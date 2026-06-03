@@ -37,26 +37,26 @@ $$\mathrm{EV_{hour}} = F \cdot (h - f_m \cdot p_{mid}) \cdot s$$
 - Trade expectancy $q$ and $F$ are derived from public trade data: grouping trades into taker-sweeps and measuring how often our quoted price would have been hit within the lookback window. The system computes these statistics from cached websocket trades and backfilled REST recent trades.
 +
 +**Hit rate from recent trades**
-+
-+- Define the recent trade window as $[t_{now} - T, t_{now}]$.
-+- Let $B$ be the current bid quote price and $A$ be the current ask quote price.
-+- Count trades in the window:
-+  - $hits_{bid} = \#\{trade : price \ge B\}$
-+  - $hits_{ask} = \#\{trade : price \le A\}$
-+  - $N = \#\{trades\}$
-+- Hit rates:
-+  - $q_{bid} = hits_{bid} / N$
-+  - $q_{ask} = hits_{ask} / N$
-+- Per-fill profit before fees:
-+  - $profit_{bid} = (p_{mid} - B) \cdot s$
-+  - $profit_{ask} = (A - p_{mid}) \cdot s$
-+- Maker fee cost:
-+  - $fee = f_m \cdot p_{mid} \cdot s$
-+- Expected value after fees:
-+  - $\mathrm{EV_{bid}} = q_{bid} \cdot (profit_{bid} - fee)$
-+  - $\mathrm{EV_{ask}} = q_{ask} \cdot (profit_{ask} - fee)$
-+
-+**Practical considerations**
+
+- Define the recent trade window as $[t_{now} - T, t_{now}]$.
+- Let $B$ be the current bid quote price and $A$ be the current ask quote price.
+- Count trades in the window:
+  - $hits_{bid} = \lvert\{\text{trade} : price \ge B\}\rvert$
+  - $hits_{ask} = \lvert\{\text{trade} : price \le A\}\rvert$
+  - $N = \lvert\{\text{trades}\}\rvert$
+- Hit rates:
+  - $q_{bid} = \dfrac{hits_{bid}}{N}$
+  - $q_{ask} = \dfrac{hits_{ask}}{N}$
+- Per-fill profit before fees:
+  - $profit_{bid} = (p_{mid} - B) \cdot s$
+  - $profit_{ask} = (A - p_{mid}) \cdot s$
+- Maker fee cost:
+  - $fee = f_m \cdot p_{mid} \cdot s$
+- Expected value after fees:
+  - $\mathrm{EV_{bid}} = q_{bid} \cdot (profit_{bid} - fee)$
+  - $\mathrm{EV_{ask}} = q_{ask} \cdot (profit_{ask} - fee)$
+
+**Practical considerations**
 
 - Round price and size to exchange step sizes before placing orders.
 - Respect per-market max leverage and margin rules when computing notional exposures.
@@ -125,3 +125,4 @@ If you want the primary store to be MySQL, set `PRIMARY_SQL_URL` in `settings.py
 - Tests: `test_market_recorder.py`, `test_hyperliquid_connector_offline.py`, `test_market_data_web.py`
 
 If you want, I can also add a short usage section to start the market-maker locally or create a small script to export EV reports from `market_data.sqlite`.
+
