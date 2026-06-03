@@ -48,17 +48,17 @@ $$\mathrm{EV_{hour}} = F \cdot (h - f_m \cdot p_{mid}) \cdot s$$
   - If a sell trade has $volume_{trade} \ge V_{book, bid}$, count one bid-side fill.
   - If a buy trade has $volume_{trade} \ge V_{book, ask}$, count one ask-side fill.
 - The result is fill count, not a probability:
-  - $fills_{bid} = \#\{\text{sell trades with } volume_{trade} \ge V_{book, bid}\}$
-  - $fills_{ask} = \#\{\text{buy trades with } volume_{trade} \ge V_{book, ask}\}$
+  - $fills_{bid} = \left|\{\text{sell trades with } volume_{trade} \ge V_{book, bid}\}\right|$
+  - $fills_{ask} = \left|\{\text{buy trades with } volume_{trade} \ge V_{book, ask}\}\right|$
 - Each counted event represents a trade large enough to sweep the book to the quoted price.
 - The expected edge per fill is quote distance minus fee:
-  - $edge_{bps} = distance_{bps} - fee_{bps}$
+  - $edge_{bps} = \text{bps} - fee_{bps}$
 - Estimated edge over the lookback window is:
   - $edge_{bid, bps} = fills_{bid} \cdot edge_{bps}$
   - $edge_{ask, bps} = fills_{ask} \cdot edge_{bps}$
 - To convert that into dollars:
-  - $\mathrm{EV_{bid,\$}} = fills_{bid} \cdot \frac{edge_{bps}}{10000} \cdot p_{mid} \cdot s$
-  - $\mathrm{EV_{ask,\$}} = fills_{ask} \cdot \frac{edge_{bps}}{10000} \cdot p_{mid} \cdot s$
+  - $\mathrm{EV}_{bid} = fills_{bid} \cdot \frac{edge_{bps}}{10000} \cdot p_{mid} \cdot s$
+  - $\mathrm{EV}_{ask} = fills_{ask} \cdot \frac{edge_{bps}}{10000} \cdot p_{mid} \cdot s$
 
 **Layman description**
 
@@ -138,4 +138,3 @@ If you want the primary store to be MySQL, set `PRIMARY_SQL_URL` in `settings.py
 - Tests: `test_market_recorder.py`, `test_hyperliquid_connector_offline.py`, `test_market_data_web.py`
 
 If you want, I can also add a short usage section to start the market-maker locally or create a small script to export EV reports from `market_data.sqlite`.
-
