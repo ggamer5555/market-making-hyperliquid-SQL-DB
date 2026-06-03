@@ -1,6 +1,6 @@
 # Hyperliquid Multi-Program Market-Maker
 
-A compact project README describing the market-making algorithm, the expected-value (EV) method used, and how data is stored using SQL and SQLite.
+NOT PREDUCTION CODE!
 
 **Project Overview**
 
