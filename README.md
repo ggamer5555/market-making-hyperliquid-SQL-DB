@@ -35,26 +35,39 @@ $$\mathrm{EV_{quote}} = q \cdot (h \cdot s - f_m \cdot p_{mid} \cdot s)$$
 $$\mathrm{EV_{hour}} = F \cdot (h - f_m \cdot p_{mid}) \cdot s$$
 
 - Trade expectancy $q$ and $F$ are derived from public trade data: grouping trades into taker-sweeps and measuring how often our quoted price would have been hit within the lookback window. The system computes these statistics from cached websocket trades and backfilled REST recent trades.
-+
-+**Hit rate from recent trades**
+
+**Sweep-based fill estimator**
 
 - Define the recent trade window as $[t_{now} - T, t_{now}]$.
-- Let $B$ be the current bid quote price and $A$ be the current ask quote price.
-- Count trades in the window:
-  - $hits_{bid} = \lvert\{\text{trade} : price \le B\}\rvert$
-  - $hits_{ask} = \lvert\{\text{trade} : price \ge A\}\rvert$
-  - $N = \lvert\{\text{trades}\}\rvert$
-- Hit rates:
-  - $q_{bid} = \dfrac{hits_{bid}}{N}$
-  - $q_{ask} = \dfrac{hits_{ask}}{N}$
-- Per-fill profit before fees:
-  - $profit_{bid} = (p_{mid} - B) \cdot s$
-  - $profit_{ask} = (A - p_{mid}) \cdot s$
-- Maker fee cost:
-  - $fee = f_m \cdot p_{mid} \cdot s$
-- Expected value after fees:
-  - $\mathrm{EV_{bid}} = q_{bid} \cdot (profit_{bid} - fee)$
-  - $\mathrm{EV_{ask}} = q_{ask} \cdot (profit_{ask} - fee)$
+- Let $p_{mid}$ be the current mid price.
+- Pick a target quoting distance in basis points, $\text{bps}$, and convert that into a bid quote and an ask quote around mid.
+- Measure the resting book depth volume up to those quote levels:
+  - $V_{book, bid}$ is the total resting bid volume from best bid down to the bid quote.
+  - $V_{book, ask}$ is the total resting ask volume from best ask up to the ask quote.
+- For each trade in the trade window, compare the trade volume to the depth volume:
+  - If a sell trade has $volume_{trade} \ge V_{book, bid}$, count one bid-side fill.
+  - If a buy trade has $volume_{trade} \ge V_{book, ask}$, count one ask-side fill.
+- The result is fill count, not a probability:
+  - $fills_{bid} = \#\{\text{sell trades with } volume_{trade} \ge V_{book, bid}\}$
+  - $fills_{ask} = \#\{\text{buy trades with } volume_{trade} \ge V_{book, ask}\}$
+- Each counted event represents a trade large enough to sweep the book to the quoted price.
+- The expected edge per fill is quote distance minus fee:
+  - $edge_{bps} = distance_{bps} - fee_{bps}$
+- Estimated edge over the lookback window is:
+  - $edge_{bid, bps} = fills_{bid} \cdot edge_{bps}$
+  - $edge_{ask, bps} = fills_{ask} \cdot edge_{bps}$
+- To convert that into dollars:
+  - $\mathrm{EV_{bid,\$}} = fills_{bid} \cdot \frac{edge_{bps}}{10000} \cdot p_{mid} \cdot s$
+  - $\mathrm{EV_{ask,\$}} = fills_{ask} \cdot \frac{edge_{bps}}{10000} \cdot p_{mid} \cdot s$
+
+**Layman description**
+
+- First, see how much quantity is queued in front of your bid and ask quotes.
+- Then look at each recent aggressive trade and ask: was that trade large enough to clear the queue to your quote?
+- If yes, count it as a likely fill.
+- Finally, multiply the number of likely fills by the profit per fill after fees.
+
+This gives a simple sweep-based score for whether the bid or ask level is worth quoting.
 
 **Practical considerations**
 
