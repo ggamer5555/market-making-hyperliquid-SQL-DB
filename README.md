@@ -41,8 +41,8 @@ $$\mathrm{EV_{hour}} = F \cdot (h - f_m \cdot p_{mid}) \cdot s$$
 - Define the recent trade window as $[t_{now} - T, t_{now}]$.
 - Let $B$ be the current bid quote price and $A$ be the current ask quote price.
 - Count trades in the window:
-  - $hits_{bid} = \lvert\{\text{trade} : price \ge B\}\rvert$
-  - $hits_{ask} = \lvert\{\text{trade} : price \le A\}\rvert$
+  - $hits_{bid} = \lvert\{\text{trade} : price \le B\}\rvert$
+  - $hits_{ask} = \lvert\{\text{trade} : price \ge A\}\rvert$
   - $N = \lvert\{\text{trades}\}\rvert$
 - Hit rates:
   - $q_{bid} = \dfrac{hits_{bid}}{N}$
