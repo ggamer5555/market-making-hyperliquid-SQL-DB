@@ -1,0 +1,8745 @@
+HYPERLIQUID READ-ONLY API DIAGNOSTIC REPORT
+===========================================
+
+This program does not place orders, cancel orders, transfer funds, or sign exchange actions.
+It calls read-only Hyperliquid /info methods, websocket subscriptions, and connector normalization methods.
+
+created_at_utc: 2026-06-03T16:57:28.027098Z
+python: 3.12.2 | packaged by conda-forge | (main, Feb 16 2024, 20:42:31) [MSC v.1937 64 bit (AMD64)]
+hyperliquid-python-sdk: 0.23.0
+eth-account: 0.13.7
+account_address: 0xa5f51a1a61d374dd97a51e946f9ab9e16af0f0e3
+private_key: ***REDACTED***
+requested_markets: ['BTC-USDC', 'xyz:AMD-USDC']
+list_mode: max 5 items per list
+
+connector.initialize
+--------------------
+
+description: Construct the Hyperliquid connector, validate main-account versus API-agent configuration, and load metadata.
+status: OK
+elapsed_ms: 20394.8
+format:
+"str"
+response:
+"<connectors.hyperliquid_connector.HyperliquidConnector object at 0x00000213A813FBF0>"
+
+connector.identity
+------------------
+
+description: Connector addresses and local configuration without secrets.
+status: OK
+elapsed_ms: 0.0
+format:
+{
+  "account_address": "str",
+  "base_url": "str",
+  "configured_dexs": {
+    "item_format": "str",
+    "length": 2,
+    "type": "list"
+  },
+  "name": "str",
+  "normalized_markets": {
+    "item_format": "str",
+    "length": 2,
+    "type": "list"
+  },
+  "post_only_time_in_force": "str",
+  "requested_markets": {
+    "item_format": "str",
+    "length": 2,
+    "type": "list"
+  },
+  "signer_address": "str"
+}
+response:
+{
+  "account_address": "0xa5f51a1a61d374dd97a51e946f9ab9e16af0f0e3",
+  "base_url": "https://api.hyperliquid.xyz",
+  "configured_dexs": [
+    "<default>",
+    "xyz"
+  ],
+  "name": "hyperliquid",
+  "normalized_markets": [
+    "BTC",
+    "xyz:AMD"
+  ],
+  "post_only_time_in_force": "Alo",
+  "requested_markets": [
+    "BTC-USDC",
+    "xyz:AMD-USDC"
+  ],
+  "signer_address": "0xcF461A4d36F155523577b46Da28C74e90972d0f1"
+}
+
+PUBLIC MARKET DATA
+==================
+
+info.meta
+---------
+
+description: Perpetual market metadata.
+status: OK
+elapsed_ms: 237.4
+format:
+{
+  "collateralToken": "int",
+  "marginTables": {
+    "item_format": {
+      "item_format": "int",
+      "length": 2,
+      "type": "list"
+    },
+    "length": 7,
+    "type": "list"
+  },
+  "universe": {
+    "item_format": {
+      "marginTableId": "int",
+      "maxLeverage": "int",
+      "name": "str",
+      "szDecimals": "int"
+    },
+    "length": 230,
+    "type": "list"
+  }
+}
+response:
+{
+  "collateralToken": 0,
+  "marginTables": {
+    "_items": [
+      [
+        50,
+        {
+          "description": "",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 50
+            }
+          ]
+        }
+      ],
+      [
+        51,
+        {
+          "description": "tiered 10x",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 10
+            },
+            {
+              "lowerBound": "3000000.0",
+              "maxLeverage": 5
+            }
+          ]
+        }
+      ],
+      [
+        52,
+        {
+          "description": "tiered 10x (2)",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 10
+            },
+            {
+              "lowerBound": "20000000.0",
+              "maxLeverage": 5
+            }
+          ]
+        }
+      ],
+      [
+        53,
+        {
+          "description": "tiered 20x",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 20
+            },
+            {
+              "lowerBound": "40000000.0",
+              "maxLeverage": 10
+            }
+          ]
+        }
+      ],
+      [
+        54,
+        {
+          "description": "tiered 20x (2)",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 20
+            },
+            {
+              "lowerBound": "70000000.0",
+              "maxLeverage": 10
+            }
+          ]
+        }
+      ]
+    ],
+    "_items_in_report": 5,
+    "_report_note": "list truncated for readability; rerun with --full for every item",
+    "_total_items": 7
+  },
+  "universe": {
+    "_items": [
+      {
+        "marginTableId": 56,
+        "maxLeverage": 40,
+        "name": "BTC",
+        "szDecimals": 5
+      },
+      {
+        "marginTableId": 55,
+        "maxLeverage": 25,
+        "name": "ETH",
+        "szDecimals": 4
+      },
+      {
+        "marginTableId": 5,
+        "maxLeverage": 5,
+        "name": "ATOM",
+        "szDecimals": 2
+      },
+      {
+        "isDelisted": true,
+        "marginTableId": 20,
+        "maxLeverage": 20,
+        "name": "MATIC",
+        "szDecimals": 1
+      },
+      {
+        "marginTableId": 5,
+        "maxLeverage": 5,
+        "name": "DYDX",
+        "szDecimals": 1
+      }
+    ],
+    "_items_in_report": 5,
+    "_report_note": "list truncated for readability; rerun with --full for every item",
+    "_total_items": 230
+  }
+}
+
+info.meta_and_asset_ctxs
+------------------------
+
+description: Perpetual metadata paired with live asset contexts.
+status: OK
+elapsed_ms: 663.8
+format:
+{
+  "item_format": {
+    "collateralToken": "int",
+    "marginTables": {
+      "item_format": {
+        "item_format": "int",
+        "length": 2,
+        "type": "list"
+      },
+      "length": 7,
+      "type": "list"
+    },
+    "universe": {
+      "item_format": {
+        "marginTableId": "int",
+        "maxLeverage": "int",
+        "name": "str",
+        "szDecimals": "int"
+      },
+      "length": 230,
+      "type": "list"
+    }
+  },
+  "length": 2,
+  "type": "list"
+}
+response:
+[
+  {
+    "collateralToken": 0,
+    "marginTables": {
+      "_items": [
+        [
+          50,
+          {
+            "description": "",
+            "marginTiers": [
+              {
+                "lowerBound": "0.0",
+                "maxLeverage": 50
+              }
+            ]
+          }
+        ],
+        [
+          51,
+          {
+            "description": "tiered 10x",
+            "marginTiers": [
+              {
+                "lowerBound": "0.0",
+                "maxLeverage": 10
+              },
+              {
+                "lowerBound": "3000000.0",
+                "maxLeverage": 5
+              }
+            ]
+          }
+        ],
+        [
+          52,
+          {
+            "description": "tiered 10x (2)",
+            "marginTiers": [
+              {
+                "lowerBound": "0.0",
+                "maxLeverage": 10
+              },
+              {
+                "lowerBound": "20000000.0",
+                "maxLeverage": 5
+              }
+            ]
+          }
+        ],
+        [
+          53,
+          {
+            "description": "tiered 20x",
+            "marginTiers": [
+              {
+                "lowerBound": "0.0",
+                "maxLeverage": 20
+              },
+              {
+                "lowerBound": "40000000.0",
+                "maxLeverage": 10
+              }
+            ]
+          }
+        ],
+        [
+          54,
+          {
+            "description": "tiered 20x (2)",
+            "marginTiers": [
+              {
+                "lowerBound": "0.0",
+                "maxLeverage": 20
+              },
+              {
+                "lowerBound": "70000000.0",
+                "maxLeverage": 10
+              }
+            ]
+          }
+        ]
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 7
+    },
+    "universe": {
+      "_items": [
+        {
+          "marginTableId": 56,
+          "maxLeverage": 40,
+          "name": "BTC",
+          "szDecimals": 5
+        },
+        {
+          "marginTableId": 55,
+          "maxLeverage": 25,
+          "name": "ETH",
+          "szDecimals": 4
+        },
+        {
+          "marginTableId": 5,
+          "maxLeverage": 5,
+          "name": "ATOM",
+          "szDecimals": 2
+        },
+        {
+          "isDelisted": true,
+          "marginTableId": 20,
+          "maxLeverage": 20,
+          "name": "MATIC",
+          "szDecimals": 1
+        },
+        {
+          "marginTableId": 5,
+          "maxLeverage": 5,
+          "name": "DYDX",
+          "szDecimals": 1
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 230
+    }
+  },
+  {
+    "_items": [
+      {
+        "dayBaseVlm": "83841.59657",
+        "dayNtlVlm": "5602970533.8366394043",
+        "funding": "0.0000125",
+        "impactPxs": [
+          "66010.0",
+          "66011.0"
+        ],
+        "markPx": "66017.0",
+        "midPx": "66010.5",
+        "openInterest": "31756.44552",
+        "oraclePx": "66032.0",
+        "premium": "-0.0003180276",
+        "prevDayPx": "67389.0"
+      },
+      {
+        "dayBaseVlm": "665887.672600001",
+        "dayNtlVlm": "1243758672.5255553722",
+        "funding": "-0.0000063635",
+        "impactPxs": [
+          "1831.0",
+          "1831.1"
+        ],
+        "markPx": "1831.2",
+        "midPx": "1831.05",
+        "openInterest": "653442.0489999998",
+        "oraclePx": "1832.1",
+        "premium": "-0.0005458217",
+        "prevDayPx": "1919.9"
+      },
+      {
+        "dayBaseVlm": "404103.0900000001",
+        "dayNtlVlm": "749322.9005499998",
+        "funding": "0.0000125",
+        "impactPxs": [
+          "1.8617",
+          "1.8655"
+        ],
+        "markPx": "1.8644",
+        "midPx": "1.8636",
+        "openInterest": "1427270.3",
+        "oraclePx": "1.8665",
+        "premium": "-0.0005357621",
+        "prevDayPx": "1.8254"
+      },
+      {
+        "dayBaseVlm": "0.0",
+        "dayNtlVlm": "0.0",
+        "funding": "0.0",
+        "impactPxs": null,
+        "markPx": "0.37621",
+        "midPx": null,
+        "openInterest": "0.0",
+        "oraclePx": "0.3754",
+        "premium": null,
+        "prevDayPx": "0.37621"
+      },
+      {
+        "dayBaseVlm": "4726487.8000000007",
+        "dayNtlVlm": "822583.3128569992",
+        "funding": "0.0000125",
+        "impactPxs": [
+          "0.18404",
+          "0.18475"
+        ],
+        "markPx": "0.18433",
+        "midPx": "0.18436",
+        "openInterest": "33749319.6000000015",
+        "oraclePx": "0.18402",
+        "premium": "0.0001086838",
+        "prevDayPx": "0.17163"
+      }
+    ],
+    "_items_in_report": 5,
+    "_report_note": "list truncated for readability; rerun with --full for every item",
+    "_total_items": 230
+  }
+]
+
+info.all_mids
+-------------
+
+description: Current midpoint prices for all markets.
+status: OK
+elapsed_ms: 237.4
+format:
+{
+  "#1000": "str",
+  "#1001": "str",
+  "#1010": "str",
+  "#1011": "str",
+  "#1020": "str",
+  "#1021": "str",
+  "#1030": "str",
+  "#1031": "str",
+  "#1040": "str",
+  "#1041": "str",
+  "#1410": "str",
+  "#1411": "str",
+  "#1420": "str",
+  "#1421": "str",
+  "#1430": "str",
+  "#1431": "str",
+  "#1490": "str",
+  "#1491": "str",
+  "#1500": "str",
+  "#1501": "str",
+  "#1510": "str",
+  "#1511": "str",
+  "#1520": "str",
+  "#1521": "str",
+  "#1530": "str",
+  "#1531": "str",
+  "0G": "str",
+  "2Z": "str",
+  "@1": "str",
+  "@10": "str",
+  "@100": "str",
+  "@101": "str",
+  "@102": "str",
+  "@103": "str",
+  "@104": "str",
+  "@105": "str",
+  "@106": "str",
+  "@107": "str",
+  "@108": "str",
+  "@109": "str",
+  "@11": "str",
+  "@110": "str",
+  "@111": "str",
+  "@112": "str",
+  "@113": "str",
+  "@114": "str",
+  "@115": "str",
+  "@116": "str",
+  "@117": "str",
+  "@118": "str",
+  "@119": "str",
+  "@12": "str",
+  "@120": "str",
+  "@121": "str",
+  "@122": "str",
+  "@123": "str",
+  "@124": "str",
+  "@125": "str",
+  "@126": "str",
+  "@127": "str",
+  "@128": "str",
+  "@129": "str",
+  "@13": "str",
+  "@130": "str",
+  "@131": "str",
+  "@132": "str",
+  "@133": "str",
+  "@134": "str",
+  "@135": "str",
+  "@136": "str",
+  "@137": "str",
+  "@138": "str",
+  "@139": "str",
+  "@14": "str",
+  "@140": "str",
+  "@141": "str",
+  "@142": "str",
+  "@143": "str",
+  "@144": "str",
+  "@145": "str",
+  "@146": "str",
+  "@147": "str",
+  "@148": "str",
+  "@149": "str",
+  "@15": "str",
+  "@150": "str",
+  "@151": "str",
+  "@152": "str",
+  "@153": "str",
+  "@154": "str",
+  "@155": "str",
+  "@156": "str",
+  "@157": "str",
+  "@158": "str",
+  "@159": "str",
+  "@16": "str",
+  "@160": "str",
+  "@161": "str",
+  "@162": "str",
+  "@163": "str",
+  "@164": "str",
+  "@165": "str",
+  "@166": "str",
+  "@167": "str",
+  "@168": "str",
+  "@169": "str",
+  "@17": "str",
+  "@170": "str",
+  "@171": "str",
+  "@172": "str",
+  "@173": "str",
+  "@174": "str",
+  "@175": "str",
+  "@176": "str",
+  "@177": "str",
+  "@178": "str",
+  "@179": "str",
+  "@18": "str",
+  "@180": "str",
+  "@181": "str",
+  "@182": "str",
+  "@183": "str",
+  "@184": "str",
+  "@185": "str",
+  "@186": "str",
+  "@187": "str",
+  "@188": "str",
+  "@189": "str",
+  "@19": "str",
+  "@190": "str",
+  "@191": "str",
+  "@192": "str",
+  "@193": "str",
+  "@194": "str",
+  "@195": "str",
+  "@196": "str",
+  "@197": "str",
+  "@198": "str",
+  "@199": "str",
+  "@2": "str",
+  "@20": "str",
+  "@200": "str",
+  "@201": "str",
+  "@202": "str",
+  "@203": "str",
+  "@204": "str",
+  "@205": "str",
+  "@206": "str",
+  "@207": "str",
+  "@208": "str",
+  "@209": "str",
+  "@21": "str",
+  "@210": "str",
+  "@211": "str",
+  "@212": "str",
+  "@213": "str",
+  "@214": "str",
+  "@215": "str",
+  "@216": "str",
+  "@217": "str",
+  "@218": "str",
+  "@219": "str",
+  "@22": "str",
+  "@220": "str",
+  "@221": "str",
+  "@222": "str",
+  "@223": "str",
+  "@224": "str",
+  "@225": "str",
+  "@226": "str",
+  "@227": "str",
+  "@228": "str",
+  "@229": "str",
+  "@23": "str",
+  "@230": "str",
+  "@231": "str",
+  "@232": "str",
+  "@233": "str",
+  "@234": "str",
+  "@235": "str",
+  "@236": "str",
+  "@237": "str",
+  "@238": "str",
+  "@239": "str",
+  "@24": "str",
+  "@240": "str",
+  "@241": "str",
+  "@242": "str",
+  "@243": "str",
+  "@244": "str",
+  "@245": "str",
+  "@246": "str",
+  "@247": "str",
+  "@248": "str",
+  "@249": "str",
+  "@25": "str",
+  "@250": "str",
+  "@251": "str",
+  "@252": "str",
+  "@253": "str",
+  "@254": "str",
+  "@255": "str",
+  "@256": "str",
+  "@257": "str",
+  "@258": "str",
+  "@259": "str",
+  "@26": "str",
+  "@260": "str",
+  "@261": "str",
+  "@262": "str",
+  "@263": "str",
+  "@264": "str",
+  "@265": "str",
+  "@266": "str",
+  "@267": "str",
+  "@268": "str",
+  "@269": "str",
+  "@27": "str",
+  "@270": "str",
+  "@271": "str",
+  "@272": "str",
+  "@273": "str",
+  "@274": "str",
+  "@275": "str",
+  "@276": "str",
+  "@277": "str",
+  "@278": "str",
+  "@279": "str",
+  "@28": "str",
+  "@280": "str",
+  "@281": "str",
+  "@282": "str",
+  "@283": "str",
+  "@284": "str",
+  "@285": "str",
+  "@286": "str",
+  "@287": "str",
+  "@288": "str",
+  "@289": "str",
+  "@29": "str",
+  "@290": "str",
+  "@291": "str",
+  "@292": "str",
+  "@293": "str",
+  "@294": "str",
+  "@295": "str",
+  "@296": "str",
+  "@297": "str",
+  "@298": "str",
+  "@299": "str",
+  "@3": "str",
+  "@30": "str",
+  "@300": "str",
+  "@301": "str",
+  "@302": "str",
+  "@303": "str",
+  "@304": "str",
+  "@305": "str",
+  "@306": "str",
+  "@307": "str",
+  "@308": "str",
+  "@309": "str",
+  "@31": "str",
+  "@310": "str",
+  "@311": "str",
+  "@312": "str",
+  "@313": "str",
+  "@314": "str",
+  "@315": "str",
+  "@316": "str",
+  "@317": "str",
+  "@318": "str",
+  "@319": "str",
+  "@32": "str",
+  "@320": "str",
+  "@321": "str",
+  "@322": "str",
+  "@323": "str",
+  "@324": "str",
+  "@325": "str",
+  "@326": "str",
+  "@327": "str",
+  "@328": "str",
+  "@329": "str",
+  "@33": "str",
+  "@330": "str",
+  "@331": "str",
+  "@332": "str",
+  "@333": "str",
+  "@334": "str",
+  "@335": "str",
+  "@336": "str",
+  "@34": "str",
+  "@35": "str",
+  "@36": "str",
+  "@363": "str",
+  "@364": "str",
+  "@365": "str",
+  "@366": "str",
+  "@367": "str",
+  "@368": "str",
+  "@369": "str",
+  "@37": "str",
+  "@38": "str",
+  "@39": "str",
+  "@4": "str",
+  "@40": "str",
+  "@41": "str",
+  "@42": "str",
+  "@43": "str",
+  "@44": "str",
+  "@45": "str",
+  "@46": "str",
+  "@47": "str",
+  "@48": "str",
+  "@49": "str",
+  "@5": "str",
+  "@50": "str",
+  "@51": "str",
+  "@52": "str",
+  "@53": "str",
+  "@54": "str",
+  "@55": "str",
+  "@56": "str",
+  "@57": "str",
+  "@58": "str",
+  "@59": "str",
+  "@6": "str",
+  "@60": "str",
+  "@61": "str",
+  "@62": "str",
+  "@63": "str",
+  "@64": "str",
+  "@65": "str",
+  "@66": "str",
+  "@67": "str",
+  "@68": "str",
+  "@69": "str",
+  "@7": "str",
+  "@70": "str",
+  "@71": "str",
+  "@72": "str",
+  "@73": "str",
+  "@74": "str",
+  "@75": "str",
+  "@76": "str",
+  "@77": "str",
+  "@78": "str",
+  "@79": "str",
+  "@8": "str",
+  "@80": "str",
+  "@81": "str",
+  "@82": "str",
+  "@83": "str",
+  "@84": "str",
+  "@85": "str",
+  "@86": "str",
+  "@87": "str",
+  "@88": "str",
+  "@89": "str",
+  "@9": "str",
+  "@90": "str",
+  "@91": "str",
+  "@92": "str",
+  "@93": "str",
+  "@94": "str",
+  "@95": "str",
+  "@96": "str",
+  "@97": "str",
+  "@98": "str",
+  "@99": "str",
+  "AAVE": "str",
+  "ACE": "str",
+  "ADA": "str",
+  "AERO": "str",
+  "AI": "str",
+  "AI16Z": "str",
+  "AIXBT": "str",
+  "ALGO": "str",
+  "ALT": "str",
+  "ANIME": "str",
+  "APE": "str",
+  "APEX": "str",
+  "APT": "str",
+  "AR": "str",
+  "ARB": "str",
+  "ARK": "str",
+  "ASTER": "str",
+  "ATOM": "str",
+  "AVAX": "str",
+  "AVNT": "str",
+  "AXS": "str",
+  "AZTEC": "str",
+  "BABY": "str",
+  "BADGER": "str",
+  "BANANA": "str",
+  "BCH": "str",
+  "BERA": "str",
+  "BIGTIME": "str",
+  "BIO": "str",
+  "BLAST": "str",
+  "BLUR": "str",
+  "BLZ": "str",
+  "BNB": "str",
+  "BNT": "str",
+  "BOME": "str",
+  "BRETT": "str",
+  "BSV": "str",
+  "BTC": "str",
+  "CAKE": "str",
+  "CANTO": "str",
+  "CATI": "str",
+  "CC": "str",
+  "CELO": "str",
+  "CFX": "str",
+  "CHILLGUY": "str",
+  "CHIP": "str",
+  "COMP": "str",
+  "CRV": "str",
+  "CYBER": "str",
+  "DASH": "str",
+  "DOGE": "str",
+  "DOOD": "str",
+  "DOT": "str",
+  "DYDX": "str",
+  "DYM": "str",
+  "EIGEN": "str",
+  "ENA": "str",
+  "ENS": "str",
+  "ETC": "str",
+  "ETH": "str",
+  "ETHFI": "str",
+  "FARTCOIN": "str",
+  "FET": "str",
+  "FIL": "str",
+  "FOGO": "str",
+  "FRIEND": "str",
+  "FTM": "str",
+  "FTT": "str",
+  "FXS": "str",
+  "GALA": "str",
+  "GAS": "str",
+  "GMT": "str",
+  "GMX": "str",
+  "GOAT": "str",
+  "GRASS": "str",
+  "GRIFFAIN": "str",
+  "HBAR": "str",
+  "HEMI": "str",
+  "HMSTR": "str",
+  "HPOS": "str",
+  "HYPE": "str",
+  "HYPER": "str",
+  "ICP": "str",
+  "ILV": "str",
+  "IMX": "str",
+  "INIT": "str",
+  "INJ": "str",
+  "IO": "str",
+  "IOTA": "str",
+  "IP": "str",
+  "JELLY": "str",
+  "JTO": "str",
+  "JUP": "str",
+  "KAITO": "str",
+  "KAS": "str",
+  "LAUNCHCOIN": "str",
+  "LAYER": "str",
+  "LDO": "str",
+  "LINEA": "str",
+  "LINK": "str",
+  "LISTA": "str",
+  "LIT": "str",
+  "LOOM": "str",
+  "LTC": "str",
+  "MANTA": "str",
+  "MATIC": "str",
+  "MAV": "str",
+  "MAVIA": "str",
+  "ME": "str",
+  "MEGA": "str",
+  "MELANIA": "str",
+  "MEME": "str",
+  "MERL": "str",
+  "MET": "str",
+  "MEW": "str",
+  "MINA": "str",
+  "MKR": "str",
+  "MNT": "str",
+  "MON": "str",
+  "MOODENG": "str",
+  "MORPHO": "str",
+  "MOVE": "str",
+  "MYRO": "str",
+  "NEAR": "str",
+  "NEIROETH": "str",
+  "NEO": "str",
+  "NFTI": "str",
+  "NIL": "str",
+  "NOT": "str",
+  "NTRN": "str",
+  "NXPC": "str",
+  "OGN": "str",
+  "OM": "str",
+  "OMNI": "str",
+  "ONDO": "str",
+  "OP": "str",
+  "ORBS": "str",
+  "ORDI": "str",
+  "OX": "str",
+  "PANDORA": "str",
+  "PAXG": "str",
+  "PENDLE": "str",
+  "PENGU": "str",
+  "PEOPLE": "str",
+  "PIXEL": "str",
+  "PNUT": "str",
+  "POL": "str",
+  "POLYX": "str",
+  "POPCAT": "str",
+  "PROMPT": "str",
+  "PROVE": "str",
+  "PUMP": "str",
+  "PURR": "str",
+  "PURR/USDC": "str",
+  "PYTH": "str",
+  "RDNT": "str",
+  "RENDER": "str",
+  "REQ": "str",
+  "RESOLV": "str",
+  "REZ": "str",
+  "RLB": "str",
+  "RNDR": "str",
+  "RSR": "str",
+  "RUNE": "str",
+  "S": "str",
+  "SAGA": "str",
+  "SAND": "str",
+  "SCR": "str",
+  "SEI": "str",
+  "SHIA": "str",
+  "SKR": "str",
+  "SKY": "str",
+  "SNX": "str",
+  "SOL": "str",
+  "SOPH": "str",
+  "SPX": "str",
+  "STABLE": "str",
+  "STBL": "str",
+  "STG": "str",
+  "STRAX": "str",
+  "STRK": "str",
+  "STX": "str",
+  "SUI": "str",
+  "SUPER": "str",
+  "SUSHI": "str",
+  "SYRUP": "str",
+  "TAO": "str",
+  "TIA": "str",
+  "TNSR": "str",
+  "TON": "str",
+  "TRB": "str",
+  "TRUMP": "str",
+  "TRX": "str",
+  "TST": "str",
+  "TURBO": "str",
+  "UMA": "str",
+  "UNI": "str",
+  "UNIBOT": "str",
+  "USTC": "str",
+  "USUAL": "str",
+  "VINE": "str",
+  "VIRTUAL": "str",
+  "VVV": "str",
+  "W": "str",
+  "WCT": "str",
+  "WIF": "str",
+  "WLD": "str",
+  "WLFI": "str",
+  "XAI": "str",
+  "XLM": "str",
+  "XMR": "str",
+  "XPL": "str",
+  "XRP": "str",
+  "YGG": "str",
+  "YZY": "str",
+  "ZEC": "str",
+  "ZEN": "str",
+  "ZEREBRO": "str",
+  "ZETA": "str",
+  "ZK": "str",
+  "ZORA": "str",
+  "ZRO": "str",
+  "kBONK": "str",
+  "kDOGS": "str",
+  "kFLOKI": "str",
+  "kLUNC": "str",
+  "kNEIRO": "str",
+  "kPEPE": "str",
+  "kSHIB": "str"
+}
+response:
+{
+  "#1000": "0.5",
+  "#1001": "0.5",
+  "#1010": "0.595",
+  "#1011": "0.405",
+  "#1020": "0.355005",
+  "#1021": "0.644995",
+  "#1030": "0.06",
+  "#1031": "0.94",
+  "#1040": "0.02448",
+  "#1041": "0.97552",
+  "#1410": "0.615075",
+  "#1411": "0.384925",
+  "#1420": "0.644495",
+  "#1421": "0.355505",
+  "#1430": "0.64153",
+  "#1431": "0.35847",
+  "#1490": "0.15314",
+  "#1491": "0.84686",
+  "#1500": "0.5",
+  "#1501": "0.5",
+  "#1510": "0.464235",
+  "#1511": "0.535765",
+  "#1520": "0.6292",
+  "#1521": "0.3708",
+  "#1530": "0.0225",
+  "#1531": "0.9775",
+  "0G": "0.385175",
+  "2Z": "0.079108",
+  "@1": "11.3815",
+  "@10": "0.000045",
+  "@100": "0.00371",
+  "@101": "0.151105",
+  "@102": "0.013872",
+  "@103": "0.00021066",
+  "@104": "0.054523",
+  "@105": "0.089605",
+  "@106": "0.007085",
+  "@107": "72.3195",
+  "@108": "0.026389",
+  "@109": "0.000195",
+  "@11": "0.000372",
+  "@110": "0.01875",
+  "@111": "0.056542",
+  "@112": "0.0005492",
+  "@113": "0.000153",
+  "@114": "0.0001353",
+  "@115": "0.050787",
+  "@116": "0.00001182",
+  "@117": "0.0010524",
+  "@118": "0.01585",
+  "@119": "0.012498",
+  "@12": "0.00004351",
+  "@120": "0.024247",
+  "@121": "0.013139",
+  "@122": "0.004714",
+  "@123": "0.042787",
+  "@124": "0.013035",
+  "@125": "0.006268",
+  "@126": "0.0775",
+  "@127": "0.043099",
+  "@128": "0.000022",
+  "@129": "0.005205",
+  "@13": "0.00066096",
+  "@130": "0.000019",
+  "@131": "0.154729",
+  "@132": "0.002606",
+  "@133": "0.000252",
+  "@134": "0.000802",
+  "@135": "0.000014",
+  "@136": "0.007003",
+  "@137": "0.000015",
+  "@138": "0.0004491",
+  "@139": "0.003442",
+  "@14": "0.0000771",
+  "@140": "0.000067",
+  "@141": "0.012876",
+  "@142": "65953.5",
+  "@143": "0.001056",
+  "@144": "0.000117",
+  "@145": "0.000025",
+  "@146": "0.000013",
+  "@147": "0.000549",
+  "@148": "0.000222",
+  "@149": "1.0",
+  "@15": "0.000172",
+  "@150": "0.99895",
+  "@151": "1830.4",
+  "@152": "1.01",
+  "@153": "0.993235",
+  "@154": "1.0",
+  "@155": "0.000518",
+  "@156": "72.812",
+  "@157": "0.003288",
+  "@158": "0.000021",
+  "@159": "0.5279",
+  "@16": "0.036977",
+  "@160": "0.001936",
+  "@161": "0.026775",
+  "@162": "0.1441",
+  "@163": "0.019145",
+  "@164": "0.001056",
+  "@165": "0.062817",
+  "@166": "0.998805",
+  "@167": "1.0",
+  "@168": "1.0",
+  "@169": "1.0",
+  "@17": "0.00002014",
+  "@170": "0.0025",
+  "@171": "0.8",
+  "@172": "0.015729",
+  "@173": "95041.5",
+  "@174": "0.4542",
+  "@175": "0.0095401",
+  "@176": "0.000715",
+  "@177": "0.016102",
+  "@178": "0.681775",
+  "@179": "0.197835",
+  "@18": "0.00605",
+  "@180": "0.9975",
+  "@181": "1.0",
+  "@182": "4425.8",
+  "@183": "0.009464",
+  "@184": "0.007005",
+  "@185": "0.002385",
+  "@186": "1.0",
+  "@187": "0.000091",
+  "@188": "0.0017388",
+  "@189": "620.0",
+  "@19": "0.0113355",
+  "@190": "0.010813",
+  "@191": "0.000218",
+  "@192": "0.000196",
+  "@193": "0.33927",
+  "@194": "0.00000508",
+  "@195": "0.000144",
+  "@196": "0.000035",
+  "@197": "1.0",
+  "@198": "0.08023",
+  "@199": "0.010095",
+  "@2": "0.00006218",
+  "@20": "0.00009245",
+  "@200": "1.715",
+  "@201": "0.00000013",
+  "@202": "0.00058",
+  "@203": "1.0",
+  "@204": "0.0353",
+  "@205": "1.018",
+  "@206": "0.11192",
+  "@207": "72.4055",
+  "@208": "0.016861",
+  "@209": "4619.0",
+  "@21": "0.00001643",
+  "@210": "0.0951825",
+  "@211": "0.0003",
+  "@212": "9.03955",
+  "@213": "8.318",
+  "@214": "0.60491",
+  "@215": "0.001508",
+  "@216": "0.0358",
+  "@217": "1.0015",
+  "@218": "3.0",
+  "@219": "0.014751",
+  "@22": "0.091484",
+  "@220": "1.0",
+  "@221": "1.0",
+  "@222": "1.0",
+  "@223": "0.000695",
+  "@224": "1.75",
+  "@225": "0.007235",
+  "@226": "8.1105",
+  "@227": "74.905",
+  "@228": "0.079193",
+  "@229": "1.0",
+  "@23": "0.203775",
+  "@230": "1.00105",
+  "@231": "0.000062",
+  "@232": "63.129",
+  "@233": "0.082112",
+  "@234": "76644.0",
+  "@235": "2110.1",
+  "@236": "0.979385",
+  "@237": "0.000045",
+  "@238": "0.08888",
+  "@239": "1.0",
+  "@24": "0.00002061",
+  "@240": "0.001801",
+  "@241": "0.00029",
+  "@242": "0.040283",
+  "@243": "0.0206015",
+  "@244": "1.252655",
+  "@245": "0.000985",
+  "@246": "0.002753",
+  "@247": "0.031137",
+  "@248": "440.01",
+  "@249": "0.02125",
+  "@25": "0.000219",
+  "@250": "65.6",
+  "@251": "0.064",
+  "@252": "0.057843",
+  "@253": "0.90995",
+  "@254": "0.20712",
+  "@255": "72.36",
+  "@256": "0.04021",
+  "@257": "0.1",
+  "@258": "0.038907",
+  "@259": "1.0",
+  "@26": "0.000962",
+  "@260": "357.3",
+  "@261": "0.002316",
+  "@262": "1.0",
+  "@263": "92.3805",
+  "@264": "226.0",
+  "@265": "66.449",
+  "@266": "362.675",
+  "@267": "1.25855",
+  "@268": "275.895",
+  "@269": "627.42",
+  "@27": "0.00000996",
+  "@270": "0.15854",
+  "@271": "85.9925",
+  "@272": "601.195",
+  "@273": "78.0",
+  "@274": "0.00000306",
+  "@275": "1.3338",
+  "@276": "400.695",
+  "@277": "628.2",
+  "@278": "0.002566",
+  "@279": "761.345",
+  "@28": "0.00014651",
+  "@280": "248.44",
+  "@281": "0.002674",
+  "@282": "0.00115016",
+  "@283": "0.055753",
+  "@284": "0.006267",
+  "@285": "0.0222175",
+  "@286": "0.061941",
+  "@287": "665.295",
+  "@288": "741.89",
+  "@289": "450.745",
+  "@29": "0.008775",
+  "@290": "0.724195",
+  "@291": "0.000476",
+  "@292": "0.032185",
+  "@293": "0.217425",
+  "@294": "0.010355",
+  "@295": "0.01073",
+  "@296": "0.101645",
+  "@297": "35.95",
+  "@298": "0.00379",
+  "@299": "0.009031",
+  "@3": "0.00545",
+  "@30": "0.000287",
+  "@300": "0.01335",
+  "@301": "5.2582",
+  "@302": "0.0046171",
+  "@303": "0.56",
+  "@304": "0.000556",
+  "@305": "0.071461",
+  "@306": "8.10935",
+  "@307": "227.195",
+  "@308": "362.675",
+  "@309": "1.0",
+  "@31": "0.000014",
+  "@310": "0.145",
+  "@311": "0.0001",
+  "@312": "0.99994",
+  "@313": "0.5",
+  "@314": "0.5",
+  "@315": "0.99",
+  "@316": "0.01581",
+  "@317": "0.024",
+  "@318": "0.975",
+  "@319": "0.00001",
+  "@32": "0.00001207",
+  "@320": "0.99604",
+  "@321": "0.84895",
+  "@322": "0.03",
+  "@323": "0.5",
+  "@324": "0.5",
+  "@325": "0.00382",
+  "@326": "0.9936",
+  "@327": "0.996",
+  "@328": "0.00001",
+  "@329": "0.00001",
+  "@33": "0.00000067",
+  "@330": "0.9902",
+  "@331": "207.685",
+  "@332": "430.42",
+  "@333": "1030.6",
+  "@334": "0.305585",
+  "@335": "0.015845",
+  "@336": "73.3995",
+  "@34": "0.002311",
+  "@35": "0.00756",
+  "@36": "0.00139",
+  "@363": "0.0022",
+  "@364": "0.99781",
+  "@365": "0.99899",
+  "@366": "0.00002",
+  "@367": "0.000675",
+  "@368": "0.00328",
+  "@369": "0.997",
+  "@37": "0.00009878",
+  "@38": "0.0009146",
+  "@39": "0.00017",
+  "@4": "3.9056",
+  "@40": "0.0003878",
+  "@41": "0.0033052",
+  "@42": "0.002006",
+  "@43": "0.000031",
+  "@44": "0.0010125",
+  "@45": "0.00010843",
+  "@46": "0.00021",
+  "@47": "0.004695",
+  "@48": "0.00038355",
+  "@49": "0.000565",
+  "@5": "0.679745",
+  "@50": "0.0266025",
+  "@51": "1.44245",
+  "@52": "0.022384",
+  "@53": "0.000235",
+  "@54": "0.031808",
+  "@55": "0.020304",
+  "@56": "0.024996",
+  "@57": "0.050878",
+  "@58": "0.085068",
+  "@59": "0.940655",
+  "@6": "0.000102",
+  "@60": "0.036092",
+  "@61": "0.001044",
+  "@62": "0.041922",
+  "@63": "0.047543",
+  "@64": "0.067699",
+  "@65": "0.054242",
+  "@66": "0.000223",
+  "@67": "0.042427",
+  "@68": "0.12002",
+  "@69": "0.36052",
+  "@7": "0.000026",
+  "@70": "0.018229",
+  "@71": "1.0",
+  "@72": "1.8047",
+  "@73": "0.062067",
+  "@74": "0.000093",
+  "@75": "0.14855",
+  "@76": "0.014015",
+  "@77": "0.00484",
+  "@78": "0.099932",
+  "@79": "0.062197",
+  "@8": "0.00505735",
+  "@80": "0.0002996",
+  "@81": "0.00006239",
+  "@82": "0.036273",
+  "@83": "0.022438",
+  "@84": "0.058024",
+  "@85": "4.19575",
+  "@86": "0.089451",
+  "@87": "0.067039",
+  "@88": "0.00009645",
+  "@89": "0.092659",
+  "@9": "0.000299",
+  "@90": "0.006541",
+  "@91": "0.010673",
+  "@92": "0.12991",
+  "@93": "0.00001979",
+  "@94": "0.082896",
+  "@95": "0.000109",
+  "@96": "0.019919",
+  "@97": "0.068883",
+  "@98": "1.0",
+  "@99": "0.019276",
+  "AAVE": "75.035",
+  "ACE": "0.1142",
+  "ADA": "0.209085",
+  "AERO": "0.371",
+  "AI": "0.12555",
+  "AI16Z": "0.06157",
+  "AIXBT": "0.026819",
+  "ALGO": "0.108175",
+  "ALT": "0.006765",
+  "ANIME": "0.00368",
+  "APE": "0.15065",
+  "APEX": "0.297175",
+  "APT": "0.8302",
+  "AR": "2.5664",
+  "ARB": "0.09401",
+  "ARK": "0.147655",
+  "ASTER": "0.69114",
+  "ATOM": "1.8636",
+  "AVAX": "8.1115",
+  "AVNT": "0.135445",
+  "AXS": "1.143",
+  "AZTEC": "0.022239",
+  "BABY": "0.013978",
+  "BADGER": "0.88823",
+  "BANANA": "3.4665",
+  "BCH": "247.765",
+  "BERA": "0.30014",
+  "BIGTIME": "0.010502",
+  "BIO": "0.034559",
+  "BLAST": "0.000456",
+  "BLUR": "0.019855",
+  "BLZ": "0.070043",
+  "BNB": "627.57",
+  "BNT": "0.38287",
+  "BOME": "0.00049",
+  "BRETT": "0.006355",
+  "BSV": "14.026",
+  "BTC": "66010.5",
+  "CAKE": "1.30485",
+  "CANTO": "0.066",
+  "CATI": "0.082821",
+  "CC": "0.15435",
+  "CELO": "0.071488",
+  "CFX": "0.051522",
+  "CHILLGUY": "0.012699",
+  "CHIP": "0.039922",
+  "COMP": "17.768",
+  "CRV": "0.20529",
+  "CYBER": "1.0415",
+  "DASH": "39.264",
+  "DOGE": "0.092203",
+  "DOOD": "0.00198",
+  "DOT": "1.0992",
+  "DYDX": "0.18436",
+  "DYM": "0.01918",
+  "EIGEN": "0.2153",
+  "ENA": "0.11181",
+  "ENS": "5.4671",
+  "ETC": "7.7704",
+  "ETH": "1831.05",
+  "ETHFI": "0.35608",
+  "FARTCOIN": "0.14432",
+  "FET": "0.262825",
+  "FIL": "0.94942",
+  "FOGO": "0.014244",
+  "FRIEND": "4.72",
+  "FTM": "0.71688",
+  "FTT": "0.32243",
+  "FXS": "0.65538",
+  "GALA": "0.002923",
+  "GAS": "1.35425",
+  "GMT": "0.010127",
+  "GMX": "6.3898",
+  "GOAT": "0.015709",
+  "GRASS": "0.49568",
+  "GRIFFAIN": "0.009332",
+  "HBAR": "0.085819",
+  "HEMI": "0.006607",
+  "HMSTR": "0.000165",
+  "HPOS": "0.041873",
+  "HYPE": "72.3515",
+  "HYPER": "0.084536",
+  "ICP": "3.06665",
+  "ILV": "12.118",
+  "IMX": "0.15418",
+  "INIT": "0.066613",
+  "INJ": "6.6071",
+  "IO": "0.18584",
+  "IOTA": "0.051631",
+  "IP": "0.39675",
+  "JELLY": "0.037555",
+  "JTO": "0.632105",
+  "JUP": "0.20554",
+  "KAITO": "0.46752",
+  "KAS": "0.032247",
+  "LAUNCHCOIN": "0.060367",
+  "LAYER": "0.07574",
+  "LDO": "0.30461",
+  "LINEA": "0.002993",
+  "LINK": "8.31685",
+  "LISTA": "0.12466",
+  "LIT": "1.69575",
+  "LOOM": "0.071161",
+  "LTC": "47.4855",
+  "MANTA": "0.0785",
+  "MATIC": "0.37621",
+  "MAV": "0.015456",
+  "MAVIA": "0.03725",
+  "ME": "0.07716",
+  "MEGA": "0.055714",
+  "MELANIA": "0.09301",
+  "MEME": "0.000547",
+  "MERL": "0.027814",
+  "MET": "0.135705",
+  "MEW": "0.00064",
+  "MINA": "0.053072",
+  "MKR": "1831.5",
+  "MNT": "0.60523",
+  "MON": "0.020645",
+  "MOODENG": "0.04653",
+  "MORPHO": "1.8906",
+  "MOVE": "0.013868",
+  "MYRO": "0.015813",
+  "NEAR": "2.8617",
+  "NEIROETH": "0.01808",
+  "NEO": "2.5222",
+  "NFTI": "6.5609",
+  "NIL": "0.061816",
+  "NOT": "0.000475",
+  "NTRN": "0.1238",
+  "NXPC": "0.4259",
+  "OGN": "0.055683",
+  "OM": "0.06527",
+  "OMNI": "4.1915",
+  "ONDO": "0.422985",
+  "OP": "0.12336",
+  "ORBS": "0.01939",
+  "ORDI": "3.6076",
+  "OX": "0.007459",
+  "PANDORA": "3026.3",
+  "PAXG": "4436.4",
+  "PENDLE": "1.3704",
+  "PENGU": "0.007008",
+  "PEOPLE": "0.006134",
+  "PIXEL": "0.024027",
+  "PNUT": "0.04934",
+  "POL": "0.09417",
+  "POLYX": "0.04559",
+  "POPCAT": "0.051188",
+  "PROMPT": "0.03661",
+  "PROVE": "0.19889",
+  "PUMP": "0.00174",
+  "PURR": "0.136755",
+  "PURR/USDC": "0.13634",
+  "PYTH": "0.038401",
+  "RDNT": "0.018328",
+  "RENDER": "2.147",
+  "REQ": "0.15473",
+  "RESOLV": "0.022682",
+  "REZ": "0.00376",
+  "RLB": "0.071",
+  "RNDR": "6.8952",
+  "RSR": "0.001522",
+  "RUNE": "0.40071",
+  "S": "0.037572",
+  "SAGA": "0.01697",
+  "SAND": "0.062034",
+  "SCR": "0.04737",
+  "SEI": "0.062007",
+  "SHIA": "0.000621",
+  "SKR": "0.012577",
+  "SKY": "0.067499",
+  "SNX": "0.27325",
+  "SOL": "72.8455",
+  "SOPH": "0.006791",
+  "SPX": "0.33785",
+  "STABLE": "0.038944",
+  "STBL": "0.032175",
+  "STG": "0.15387",
+  "STRAX": "1.5829",
+  "STRK": "0.03678",
+  "STX": "0.21613",
+  "SUI": "0.81715",
+  "SUPER": "0.110135",
+  "SUSHI": "0.22663",
+  "SYRUP": "0.1442",
+  "TAO": "227.34",
+  "TIA": "0.37144",
+  "TNSR": "0.03648",
+  "TON": "2.0047",
+  "TRB": "15.876",
+  "TRUMP": "1.9607",
+  "TRX": "0.33343",
+  "TST": "0.017491",
+  "TURBO": "0.001012",
+  "UMA": "0.41927",
+  "UNI": "2.84685",
+  "UNIBOT": "7.636",
+  "USTC": "0.007534",
+  "USUAL": "0.01212",
+  "VINE": "0.013",
+  "VIRTUAL": "0.72445",
+  "VVV": "20.77",
+  "W": "0.01299",
+  "WCT": "0.051638",
+  "WIF": "0.18518",
+  "WLD": "0.541",
+  "WLFI": "0.061581",
+  "XAI": "0.00979",
+  "XLM": "0.222665",
+  "XMR": "356.535",
+  "XPL": "0.095027",
+  "XRP": "1.22065",
+  "YGG": "0.032375",
+  "YZY": "0.31107",
+  "ZEC": "601.385",
+  "ZEN": "5.4313",
+  "ZEREBRO": "0.032083",
+  "ZETA": "0.04722",
+  "ZK": "0.01278",
+  "ZORA": "0.011116",
+  "ZRO": "1.2234",
+  "kBONK": "0.00508",
+  "kDOGS": "0.13659",
+  "kFLOKI": "0.026657",
+  "kLUNC": "0.069843",
+  "kNEIRO": "0.07692",
+  "kPEPE": "0.003141",
+  "kSHIB": "0.005227"
+}
+
+info.meta[dex=default]
+----------------------
+
+description: Perp metadata for the configured market dex.
+status: OK
+elapsed_ms: 304.3
+format:
+{
+  "collateralToken": "int",
+  "marginTables": {
+    "item_format": {
+      "item_format": "int",
+      "length": 2,
+      "type": "list"
+    },
+    "length": 7,
+    "type": "list"
+  },
+  "universe": {
+    "item_format": {
+      "marginTableId": "int",
+      "maxLeverage": "int",
+      "name": "str",
+      "szDecimals": "int"
+    },
+    "length": 230,
+    "type": "list"
+  }
+}
+response:
+{
+  "collateralToken": 0,
+  "marginTables": {
+    "_items": [
+      [
+        50,
+        {
+          "description": "",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 50
+            }
+          ]
+        }
+      ],
+      [
+        51,
+        {
+          "description": "tiered 10x",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 10
+            },
+            {
+              "lowerBound": "3000000.0",
+              "maxLeverage": 5
+            }
+          ]
+        }
+      ],
+      [
+        52,
+        {
+          "description": "tiered 10x (2)",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 10
+            },
+            {
+              "lowerBound": "20000000.0",
+              "maxLeverage": 5
+            }
+          ]
+        }
+      ],
+      [
+        53,
+        {
+          "description": "tiered 20x",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 20
+            },
+            {
+              "lowerBound": "40000000.0",
+              "maxLeverage": 10
+            }
+          ]
+        }
+      ],
+      [
+        54,
+        {
+          "description": "tiered 20x (2)",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 20
+            },
+            {
+              "lowerBound": "70000000.0",
+              "maxLeverage": 10
+            }
+          ]
+        }
+      ]
+    ],
+    "_items_in_report": 5,
+    "_report_note": "list truncated for readability; rerun with --full for every item",
+    "_total_items": 7
+  },
+  "universe": {
+    "_items": [
+      {
+        "marginTableId": 56,
+        "maxLeverage": 40,
+        "name": "BTC",
+        "szDecimals": 5
+      },
+      {
+        "marginTableId": 55,
+        "maxLeverage": 25,
+        "name": "ETH",
+        "szDecimals": 4
+      },
+      {
+        "marginTableId": 5,
+        "maxLeverage": 5,
+        "name": "ATOM",
+        "szDecimals": 2
+      },
+      {
+        "isDelisted": true,
+        "marginTableId": 20,
+        "maxLeverage": 20,
+        "name": "MATIC",
+        "szDecimals": 1
+      },
+      {
+        "marginTableId": 5,
+        "maxLeverage": 5,
+        "name": "DYDX",
+        "szDecimals": 1
+      }
+    ],
+    "_items_in_report": 5,
+    "_report_note": "list truncated for readability; rerun with --full for every item",
+    "_total_items": 230
+  }
+}
+
+info.meta_and_asset_ctxs[dex=default]
+-------------------------------------
+
+description: Perp metadata plus live contexts for the configured market dex.
+status: OK
+elapsed_ms: 1307.8
+format:
+{
+  "item_format": {
+    "collateralToken": "int",
+    "marginTables": {
+      "item_format": {
+        "item_format": "int",
+        "length": 2,
+        "type": "list"
+      },
+      "length": 7,
+      "type": "list"
+    },
+    "universe": {
+      "item_format": {
+        "marginTableId": "int",
+        "maxLeverage": "int",
+        "name": "str",
+        "szDecimals": "int"
+      },
+      "length": 230,
+      "type": "list"
+    }
+  },
+  "length": 2,
+  "type": "list"
+}
+response:
+[
+  {
+    "collateralToken": 0,
+    "marginTables": {
+      "_items": [
+        [
+          50,
+          {
+            "description": "",
+            "marginTiers": [
+              {
+                "lowerBound": "0.0",
+                "maxLeverage": 50
+              }
+            ]
+          }
+        ],
+        [
+          51,
+          {
+            "description": "tiered 10x",
+            "marginTiers": [
+              {
+                "lowerBound": "0.0",
+                "maxLeverage": 10
+              },
+              {
+                "lowerBound": "3000000.0",
+                "maxLeverage": 5
+              }
+            ]
+          }
+        ],
+        [
+          52,
+          {
+            "description": "tiered 10x (2)",
+            "marginTiers": [
+              {
+                "lowerBound": "0.0",
+                "maxLeverage": 10
+              },
+              {
+                "lowerBound": "20000000.0",
+                "maxLeverage": 5
+              }
+            ]
+          }
+        ],
+        [
+          53,
+          {
+            "description": "tiered 20x",
+            "marginTiers": [
+              {
+                "lowerBound": "0.0",
+                "maxLeverage": 20
+              },
+              {
+                "lowerBound": "40000000.0",
+                "maxLeverage": 10
+              }
+            ]
+          }
+        ],
+        [
+          54,
+          {
+            "description": "tiered 20x (2)",
+            "marginTiers": [
+              {
+                "lowerBound": "0.0",
+                "maxLeverage": 20
+              },
+              {
+                "lowerBound": "70000000.0",
+                "maxLeverage": 10
+              }
+            ]
+          }
+        ]
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 7
+    },
+    "universe": {
+      "_items": [
+        {
+          "marginTableId": 56,
+          "maxLeverage": 40,
+          "name": "BTC",
+          "szDecimals": 5
+        },
+        {
+          "marginTableId": 55,
+          "maxLeverage": 25,
+          "name": "ETH",
+          "szDecimals": 4
+        },
+        {
+          "marginTableId": 5,
+          "maxLeverage": 5,
+          "name": "ATOM",
+          "szDecimals": 2
+        },
+        {
+          "isDelisted": true,
+          "marginTableId": 20,
+          "maxLeverage": 20,
+          "name": "MATIC",
+          "szDecimals": 1
+        },
+        {
+          "marginTableId": 5,
+          "maxLeverage": 5,
+          "name": "DYDX",
+          "szDecimals": 1
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 230
+    }
+  },
+  {
+    "_items": [
+      {
+        "dayBaseVlm": "83841.93459",
+        "dayNtlVlm": "5602992812.7348403931",
+        "funding": "0.0000125",
+        "impactPxs": [
+          "66010.0",
+          "66011.0"
+        ],
+        "markPx": "66010.0",
+        "midPx": "66010.5",
+        "openInterest": "31755.82598",
+        "oraclePx": "66027.0",
+        "premium": "-0.0002423251",
+        "prevDayPx": "67389.0"
+      },
+      {
+        "dayBaseVlm": "665890.036600001",
+        "dayNtlVlm": "1243762992.9719552994",
+        "funding": "-0.0000063243",
+        "impactPxs": [
+          "1831.1",
+          "1831.39"
+        ],
+        "markPx": "1831.1",
+        "midPx": "1831.15",
+        "openInterest": "653442.1483999997",
+        "oraclePx": "1832.0",
+        "premium": "-0.0003329694",
+        "prevDayPx": "1919.9"
+      },
+      {
+        "dayBaseVlm": "404103.0900000001",
+        "dayNtlVlm": "749322.9005499998",
+        "funding": "0.0000125",
+        "impactPxs": [
+          "1.8617",
+          "1.8656"
+        ],
+        "markPx": "1.8642",
+        "midPx": "1.8636",
+        "openInterest": "1427270.3",
+        "oraclePx": "1.8664",
+        "premium": "-0.0004286327",
+        "prevDayPx": "1.8254"
+      },
+      {
+        "dayBaseVlm": "0.0",
+        "dayNtlVlm": "0.0",
+        "funding": "0.0",
+        "impactPxs": null,
+        "markPx": "0.37621",
+        "midPx": null,
+        "openInterest": "0.0",
+        "oraclePx": "0.3754",
+        "premium": null,
+        "prevDayPx": "0.37621"
+      },
+      {
+        "dayBaseVlm": "4726487.8000000007",
+        "dayNtlVlm": "822583.3128569992",
+        "funding": "0.0000125",
+        "impactPxs": [
+          "0.18405",
+          "0.18474"
+        ],
+        "markPx": "0.18433",
+        "midPx": "0.18436",
+        "openInterest": "33749319.6000000015",
+        "oraclePx": "0.18402",
+        "premium": "0.0001630258",
+        "prevDayPx": "0.17163"
+      }
+    ],
+    "_items_in_report": 5,
+    "_report_note": "list truncated for readability; rerun with --full for every item",
+    "_total_items": 230
+  }
+]
+
+info.all_mids[dex=default]
+--------------------------
+
+description: Current midpoint prices for the configured market dex.
+status: OK
+elapsed_ms: 227.9
+format:
+{
+  "#1000": "str",
+  "#1001": "str",
+  "#1010": "str",
+  "#1011": "str",
+  "#1020": "str",
+  "#1021": "str",
+  "#1030": "str",
+  "#1031": "str",
+  "#1040": "str",
+  "#1041": "str",
+  "#1410": "str",
+  "#1411": "str",
+  "#1420": "str",
+  "#1421": "str",
+  "#1430": "str",
+  "#1431": "str",
+  "#1490": "str",
+  "#1491": "str",
+  "#1500": "str",
+  "#1501": "str",
+  "#1510": "str",
+  "#1511": "str",
+  "#1520": "str",
+  "#1521": "str",
+  "#1530": "str",
+  "#1531": "str",
+  "0G": "str",
+  "2Z": "str",
+  "@1": "str",
+  "@10": "str",
+  "@100": "str",
+  "@101": "str",
+  "@102": "str",
+  "@103": "str",
+  "@104": "str",
+  "@105": "str",
+  "@106": "str",
+  "@107": "str",
+  "@108": "str",
+  "@109": "str",
+  "@11": "str",
+  "@110": "str",
+  "@111": "str",
+  "@112": "str",
+  "@113": "str",
+  "@114": "str",
+  "@115": "str",
+  "@116": "str",
+  "@117": "str",
+  "@118": "str",
+  "@119": "str",
+  "@12": "str",
+  "@120": "str",
+  "@121": "str",
+  "@122": "str",
+  "@123": "str",
+  "@124": "str",
+  "@125": "str",
+  "@126": "str",
+  "@127": "str",
+  "@128": "str",
+  "@129": "str",
+  "@13": "str",
+  "@130": "str",
+  "@131": "str",
+  "@132": "str",
+  "@133": "str",
+  "@134": "str",
+  "@135": "str",
+  "@136": "str",
+  "@137": "str",
+  "@138": "str",
+  "@139": "str",
+  "@14": "str",
+  "@140": "str",
+  "@141": "str",
+  "@142": "str",
+  "@143": "str",
+  "@144": "str",
+  "@145": "str",
+  "@146": "str",
+  "@147": "str",
+  "@148": "str",
+  "@149": "str",
+  "@15": "str",
+  "@150": "str",
+  "@151": "str",
+  "@152": "str",
+  "@153": "str",
+  "@154": "str",
+  "@155": "str",
+  "@156": "str",
+  "@157": "str",
+  "@158": "str",
+  "@159": "str",
+  "@16": "str",
+  "@160": "str",
+  "@161": "str",
+  "@162": "str",
+  "@163": "str",
+  "@164": "str",
+  "@165": "str",
+  "@166": "str",
+  "@167": "str",
+  "@168": "str",
+  "@169": "str",
+  "@17": "str",
+  "@170": "str",
+  "@171": "str",
+  "@172": "str",
+  "@173": "str",
+  "@174": "str",
+  "@175": "str",
+  "@176": "str",
+  "@177": "str",
+  "@178": "str",
+  "@179": "str",
+  "@18": "str",
+  "@180": "str",
+  "@181": "str",
+  "@182": "str",
+  "@183": "str",
+  "@184": "str",
+  "@185": "str",
+  "@186": "str",
+  "@187": "str",
+  "@188": "str",
+  "@189": "str",
+  "@19": "str",
+  "@190": "str",
+  "@191": "str",
+  "@192": "str",
+  "@193": "str",
+  "@194": "str",
+  "@195": "str",
+  "@196": "str",
+  "@197": "str",
+  "@198": "str",
+  "@199": "str",
+  "@2": "str",
+  "@20": "str",
+  "@200": "str",
+  "@201": "str",
+  "@202": "str",
+  "@203": "str",
+  "@204": "str",
+  "@205": "str",
+  "@206": "str",
+  "@207": "str",
+  "@208": "str",
+  "@209": "str",
+  "@21": "str",
+  "@210": "str",
+  "@211": "str",
+  "@212": "str",
+  "@213": "str",
+  "@214": "str",
+  "@215": "str",
+  "@216": "str",
+  "@217": "str",
+  "@218": "str",
+  "@219": "str",
+  "@22": "str",
+  "@220": "str",
+  "@221": "str",
+  "@222": "str",
+  "@223": "str",
+  "@224": "str",
+  "@225": "str",
+  "@226": "str",
+  "@227": "str",
+  "@228": "str",
+  "@229": "str",
+  "@23": "str",
+  "@230": "str",
+  "@231": "str",
+  "@232": "str",
+  "@233": "str",
+  "@234": "str",
+  "@235": "str",
+  "@236": "str",
+  "@237": "str",
+  "@238": "str",
+  "@239": "str",
+  "@24": "str",
+  "@240": "str",
+  "@241": "str",
+  "@242": "str",
+  "@243": "str",
+  "@244": "str",
+  "@245": "str",
+  "@246": "str",
+  "@247": "str",
+  "@248": "str",
+  "@249": "str",
+  "@25": "str",
+  "@250": "str",
+  "@251": "str",
+  "@252": "str",
+  "@253": "str",
+  "@254": "str",
+  "@255": "str",
+  "@256": "str",
+  "@257": "str",
+  "@258": "str",
+  "@259": "str",
+  "@26": "str",
+  "@260": "str",
+  "@261": "str",
+  "@262": "str",
+  "@263": "str",
+  "@264": "str",
+  "@265": "str",
+  "@266": "str",
+  "@267": "str",
+  "@268": "str",
+  "@269": "str",
+  "@27": "str",
+  "@270": "str",
+  "@271": "str",
+  "@272": "str",
+  "@273": "str",
+  "@274": "str",
+  "@275": "str",
+  "@276": "str",
+  "@277": "str",
+  "@278": "str",
+  "@279": "str",
+  "@28": "str",
+  "@280": "str",
+  "@281": "str",
+  "@282": "str",
+  "@283": "str",
+  "@284": "str",
+  "@285": "str",
+  "@286": "str",
+  "@287": "str",
+  "@288": "str",
+  "@289": "str",
+  "@29": "str",
+  "@290": "str",
+  "@291": "str",
+  "@292": "str",
+  "@293": "str",
+  "@294": "str",
+  "@295": "str",
+  "@296": "str",
+  "@297": "str",
+  "@298": "str",
+  "@299": "str",
+  "@3": "str",
+  "@30": "str",
+  "@300": "str",
+  "@301": "str",
+  "@302": "str",
+  "@303": "str",
+  "@304": "str",
+  "@305": "str",
+  "@306": "str",
+  "@307": "str",
+  "@308": "str",
+  "@309": "str",
+  "@31": "str",
+  "@310": "str",
+  "@311": "str",
+  "@312": "str",
+  "@313": "str",
+  "@314": "str",
+  "@315": "str",
+  "@316": "str",
+  "@317": "str",
+  "@318": "str",
+  "@319": "str",
+  "@32": "str",
+  "@320": "str",
+  "@321": "str",
+  "@322": "str",
+  "@323": "str",
+  "@324": "str",
+  "@325": "str",
+  "@326": "str",
+  "@327": "str",
+  "@328": "str",
+  "@329": "str",
+  "@33": "str",
+  "@330": "str",
+  "@331": "str",
+  "@332": "str",
+  "@333": "str",
+  "@334": "str",
+  "@335": "str",
+  "@336": "str",
+  "@34": "str",
+  "@35": "str",
+  "@36": "str",
+  "@363": "str",
+  "@364": "str",
+  "@365": "str",
+  "@366": "str",
+  "@367": "str",
+  "@368": "str",
+  "@369": "str",
+  "@37": "str",
+  "@38": "str",
+  "@39": "str",
+  "@4": "str",
+  "@40": "str",
+  "@41": "str",
+  "@42": "str",
+  "@43": "str",
+  "@44": "str",
+  "@45": "str",
+  "@46": "str",
+  "@47": "str",
+  "@48": "str",
+  "@49": "str",
+  "@5": "str",
+  "@50": "str",
+  "@51": "str",
+  "@52": "str",
+  "@53": "str",
+  "@54": "str",
+  "@55": "str",
+  "@56": "str",
+  "@57": "str",
+  "@58": "str",
+  "@59": "str",
+  "@6": "str",
+  "@60": "str",
+  "@61": "str",
+  "@62": "str",
+  "@63": "str",
+  "@64": "str",
+  "@65": "str",
+  "@66": "str",
+  "@67": "str",
+  "@68": "str",
+  "@69": "str",
+  "@7": "str",
+  "@70": "str",
+  "@71": "str",
+  "@72": "str",
+  "@73": "str",
+  "@74": "str",
+  "@75": "str",
+  "@76": "str",
+  "@77": "str",
+  "@78": "str",
+  "@79": "str",
+  "@8": "str",
+  "@80": "str",
+  "@81": "str",
+  "@82": "str",
+  "@83": "str",
+  "@84": "str",
+  "@85": "str",
+  "@86": "str",
+  "@87": "str",
+  "@88": "str",
+  "@89": "str",
+  "@9": "str",
+  "@90": "str",
+  "@91": "str",
+  "@92": "str",
+  "@93": "str",
+  "@94": "str",
+  "@95": "str",
+  "@96": "str",
+  "@97": "str",
+  "@98": "str",
+  "@99": "str",
+  "AAVE": "str",
+  "ACE": "str",
+  "ADA": "str",
+  "AERO": "str",
+  "AI": "str",
+  "AI16Z": "str",
+  "AIXBT": "str",
+  "ALGO": "str",
+  "ALT": "str",
+  "ANIME": "str",
+  "APE": "str",
+  "APEX": "str",
+  "APT": "str",
+  "AR": "str",
+  "ARB": "str",
+  "ARK": "str",
+  "ASTER": "str",
+  "ATOM": "str",
+  "AVAX": "str",
+  "AVNT": "str",
+  "AXS": "str",
+  "AZTEC": "str",
+  "BABY": "str",
+  "BADGER": "str",
+  "BANANA": "str",
+  "BCH": "str",
+  "BERA": "str",
+  "BIGTIME": "str",
+  "BIO": "str",
+  "BLAST": "str",
+  "BLUR": "str",
+  "BLZ": "str",
+  "BNB": "str",
+  "BNT": "str",
+  "BOME": "str",
+  "BRETT": "str",
+  "BSV": "str",
+  "BTC": "str",
+  "CAKE": "str",
+  "CANTO": "str",
+  "CATI": "str",
+  "CC": "str",
+  "CELO": "str",
+  "CFX": "str",
+  "CHILLGUY": "str",
+  "CHIP": "str",
+  "COMP": "str",
+  "CRV": "str",
+  "CYBER": "str",
+  "DASH": "str",
+  "DOGE": "str",
+  "DOOD": "str",
+  "DOT": "str",
+  "DYDX": "str",
+  "DYM": "str",
+  "EIGEN": "str",
+  "ENA": "str",
+  "ENS": "str",
+  "ETC": "str",
+  "ETH": "str",
+  "ETHFI": "str",
+  "FARTCOIN": "str",
+  "FET": "str",
+  "FIL": "str",
+  "FOGO": "str",
+  "FRIEND": "str",
+  "FTM": "str",
+  "FTT": "str",
+  "FXS": "str",
+  "GALA": "str",
+  "GAS": "str",
+  "GMT": "str",
+  "GMX": "str",
+  "GOAT": "str",
+  "GRASS": "str",
+  "GRIFFAIN": "str",
+  "HBAR": "str",
+  "HEMI": "str",
+  "HMSTR": "str",
+  "HPOS": "str",
+  "HYPE": "str",
+  "HYPER": "str",
+  "ICP": "str",
+  "ILV": "str",
+  "IMX": "str",
+  "INIT": "str",
+  "INJ": "str",
+  "IO": "str",
+  "IOTA": "str",
+  "IP": "str",
+  "JELLY": "str",
+  "JTO": "str",
+  "JUP": "str",
+  "KAITO": "str",
+  "KAS": "str",
+  "LAUNCHCOIN": "str",
+  "LAYER": "str",
+  "LDO": "str",
+  "LINEA": "str",
+  "LINK": "str",
+  "LISTA": "str",
+  "LIT": "str",
+  "LOOM": "str",
+  "LTC": "str",
+  "MANTA": "str",
+  "MATIC": "str",
+  "MAV": "str",
+  "MAVIA": "str",
+  "ME": "str",
+  "MEGA": "str",
+  "MELANIA": "str",
+  "MEME": "str",
+  "MERL": "str",
+  "MET": "str",
+  "MEW": "str",
+  "MINA": "str",
+  "MKR": "str",
+  "MNT": "str",
+  "MON": "str",
+  "MOODENG": "str",
+  "MORPHO": "str",
+  "MOVE": "str",
+  "MYRO": "str",
+  "NEAR": "str",
+  "NEIROETH": "str",
+  "NEO": "str",
+  "NFTI": "str",
+  "NIL": "str",
+  "NOT": "str",
+  "NTRN": "str",
+  "NXPC": "str",
+  "OGN": "str",
+  "OM": "str",
+  "OMNI": "str",
+  "ONDO": "str",
+  "OP": "str",
+  "ORBS": "str",
+  "ORDI": "str",
+  "OX": "str",
+  "PANDORA": "str",
+  "PAXG": "str",
+  "PENDLE": "str",
+  "PENGU": "str",
+  "PEOPLE": "str",
+  "PIXEL": "str",
+  "PNUT": "str",
+  "POL": "str",
+  "POLYX": "str",
+  "POPCAT": "str",
+  "PROMPT": "str",
+  "PROVE": "str",
+  "PUMP": "str",
+  "PURR": "str",
+  "PURR/USDC": "str",
+  "PYTH": "str",
+  "RDNT": "str",
+  "RENDER": "str",
+  "REQ": "str",
+  "RESOLV": "str",
+  "REZ": "str",
+  "RLB": "str",
+  "RNDR": "str",
+  "RSR": "str",
+  "RUNE": "str",
+  "S": "str",
+  "SAGA": "str",
+  "SAND": "str",
+  "SCR": "str",
+  "SEI": "str",
+  "SHIA": "str",
+  "SKR": "str",
+  "SKY": "str",
+  "SNX": "str",
+  "SOL": "str",
+  "SOPH": "str",
+  "SPX": "str",
+  "STABLE": "str",
+  "STBL": "str",
+  "STG": "str",
+  "STRAX": "str",
+  "STRK": "str",
+  "STX": "str",
+  "SUI": "str",
+  "SUPER": "str",
+  "SUSHI": "str",
+  "SYRUP": "str",
+  "TAO": "str",
+  "TIA": "str",
+  "TNSR": "str",
+  "TON": "str",
+  "TRB": "str",
+  "TRUMP": "str",
+  "TRX": "str",
+  "TST": "str",
+  "TURBO": "str",
+  "UMA": "str",
+  "UNI": "str",
+  "UNIBOT": "str",
+  "USTC": "str",
+  "USUAL": "str",
+  "VINE": "str",
+  "VIRTUAL": "str",
+  "VVV": "str",
+  "W": "str",
+  "WCT": "str",
+  "WIF": "str",
+  "WLD": "str",
+  "WLFI": "str",
+  "XAI": "str",
+  "XLM": "str",
+  "XMR": "str",
+  "XPL": "str",
+  "XRP": "str",
+  "YGG": "str",
+  "YZY": "str",
+  "ZEC": "str",
+  "ZEN": "str",
+  "ZEREBRO": "str",
+  "ZETA": "str",
+  "ZK": "str",
+  "ZORA": "str",
+  "ZRO": "str",
+  "kBONK": "str",
+  "kDOGS": "str",
+  "kFLOKI": "str",
+  "kLUNC": "str",
+  "kNEIRO": "str",
+  "kPEPE": "str",
+  "kSHIB": "str"
+}
+response:
+{
+  "#1000": "0.5",
+  "#1001": "0.5",
+  "#1010": "0.595",
+  "#1011": "0.405",
+  "#1020": "0.355005",
+  "#1021": "0.644995",
+  "#1030": "0.06",
+  "#1031": "0.94",
+  "#1040": "0.02448",
+  "#1041": "0.97552",
+  "#1410": "0.615075",
+  "#1411": "0.384925",
+  "#1420": "0.644495",
+  "#1421": "0.355505",
+  "#1430": "0.64153",
+  "#1431": "0.35847",
+  "#1490": "0.15227",
+  "#1491": "0.84773",
+  "#1500": "0.5",
+  "#1501": "0.5",
+  "#1510": "0.464185",
+  "#1511": "0.535815",
+  "#1520": "0.6292",
+  "#1521": "0.3708",
+  "#1530": "0.0225",
+  "#1531": "0.9775",
+  "0G": "0.385275",
+  "2Z": "0.079108",
+  "@1": "11.3815",
+  "@10": "0.000045",
+  "@100": "0.00371",
+  "@101": "0.151105",
+  "@102": "0.013872",
+  "@103": "0.00021066",
+  "@104": "0.054523",
+  "@105": "0.089605",
+  "@106": "0.007085",
+  "@107": "72.3285",
+  "@108": "0.026389",
+  "@109": "0.000195",
+  "@11": "0.000372",
+  "@110": "0.01875",
+  "@111": "0.056542",
+  "@112": "0.0005492",
+  "@113": "0.000153",
+  "@114": "0.0001353",
+  "@115": "0.050787",
+  "@116": "0.00001182",
+  "@117": "0.0010524",
+  "@118": "0.01585",
+  "@119": "0.012498",
+  "@12": "0.00004351",
+  "@120": "0.024247",
+  "@121": "0.013139",
+  "@122": "0.004714",
+  "@123": "0.042787",
+  "@124": "0.013035",
+  "@125": "0.006268",
+  "@126": "0.0775",
+  "@127": "0.043099",
+  "@128": "0.000022",
+  "@129": "0.005205",
+  "@13": "0.00066096",
+  "@130": "0.000019",
+  "@131": "0.154729",
+  "@132": "0.002606",
+  "@133": "0.000252",
+  "@134": "0.000802",
+  "@135": "0.000014",
+  "@136": "0.007003",
+  "@137": "0.000015",
+  "@138": "0.0004491",
+  "@139": "0.003442",
+  "@14": "0.0000771",
+  "@140": "0.000067",
+  "@141": "0.012876",
+  "@142": "65953.5",
+  "@143": "0.001056",
+  "@144": "0.000117",
+  "@145": "0.000025",
+  "@146": "0.000013",
+  "@147": "0.000549",
+  "@148": "0.000222",
+  "@149": "1.0",
+  "@15": "0.000172",
+  "@150": "0.99895",
+  "@151": "1830.45",
+  "@152": "1.01",
+  "@153": "0.993235",
+  "@154": "1.0",
+  "@155": "0.000518",
+  "@156": "72.8155",
+  "@157": "0.003288",
+  "@158": "0.000021",
+  "@159": "0.5279",
+  "@16": "0.036977",
+  "@160": "0.001936",
+  "@161": "0.026775",
+  "@162": "0.144095",
+  "@163": "0.019145",
+  "@164": "0.001056",
+  "@165": "0.062817",
+  "@166": "0.998805",
+  "@167": "1.0",
+  "@168": "1.0",
+  "@169": "1.0",
+  "@17": "0.00002014",
+  "@170": "0.0025",
+  "@171": "0.8",
+  "@172": "0.015729",
+  "@173": "95041.5",
+  "@174": "0.4542",
+  "@175": "0.0095401",
+  "@176": "0.000715",
+  "@177": "0.016102",
+  "@178": "0.681775",
+  "@179": "0.197835",
+  "@18": "0.00605",
+  "@180": "0.9975",
+  "@181": "1.0",
+  "@182": "4426.05",
+  "@183": "0.009464",
+  "@184": "0.007005",
+  "@185": "0.002385",
+  "@186": "1.0",
+  "@187": "0.000091",
+  "@188": "0.00173925",
+  "@189": "620.0",
+  "@19": "0.0113355",
+  "@190": "0.010813",
+  "@191": "0.000218",
+  "@192": "0.000196",
+  "@193": "0.33936",
+  "@194": "0.00000508",
+  "@195": "0.000144",
+  "@196": "0.000035",
+  "@197": "1.0",
+  "@198": "0.080133",
+  "@199": "0.010095",
+  "@2": "0.00006218",
+  "@20": "0.00009245",
+  "@200": "1.715",
+  "@201": "0.00000013",
+  "@202": "0.00058",
+  "@203": "1.0",
+  "@204": "0.0353",
+  "@205": "1.018",
+  "@206": "0.11192",
+  "@207": "72.4835",
+  "@208": "0.016861",
+  "@209": "4619.0",
+  "@21": "0.00001643",
+  "@210": "0.095183",
+  "@211": "0.0003",
+  "@212": "9.03955",
+  "@213": "8.318",
+  "@214": "0.60491",
+  "@215": "0.001508",
+  "@216": "0.0358",
+  "@217": "1.0015",
+  "@218": "3.0",
+  "@219": "0.014751",
+  "@22": "0.091484",
+  "@220": "1.0",
+  "@221": "1.0",
+  "@222": "1.0",
+  "@223": "0.000695",
+  "@224": "1.75",
+  "@225": "0.007235",
+  "@226": "8.1105",
+  "@227": "74.905",
+  "@228": "0.079193",
+  "@229": "1.0",
+  "@23": "0.203775",
+  "@230": "1.00105",
+  "@231": "0.000062",
+  "@232": "63.129",
+  "@233": "0.082112",
+  "@234": "76644.0",
+  "@235": "2110.1",
+  "@236": "0.979385",
+  "@237": "0.000045",
+  "@238": "0.08888",
+  "@239": "1.0",
+  "@24": "0.00002061",
+  "@240": "0.001801",
+  "@241": "0.00029",
+  "@242": "0.040283",
+  "@243": "0.0206015",
+  "@244": "1.252655",
+  "@245": "0.000985",
+  "@246": "0.002753",
+  "@247": "0.031137",
+  "@248": "440.01",
+  "@249": "0.02125",
+  "@25": "0.000219",
+  "@250": "65.6",
+  "@251": "0.064",
+  "@252": "0.057843",
+  "@253": "0.90995",
+  "@254": "0.20712",
+  "@255": "72.392",
+  "@256": "0.04021",
+  "@257": "0.1",
+  "@258": "0.038923",
+  "@259": "1.0",
+  "@26": "0.000962",
+  "@260": "357.105",
+  "@261": "0.002316",
+  "@262": "1.0",
+  "@263": "92.3805",
+  "@264": "226.0",
+  "@265": "66.449",
+  "@266": "362.675",
+  "@267": "1.25855",
+  "@268": "275.895",
+  "@269": "627.42",
+  "@27": "0.00000996",
+  "@270": "0.15854",
+  "@271": "85.9925",
+  "@272": "601.26",
+  "@273": "78.0",
+  "@274": "0.00000306",
+  "@275": "1.3338",
+  "@276": "400.695",
+  "@277": "628.2",
+  "@278": "0.002566",
+  "@279": "761.345",
+  "@28": "0.00014651",
+  "@280": "248.44",
+  "@281": "0.002674",
+  "@282": "0.00115016",
+  "@283": "0.055753",
+  "@284": "0.006267",
+  "@285": "0.0222175",
+  "@286": "0.061951",
+  "@287": "665.295",
+  "@288": "741.89",
+  "@289": "450.745",
+  "@29": "0.008775",
+  "@290": "0.724195",
+  "@291": "0.000476",
+  "@292": "0.032193",
+  "@293": "0.217425",
+  "@294": "0.010355",
+  "@295": "0.01073",
+  "@296": "0.101645",
+  "@297": "35.95",
+  "@298": "0.00379",
+  "@299": "0.009031",
+  "@3": "0.00545",
+  "@30": "0.000287",
+  "@300": "0.01335",
+  "@301": "5.25965",
+  "@302": "0.0046171",
+  "@303": "0.56",
+  "@304": "0.000556",
+  "@305": "0.0716795",
+  "@306": "8.10935",
+  "@307": "227.195",
+  "@308": "362.675",
+  "@309": "1.0",
+  "@31": "0.000014",
+  "@310": "0.145",
+  "@311": "0.0001",
+  "@312": "0.99994",
+  "@313": "0.5",
+  "@314": "0.5",
+  "@315": "0.99",
+  "@316": "0.01581",
+  "@317": "0.024",
+  "@318": "0.975",
+  "@319": "0.00001",
+  "@32": "0.00001207",
+  "@320": "0.99604",
+  "@321": "0.84895",
+  "@322": "0.03",
+  "@323": "0.5",
+  "@324": "0.5",
+  "@325": "0.00382",
+  "@326": "0.9936",
+  "@327": "0.996",
+  "@328": "0.00001",
+  "@329": "0.00001",
+  "@33": "0.00000067",
+  "@330": "0.9902",
+  "@331": "207.685",
+  "@332": "430.42",
+  "@333": "1030.6",
+  "@334": "0.305275",
+  "@335": "0.015845",
+  "@336": "73.3995",
+  "@34": "0.002311",
+  "@35": "0.00756",
+  "@36": "0.00139",
+  "@363": "0.0022",
+  "@364": "0.99781",
+  "@365": "0.99899",
+  "@366": "0.00002",
+  "@367": "0.000675",
+  "@368": "0.00328",
+  "@369": "0.997",
+  "@37": "0.00009878",
+  "@38": "0.0009146",
+  "@39": "0.00017",
+  "@4": "3.9056",
+  "@40": "0.0003878",
+  "@41": "0.0033052",
+  "@42": "0.002006",
+  "@43": "0.000031",
+  "@44": "0.0010125",
+  "@45": "0.00010843",
+  "@46": "0.00021",
+  "@47": "0.004695",
+  "@48": "0.00038355",
+  "@49": "0.000565",
+  "@5": "0.679745",
+  "@50": "0.0266025",
+  "@51": "1.44245",
+  "@52": "0.022384",
+  "@53": "0.000235",
+  "@54": "0.031808",
+  "@55": "0.020304",
+  "@56": "0.024996",
+  "@57": "0.050878",
+  "@58": "0.085068",
+  "@59": "0.940655",
+  "@6": "0.000102",
+  "@60": "0.036092",
+  "@61": "0.001044",
+  "@62": "0.041922",
+  "@63": "0.047543",
+  "@64": "0.067699",
+  "@65": "0.054242",
+  "@66": "0.000223",
+  "@67": "0.042427",
+  "@68": "0.12002",
+  "@69": "0.36052",
+  "@7": "0.000026",
+  "@70": "0.018229",
+  "@71": "1.0",
+  "@72": "1.8047",
+  "@73": "0.062067",
+  "@74": "0.000093",
+  "@75": "0.14855",
+  "@76": "0.014015",
+  "@77": "0.00484",
+  "@78": "0.099932",
+  "@79": "0.062197",
+  "@8": "0.00505735",
+  "@80": "0.0002996",
+  "@81": "0.00006239",
+  "@82": "0.036273",
+  "@83": "0.022438",
+  "@84": "0.058024",
+  "@85": "4.19575",
+  "@86": "0.089451",
+  "@87": "0.067039",
+  "@88": "0.00009645",
+  "@89": "0.092659",
+  "@9": "0.000299",
+  "@90": "0.006541",
+  "@91": "0.010673",
+  "@92": "0.12991",
+  "@93": "0.00001979",
+  "@94": "0.082896",
+  "@95": "0.000109",
+  "@96": "0.019919",
+  "@97": "0.068883",
+  "@98": "1.0",
+  "@99": "0.019276",
+  "AAVE": "75.0525",
+  "ACE": "0.1142",
+  "ADA": "0.20911",
+  "AERO": "0.370995",
+  "AI": "0.12555",
+  "AI16Z": "0.06157",
+  "AIXBT": "0.026828",
+  "ALGO": "0.108175",
+  "ALT": "0.006766",
+  "ANIME": "0.00368",
+  "APE": "0.15069",
+  "APEX": "0.297175",
+  "APT": "0.8301",
+  "AR": "2.5672",
+  "ARB": "0.09404",
+  "ARK": "0.147655",
+  "ASTER": "0.69115",
+  "ATOM": "1.8636",
+  "AVAX": "8.112",
+  "AVNT": "0.135495",
+  "AXS": "1.1431",
+  "AZTEC": "0.022239",
+  "BABY": "0.013978",
+  "BADGER": "0.88823",
+  "BANANA": "3.467",
+  "BCH": "247.77",
+  "BERA": "0.30018",
+  "BIGTIME": "0.010501",
+  "BIO": "0.034594",
+  "BLAST": "0.000456",
+  "BLUR": "0.019855",
+  "BLZ": "0.070043",
+  "BNB": "627.605",
+  "BNT": "0.38287",
+  "BOME": "0.00049",
+  "BRETT": "0.006356",
+  "BSV": "14.026",
+  "BTC": "66016.5",
+  "CAKE": "1.30485",
+  "CANTO": "0.066",
+  "CATI": "0.082821",
+  "CC": "0.15435",
+  "CELO": "0.071488",
+  "CFX": "0.051522",
+  "CHILLGUY": "0.012699",
+  "CHIP": "0.039921",
+  "COMP": "17.7685",
+  "CRV": "0.20534",
+  "CYBER": "1.0415",
+  "DASH": "39.264",
+  "DOGE": "0.092197",
+  "DOOD": "0.00198",
+  "DOT": "1.09945",
+  "DYDX": "0.18436",
+  "DYM": "0.01918",
+  "EIGEN": "0.2152",
+  "ENA": "0.111825",
+  "ENS": "5.4672",
+  "ETC": "7.77",
+  "ETH": "1831.25",
+  "ETHFI": "0.35608",
+  "FARTCOIN": "0.14429",
+  "FET": "0.262865",
+  "FIL": "0.94943",
+  "FOGO": "0.014246",
+  "FRIEND": "4.72",
+  "FTM": "0.71688",
+  "FTT": "0.32243",
+  "FXS": "0.65538",
+  "GALA": "0.002923",
+  "GAS": "1.35405",
+  "GMT": "0.010127",
+  "GMX": "6.3898",
+  "GOAT": "0.015709",
+  "GRASS": "0.49543",
+  "GRIFFAIN": "0.009332",
+  "HBAR": "0.08582",
+  "HEMI": "0.006607",
+  "HMSTR": "0.000165",
+  "HPOS": "0.041873",
+  "HYPE": "72.3745",
+  "HYPER": "0.084536",
+  "ICP": "3.0667",
+  "ILV": "12.118",
+  "IMX": "0.1542",
+  "INIT": "0.066613",
+  "INJ": "6.60715",
+  "IO": "0.18586",
+  "IOTA": "0.051631",
+  "IP": "0.39675",
+  "JELLY": "0.037555",
+  "JTO": "0.632305",
+  "JUP": "0.205555",
+  "KAITO": "0.467575",
+  "KAS": "0.032247",
+  "LAUNCHCOIN": "0.060367",
+  "LAYER": "0.07574",
+  "LDO": "0.30468",
+  "LINEA": "0.002994",
+  "LINK": "8.3176",
+  "LISTA": "0.12466",
+  "LIT": "1.693",
+  "LOOM": "0.071161",
+  "LTC": "47.49",
+  "MANTA": "0.0785",
+  "MATIC": "0.37621",
+  "MAV": "0.015456",
+  "MAVIA": "0.03725",
+  "ME": "0.07716",
+  "MEGA": "0.055722",
+  "MELANIA": "0.09301",
+  "MEME": "0.000547",
+  "MERL": "0.027814",
+  "MET": "0.135695",
+  "MEW": "0.00064",
+  "MINA": "0.053081",
+  "MKR": "1831.5",
+  "MNT": "0.60523",
+  "MON": "0.020642",
+  "MOODENG": "0.04653",
+  "MORPHO": "1.89065",
+  "MOVE": "0.013869",
+  "MYRO": "0.015813",
+  "NEAR": "2.8594",
+  "NEIROETH": "0.01808",
+  "NEO": "2.5221",
+  "NFTI": "6.5609",
+  "NIL": "0.061819",
+  "NOT": "0.000475",
+  "NTRN": "0.1238",
+  "NXPC": "0.4259",
+  "OGN": "0.055683",
+  "OM": "0.06527",
+  "OMNI": "4.1915",
+  "ONDO": "0.42306",
+  "OP": "0.12331",
+  "ORBS": "0.01939",
+  "ORDI": "3.6076",
+  "OX": "0.007459",
+  "PANDORA": "3026.3",
+  "PAXG": "4436.45",
+  "PENDLE": "1.37055",
+  "PENGU": "0.007007",
+  "PEOPLE": "0.006134",
+  "PIXEL": "0.024027",
+  "PNUT": "0.04934",
+  "POL": "0.09418",
+  "POLYX": "0.04559",
+  "POPCAT": "0.051193",
+  "PROMPT": "0.03661",
+  "PROVE": "0.19889",
+  "PUMP": "0.00174",
+  "PURR": "0.13676",
+  "PURR/USDC": "0.136345",
+  "PYTH": "0.038393",
+  "RDNT": "0.018328",
+  "RENDER": "2.14785",
+  "REQ": "0.15473",
+  "RESOLV": "0.022682",
+  "REZ": "0.00376",
+  "RLB": "0.071",
+  "RNDR": "6.8952",
+  "RSR": "0.001522",
+  "RUNE": "0.40077",
+  "S": "0.037572",
+  "SAGA": "0.01697",
+  "SAND": "0.062043",
+  "SCR": "0.04737",
+  "SEI": "0.062018",
+  "SHIA": "0.000621",
+  "SKR": "0.012578",
+  "SKY": "0.067499",
+  "SNX": "0.27329",
+  "SOL": "72.8535",
+  "SOPH": "0.006792",
+  "SPX": "0.33793",
+  "STABLE": "0.038944",
+  "STBL": "0.032175",
+  "STG": "0.15387",
+  "STRAX": "1.5829",
+  "STRK": "0.03678",
+  "STX": "0.2161",
+  "SUI": "0.81722",
+  "SUPER": "0.110165",
+  "SUSHI": "0.22659",
+  "SYRUP": "0.14421",
+  "TAO": "227.35",
+  "TIA": "0.37134",
+  "TNSR": "0.03648",
+  "TON": "2.0042",
+  "TRB": "15.876",
+  "TRUMP": "1.9609",
+  "TRX": "0.33343",
+  "TST": "0.017491",
+  "TURBO": "0.001013",
+  "UMA": "0.41927",
+  "UNI": "2.8471",
+  "UNIBOT": "7.636",
+  "USTC": "0.007534",
+  "USUAL": "0.01212",
+  "VINE": "0.012997",
+  "VIRTUAL": "0.72419",
+  "VVV": "20.7735",
+  "W": "0.01299",
+  "WCT": "0.051638",
+  "WIF": "0.18516",
+  "WLD": "0.54003",
+  "WLFI": "0.061581",
+  "XAI": "0.00979",
+  "XLM": "0.222665",
+  "XMR": "356.21",
+  "XPL": "0.095107",
+  "XRP": "1.22055",
+  "YGG": "0.032377",
+  "YZY": "0.31107",
+  "ZEC": "601.635",
+  "ZEN": "5.4323",
+  "ZEREBRO": "0.032083",
+  "ZETA": "0.04722",
+  "ZK": "0.012781",
+  "ZORA": "0.011126",
+  "ZRO": "1.2234",
+  "kBONK": "0.00508",
+  "kDOGS": "0.13659",
+  "kFLOKI": "0.026659",
+  "kLUNC": "0.069843",
+  "kNEIRO": "0.07692",
+  "kPEPE": "0.003141",
+  "kSHIB": "0.005227"
+}
+
+info.meta[dex=xyz]
+------------------
+
+description: Perp metadata for the configured market dex.
+status: OK
+elapsed_ms: 588.2
+format:
+{
+  "collateralToken": "int",
+  "marginTables": {
+    "item_format": {
+      "item_format": "int",
+      "length": 2,
+      "type": "list"
+    },
+    "length": 1,
+    "type": "list"
+  },
+  "universe": {
+    "item_format": {
+      "growthMode": "str",
+      "lastGrowthModeChangeTime": "str",
+      "marginTableId": "int",
+      "maxLeverage": "int",
+      "name": "str",
+      "szDecimals": "int"
+    },
+    "length": 85,
+    "type": "list"
+  }
+}
+response:
+{
+  "collateralToken": 0,
+  "marginTables": [
+    [
+      50,
+      {
+        "description": "",
+        "marginTiers": [
+          {
+            "lowerBound": "0.0",
+            "maxLeverage": 50
+          }
+        ]
+      }
+    ]
+  ],
+  "universe": {
+    "_items": [
+      {
+        "growthMode": "enabled",
+        "lastGrowthModeChangeTime": "2025-11-23T17:37:10.033211662",
+        "marginTableId": 30,
+        "maxLeverage": 30,
+        "name": "xyz:XYZ100",
+        "szDecimals": 4
+      },
+      {
+        "growthMode": "enabled",
+        "lastGrowthModeChangeTime": "2025-11-23T17:37:10.033211662",
+        "marginTableId": 10,
+        "maxLeverage": 10,
+        "name": "xyz:TSLA",
+        "szDecimals": 3
+      },
+      {
+        "growthMode": "enabled",
+        "lastGrowthModeChangeTime": "2025-11-23T17:37:10.033211662",
+        "marginTableId": 20,
+        "maxLeverage": 20,
+        "name": "xyz:NVDA",
+        "szDecimals": 3
+      },
+      {
+        "marginTableId": 25,
+        "maxLeverage": 25,
+        "name": "xyz:GOLD",
+        "szDecimals": 4
+      },
+      {
+        "growthMode": "enabled",
+        "lastGrowthModeChangeTime": "2025-11-23T17:37:10.033211662",
+        "marginMode": "noCross",
+        "marginTableId": 10,
+        "maxLeverage": 10,
+        "name": "xyz:HOOD",
+        "onlyIsolated": true,
+        "szDecimals": 3
+      }
+    ],
+    "_items_in_report": 5,
+    "_report_note": "list truncated for readability; rerun with --full for every item",
+    "_total_items": 85
+  }
+}
+
+info.meta_and_asset_ctxs[dex=xyz]
+---------------------------------
+
+description: Perp metadata plus live contexts for the configured market dex.
+status: OK
+elapsed_ms: 466.1
+format:
+{
+  "item_format": {
+    "collateralToken": "int",
+    "marginTables": {
+      "item_format": {
+        "item_format": "int",
+        "length": 2,
+        "type": "list"
+      },
+      "length": 1,
+      "type": "list"
+    },
+    "universe": {
+      "item_format": {
+        "growthMode": "str",
+        "lastGrowthModeChangeTime": "str",
+        "marginTableId": "int",
+        "maxLeverage": "int",
+        "name": "str",
+        "szDecimals": "int"
+      },
+      "length": 85,
+      "type": "list"
+    }
+  },
+  "length": 2,
+  "type": "list"
+}
+response:
+[
+  {
+    "collateralToken": 0,
+    "marginTables": [
+      [
+        50,
+        {
+          "description": "",
+          "marginTiers": [
+            {
+              "lowerBound": "0.0",
+              "maxLeverage": 50
+            }
+          ]
+        }
+      ]
+    ],
+    "universe": {
+      "_items": [
+        {
+          "growthMode": "enabled",
+          "lastGrowthModeChangeTime": "2025-11-23T17:37:10.033211662",
+          "marginTableId": 30,
+          "maxLeverage": 30,
+          "name": "xyz:XYZ100",
+          "szDecimals": 4
+        },
+        {
+          "growthMode": "enabled",
+          "lastGrowthModeChangeTime": "2025-11-23T17:37:10.033211662",
+          "marginTableId": 10,
+          "maxLeverage": 10,
+          "name": "xyz:TSLA",
+          "szDecimals": 3
+        },
+        {
+          "growthMode": "enabled",
+          "lastGrowthModeChangeTime": "2025-11-23T17:37:10.033211662",
+          "marginTableId": 20,
+          "maxLeverage": 20,
+          "name": "xyz:NVDA",
+          "szDecimals": 3
+        },
+        {
+          "marginTableId": 25,
+          "maxLeverage": 25,
+          "name": "xyz:GOLD",
+          "szDecimals": 4
+        },
+        {
+          "growthMode": "enabled",
+          "lastGrowthModeChangeTime": "2025-11-23T17:37:10.033211662",
+          "marginMode": "noCross",
+          "marginTableId": 10,
+          "maxLeverage": 10,
+          "name": "xyz:HOOD",
+          "onlyIsolated": true,
+          "szDecimals": 3
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 85
+    }
+  },
+  {
+    "_items": [
+      {
+        "dayBaseVlm": "11414.6439",
+        "dayNtlVlm": "349650217.3008999228",
+        "funding": "0.00000625",
+        "impactPxs": [
+          "30534.0",
+          "30535.0"
+        ],
+        "markPx": "30533.0",
+        "midPx": "30534.5",
+        "openInterest": "14209.0018",
+        "oraclePx": "30534.0",
+        "premium": "0.0000163752",
+        "prevDayPx": "30637.0"
+      },
+      {
+        "dayBaseVlm": "68742.357",
+        "dayNtlVlm": "29170920.5029000007",
+        "funding": "0.00000625",
+        "impactPxs": [
+          "421.394",
+          "421.51"
+        ],
+        "markPx": "421.44",
+        "midPx": "421.47",
+        "openInterest": "65695.57",
+        "oraclePx": "421.53",
+        "premium": "-0.0001850402",
+        "prevDayPx": "422.69"
+      },
+      {
+        "dayBaseVlm": "478505.492",
+        "dayNtlVlm": "105696241.1655599922",
+        "funding": "0.00000625",
+        "impactPxs": [
+          "215.658",
+          "215.677"
+        ],
+        "markPx": "215.63",
+        "midPx": "215.665",
+        "openInterest": "892579.6719999999",
+        "oraclePx": "215.62",
+        "premium": "0.000220295",
+        "prevDayPx": "225.35"
+      },
+      {
+        "dayBaseVlm": "8394.1274",
+        "dayNtlVlm": "37468276.0776900128",
+        "funding": "0.00000625",
+        "impactPxs": [
+          "4443.66",
+          "4444.36"
+        ],
+        "markPx": "4443.1",
+        "midPx": "4443.85",
+        "openInterest": "22016.9656",
+        "oraclePx": "4441.8",
+        "premium": "0.000497546",
+        "prevDayPx": "4493.1"
+      },
+      {
+        "dayBaseVlm": "89027.421",
+        "dayNtlVlm": "7685601.5646109981",
+        "funding": "0.0000068577",
+        "impactPxs": [
+          "83.287",
+          "83.311"
+        ],
+        "markPx": "83.281",
+        "midPx": "83.298",
+        "openInterest": "140502.226",
+        "oraclePx": "83.247",
+        "premium": "0.0006246471",
+        "prevDayPx": "88.729"
+      }
+    ],
+    "_items_in_report": 5,
+    "_report_note": "list truncated for readability; rerun with --full for every item",
+    "_total_items": 85
+  }
+]
+
+info.all_mids[dex=xyz]
+----------------------
+
+description: Current midpoint prices for the configured market dex.
+status: OK
+elapsed_ms: 228.0
+format:
+{
+  "xyz:AAPL": "str",
+  "xyz:ALUMINIUM": "str",
+  "xyz:AMD": "str",
+  "xyz:AMZN": "str",
+  "xyz:ARM": "str",
+  "xyz:ASML": "str",
+  "xyz:AVGO": "str",
+  "xyz:BABA": "str",
+  "xyz:BB": "str",
+  "xyz:BIRD": "str",
+  "xyz:BRENTOIL": "str",
+  "xyz:BX": "str",
+  "xyz:CBRS": "str",
+  "xyz:CL": "str",
+  "xyz:COIN": "str",
+  "xyz:COPPER": "str",
+  "xyz:CORN": "str",
+  "xyz:COST": "str",
+  "xyz:CRCL": "str",
+  "xyz:CRWV": "str",
+  "xyz:DELL": "str",
+  "xyz:DKNG": "str",
+  "xyz:DRAM": "str",
+  "xyz:DXY": "str",
+  "xyz:EBAY": "str",
+  "xyz:EUR": "str",
+  "xyz:EWJ": "str",
+  "xyz:EWT": "str",
+  "xyz:EWY": "str",
+  "xyz:EWZ": "str",
+  "xyz:GBP": "str",
+  "xyz:GME": "str",
+  "xyz:GOLD": "str",
+  "xyz:GOOGL": "str",
+  "xyz:H100": "str",
+  "xyz:HIMS": "str",
+  "xyz:HOOD": "str",
+  "xyz:HYUNDAI": "str",
+  "xyz:IBM": "str",
+  "xyz:IBOV": "str",
+  "xyz:INTC": "str",
+  "xyz:JP225": "str",
+  "xyz:JPY": "str",
+  "xyz:KIOXIA": "str",
+  "xyz:KR200": "str",
+  "xyz:KRW": "str",
+  "xyz:LITE": "str",
+  "xyz:LLY": "str",
+  "xyz:META": "str",
+  "xyz:MINIMAX": "str",
+  "xyz:MRVL": "str",
+  "xyz:MSFT": "str",
+  "xyz:MSTR": "str",
+  "xyz:MU": "str",
+  "xyz:NATGAS": "str",
+  "xyz:NFLX": "str",
+  "xyz:NIFTY": "str",
+  "xyz:NVDA": "str",
+  "xyz:ORCL": "str",
+  "xyz:PALLADIUM": "str",
+  "xyz:PLATINUM": "str",
+  "xyz:PLTR": "str",
+  "xyz:PURRDAT": "str",
+  "xyz:QNT": "str",
+  "xyz:RIVN": "str",
+  "xyz:RKLB": "str",
+  "xyz:SILVER": "str",
+  "xyz:SKHX": "str",
+  "xyz:SMSN": "str",
+  "xyz:SNDK": "str",
+  "xyz:SOFTBANK": "str",
+  "xyz:SP500": "str",
+  "xyz:SPCX": "str",
+  "xyz:TSLA": "str",
+  "xyz:TSM": "str",
+  "xyz:TTF": "str",
+  "xyz:URANIUM": "str",
+  "xyz:URNM": "str",
+  "xyz:USAR": "str",
+  "xyz:VIX": "str",
+  "xyz:VOL": "str",
+  "xyz:WHEAT": "str",
+  "xyz:XLE": "str",
+  "xyz:XYZ100": "str",
+  "xyz:ZM": "str"
+}
+response:
+{
+  "xyz:AAPL": "310.155",
+  "xyz:ALUMINIUM": "3080.0",
+  "xyz:AMD": "533.54",
+  "xyz:AMZN": "248.77",
+  "xyz:ARM": "396.12",
+  "xyz:ASML": "1726.95",
+  "xyz:AVGO": "485.475",
+  "xyz:BABA": "127.255",
+  "xyz:BB": "9.8407",
+  "xyz:BIRD": "4.12905",
+  "xyz:BRENTOIL": "97.716",
+  "xyz:BX": "109.745",
+  "xyz:CBRS": "215.195",
+  "xyz:CL": "95.615",
+  "xyz:COIN": "164.83",
+  "xyz:COPPER": "6.5181",
+  "xyz:CORN": "4.61",
+  "xyz:COST": "965.09",
+  "xyz:CRCL": "92.581",
+  "xyz:CRWV": "112.125",
+  "xyz:DELL": "414.565",
+  "xyz:DKNG": "24.832",
+  "xyz:DRAM": "68.904",
+  "xyz:DXY": "97.15",
+  "xyz:EBAY": "108.725",
+  "xyz:EUR": "1.1606",
+  "xyz:EWJ": "94.021",
+  "xyz:EWT": "106.695",
+  "xyz:EWY": "210.96",
+  "xyz:EWZ": "34.5905",
+  "xyz:GBP": "1.3425",
+  "xyz:GME": "22.2755",
+  "xyz:GOLD": "4443.85",
+  "xyz:GOOGL": "361.57",
+  "xyz:H100": "2.6",
+  "xyz:HIMS": "26.567",
+  "xyz:HOOD": "83.298",
+  "xyz:HYUNDAI": "508.465",
+  "xyz:IBM": "305.18",
+  "xyz:IBOV": "175000.0",
+  "xyz:INTC": "112.21",
+  "xyz:JP225": "68245.5",
+  "xyz:JPY": "159.965",
+  "xyz:KIOXIA": "140.0",
+  "xyz:KR200": "1416.8",
+  "xyz:KRW": "1476.8",
+  "xyz:LITE": "947.125",
+  "xyz:LLY": "1089.35",
+  "xyz:META": "618.74",
+  "xyz:MINIMAX": "100.0",
+  "xyz:MRVL": "307.935",
+  "xyz:MSFT": "424.645",
+  "xyz:MSTR": "131.195",
+  "xyz:MU": "1064.6",
+  "xyz:NATGAS": "3.2293",
+  "xyz:NFLX": "81.375",
+  "xyz:NIFTY": "24250.0",
+  "xyz:NVDA": "215.665",
+  "xyz:ORCL": "228.97",
+  "xyz:PALLADIUM": "1325.35",
+  "xyz:PLATINUM": "1872.3",
+  "xyz:PLTR": "142.75",
+  "xyz:PURRDAT": "10.3715",
+  "xyz:QNT": "102.13",
+  "xyz:RIVN": "17.941",
+  "xyz:RKLB": "115.345",
+  "xyz:SILVER": "73.4505",
+  "xyz:SKHX": "1579.35",
+  "xyz:SMSN": "241.46",
+  "xyz:SNDK": "1798.5",
+  "xyz:SOFTBANK": "31.0",
+  "xyz:SP500": "7561.65",
+  "xyz:SPCX": "188.335",
+  "xyz:TSLA": "421.47",
+  "xyz:TSM": "439.1",
+  "xyz:TTF": "57.0",
+  "xyz:URANIUM": "85.0",
+  "xyz:URNM": "61.594",
+  "xyz:USAR": "28.0665",
+  "xyz:VIX": "20.0",
+  "xyz:VOL": "15.0",
+  "xyz:WHEAT": "6.3",
+  "xyz:XLE": "59.3395",
+  "xyz:XYZ100": "30534.5",
+  "xyz:ZM": "106.22"
+}
+
+info.spot_meta
+--------------
+
+description: Spot-market metadata.
+status: OK
+elapsed_ms: 893.3
+format:
+{
+  "tokens": {
+    "item_format": {
+      "deployerTradingFeeShare": "str",
+      "evmContract": {
+        "address": "str",
+        "evm_extra_wei_decimals": "int"
+      },
+      "fullName": "null",
+      "index": "int",
+      "isCanonical": "bool",
+      "name": "str",
+      "szDecimals": "int",
+      "tokenId": "str",
+      "weiDecimals": "int"
+    },
+    "length": 464,
+    "type": "list"
+  },
+  "universe": {
+    "item_format": {
+      "index": "int",
+      "isCanonical": "bool",
+      "name": "str",
+      "tokens": {
+        "item_format": "int",
+        "length": 2,
+        "type": "list"
+      }
+    },
+    "length": 301,
+    "type": "list"
+  }
+}
+response:
+{
+  "tokens": {
+    "_items": [
+      {
+        "deployerTradingFeeShare": "0.0",
+        "evmContract": {
+          "address": "0x6b9e773128f453f5c2c60935ee2de2cbc5390a24",
+          "evm_extra_wei_decimals": -2
+        },
+        "fullName": null,
+        "index": 0,
+        "isCanonical": true,
+        "name": "USDC",
+        "szDecimals": 8,
+        "tokenId": "0x6d1e7cde53ba9467b783cb7c530ce054",
+        "weiDecimals": 8
+      },
+      {
+        "deployerTradingFeeShare": "0.0",
+        "evmContract": {
+          "address": "0x9b498c3c8a0b8cd8ba1d9851d40d186f1872b44e",
+          "evm_extra_wei_decimals": 13
+        },
+        "fullName": null,
+        "index": 1,
+        "isCanonical": true,
+        "name": "PURR",
+        "szDecimals": 0,
+        "tokenId": "0xc1fb593aeffbeb02f85e0308e9956a90",
+        "weiDecimals": 5
+      },
+      {
+        "deployerTradingFeeShare": "0.0",
+        "evmContract": {
+          "address": "0xa320d9f65ec992eff38622c63627856382db726c",
+          "evm_extra_wei_decimals": 10
+        },
+        "fullName": null,
+        "index": 2,
+        "isCanonical": false,
+        "name": "HFUN",
+        "szDecimals": 2,
+        "tokenId": "0xbaf265ef389da684513d98d68edf4eae",
+        "weiDecimals": 8
+      },
+      {
+        "deployerTradingFeeShare": "0.0",
+        "evmContract": null,
+        "fullName": null,
+        "index": 3,
+        "isCanonical": false,
+        "name": "LICK",
+        "szDecimals": 0,
+        "tokenId": "0xba3aaf468f793d9b42fd3328e24f1de9",
+        "weiDecimals": 5
+      },
+      {
+        "deployerTradingFeeShare": "0.0",
+        "evmContract": null,
+        "fullName": null,
+        "index": 4,
+        "isCanonical": false,
+        "name": "MANLET",
+        "szDecimals": 0,
+        "tokenId": "0xe9ced9225d2a69ccc8d6a5b224524b99",
+        "weiDecimals": 5
+      }
+    ],
+    "_items_in_report": 5,
+    "_report_note": "list truncated for readability; rerun with --full for every item",
+    "_total_items": 464
+  },
+  "universe": {
+    "_items": [
+      {
+        "index": 0,
+        "isCanonical": true,
+        "name": "PURR/USDC",
+        "tokens": [
+          1,
+          0
+        ]
+      },
+      {
+        "index": 1,
+        "isCanonical": false,
+        "name": "@1",
+        "tokens": [
+          2,
+          0
+        ]
+      },
+      {
+        "index": 2,
+        "isCanonical": false,
+        "name": "@2",
+        "tokens": [
+          3,
+          0
+        ]
+      },
+      {
+        "index": 3,
+        "isCanonical": false,
+        "name": "@3",
+        "tokens": [
+          4,
+          0
+        ]
+      },
+      {
+        "index": 4,
+        "isCanonical": false,
+        "name": "@4",
+        "tokens": [
+          5,
+          0
+        ]
+      }
+    ],
+    "_items_in_report": 5,
+    "_report_note": "list truncated for readability; rerun with --full for every item",
+    "_total_items": 301
+  }
+}
+
+info.spot_meta_and_asset_ctxs
+-----------------------------
+
+description: Spot metadata paired with live asset contexts.
+status: OK
+elapsed_ms: 946.7
+format:
+{
+  "item_format": {
+    "tokens": {
+      "item_format": {
+        "deployerTradingFeeShare": "str",
+        "evmContract": {
+          "address": "str",
+          "evm_extra_wei_decimals": "int"
+        },
+        "fullName": "null",
+        "index": "int",
+        "isCanonical": "bool",
+        "name": "str",
+        "szDecimals": "int",
+        "tokenId": "str",
+        "weiDecimals": "int"
+      },
+      "length": 464,
+      "type": "list"
+    },
+    "universe": {
+      "item_format": {
+        "index": "int",
+        "isCanonical": "bool",
+        "name": "str",
+        "tokens": {
+          "item_format": "int",
+          "length": 2,
+          "type": "list"
+        }
+      },
+      "length": 301,
+      "type": "list"
+    }
+  },
+  "length": 2,
+  "type": "list"
+}
+response:
+[
+  {
+    "tokens": {
+      "_items": [
+        {
+          "deployerTradingFeeShare": "0.0",
+          "evmContract": {
+            "address": "0x6b9e773128f453f5c2c60935ee2de2cbc5390a24",
+            "evm_extra_wei_decimals": -2
+          },
+          "fullName": null,
+          "index": 0,
+          "isCanonical": true,
+          "name": "USDC",
+          "szDecimals": 8,
+          "tokenId": "0x6d1e7cde53ba9467b783cb7c530ce054",
+          "weiDecimals": 8
+        },
+        {
+          "deployerTradingFeeShare": "0.0",
+          "evmContract": {
+            "address": "0x9b498c3c8a0b8cd8ba1d9851d40d186f1872b44e",
+            "evm_extra_wei_decimals": 13
+          },
+          "fullName": null,
+          "index": 1,
+          "isCanonical": true,
+          "name": "PURR",
+          "szDecimals": 0,
+          "tokenId": "0xc1fb593aeffbeb02f85e0308e9956a90",
+          "weiDecimals": 5
+        },
+        {
+          "deployerTradingFeeShare": "0.0",
+          "evmContract": {
+            "address": "0xa320d9f65ec992eff38622c63627856382db726c",
+            "evm_extra_wei_decimals": 10
+          },
+          "fullName": null,
+          "index": 2,
+          "isCanonical": false,
+          "name": "HFUN",
+          "szDecimals": 2,
+          "tokenId": "0xbaf265ef389da684513d98d68edf4eae",
+          "weiDecimals": 8
+        },
+        {
+          "deployerTradingFeeShare": "0.0",
+          "evmContract": null,
+          "fullName": null,
+          "index": 3,
+          "isCanonical": false,
+          "name": "LICK",
+          "szDecimals": 0,
+          "tokenId": "0xba3aaf468f793d9b42fd3328e24f1de9",
+          "weiDecimals": 5
+        },
+        {
+          "deployerTradingFeeShare": "0.0",
+          "evmContract": null,
+          "fullName": null,
+          "index": 4,
+          "isCanonical": false,
+          "name": "MANLET",
+          "szDecimals": 0,
+          "tokenId": "0xe9ced9225d2a69ccc8d6a5b224524b99",
+          "weiDecimals": 5
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 464
+    },
+    "universe": {
+      "_items": [
+        {
+          "index": 0,
+          "isCanonical": true,
+          "name": "PURR/USDC",
+          "tokens": [
+            1,
+            0
+          ]
+        },
+        {
+          "index": 1,
+          "isCanonical": false,
+          "name": "@1",
+          "tokens": [
+            2,
+            0
+          ]
+        },
+        {
+          "index": 2,
+          "isCanonical": false,
+          "name": "@2",
+          "tokens": [
+            3,
+            0
+          ]
+        },
+        {
+          "index": 3,
+          "isCanonical": false,
+          "name": "@3",
+          "tokens": [
+            4,
+            0
+          ]
+        },
+        {
+          "index": 4,
+          "isCanonical": false,
+          "name": "@4",
+          "tokens": [
+            5,
+            0
+          ]
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 301
+    }
+  },
+  {
+    "_items": [
+      {
+        "circulatingSupply": "595328222.7135800123",
+        "coin": "PURR/USDC",
+        "dayBaseVlm": "32903139.0",
+        "dayNtlVlm": "4362003.672670003",
+        "markPx": "0.13607",
+        "midPx": "0.136345",
+        "prevDayPx": "0.14684",
+        "totalSupply": "595328229.2363599539"
+      },
+      {
+        "circulatingSupply": "995913.59917394",
+        "coin": "@1",
+        "dayBaseVlm": "4192.31",
+        "dayNtlVlm": "47511.52295",
+        "markPx": "11.394",
+        "midPx": "11.3815",
+        "prevDayPx": "11.501",
+        "totalSupply": "995913.6500001"
+      },
+      {
+        "circulatingSupply": "4871162122.6191301346",
+        "coin": "@2",
+        "dayBaseVlm": "1.0",
+        "dayNtlVlm": "0.00006209",
+        "markPx": "0.00006209",
+        "midPx": "0.00006218",
+        "prevDayPx": "0.00006209",
+        "totalSupply": "6869162132.9507303238"
+      },
+      {
+        "circulatingSupply": "9776869.7089499999",
+        "coin": "@3",
+        "dayBaseVlm": "0.0",
+        "dayNtlVlm": "0.0",
+        "markPx": "0.0009",
+        "midPx": "0.00545",
+        "prevDayPx": "0.00088898",
+        "totalSupply": "9776869.8695500009"
+      },
+      {
+        "circulatingSupply": "989673.00397",
+        "coin": "@4",
+        "dayBaseVlm": "8314.0",
+        "dayNtlVlm": "32716.066",
+        "markPx": "3.9076",
+        "midPx": "3.9056",
+        "prevDayPx": "4.1119",
+        "totalSupply": "994350.2044"
+      }
+    ],
+    "_items_in_report": 5,
+    "_report_note": "list truncated for readability; rerun with --full for every item",
+    "_total_items": 370
+  }
+]
+
+info.perp_dexs
+--------------
+
+description: Available perpetual DEX metadata.
+status: OK
+elapsed_ms: 498.7
+format:
+{
+  "item_format": "null",
+  "length": 9,
+  "type": "list"
+}
+response:
+{
+  "_items": [
+    null,
+    {
+      "assetToFundingInterestRate": [
+        [
+          "xyz:EUR",
+          "0.0"
+        ],
+        [
+          "xyz:GBP",
+          "0.0"
+        ],
+        [
+          "xyz:JPY",
+          "0.0"
+        ],
+        [
+          "xyz:KRW",
+          "0.0"
+        ]
+      ],
+      "assetToFundingMultiplier": {
+        "_items": [
+          [
+            "xyz:AAPL",
+            "0.5"
+          ],
+          [
+            "xyz:ALUMINIUM",
+            "0.5"
+          ],
+          [
+            "xyz:AMD",
+            "0.5"
+          ],
+          [
+            "xyz:AMZN",
+            "0.5"
+          ],
+          [
+            "xyz:ARM",
+            "0.5"
+          ]
+        ],
+        "_items_in_report": 5,
+        "_report_note": "list truncated for readability; rerun with --full for every item",
+        "_total_items": 85
+      },
+      "assetToStreamingOiCap": {
+        "_items": [
+          [
+            "xyz:AAPL",
+            "100000000.0"
+          ],
+          [
+            "xyz:ALUMINIUM",
+            "25000000.0"
+          ],
+          [
+            "xyz:AMD",
+            "100000000.0"
+          ],
+          [
+            "xyz:AMZN",
+            "100000000.0"
+          ],
+          [
+            "xyz:ARM",
+            "50000000.0"
+          ]
+        ],
+        "_items_in_report": 5,
+        "_report_note": "list truncated for readability; rerun with --full for every item",
+        "_total_items": 85
+      },
+      "deployer": "0x88806a71d74ad0a510b350545c9ae490912f0888",
+      "deployerFeeScale": "1.0",
+      "feeRecipient": "0x9cd0a696c7cbb9d44de99268194cb08e5684e5fe",
+      "fullName": "XYZ",
+      "lastDeployerFeeScaleChangeTime": "1970-01-01T00:00:00",
+      "name": "xyz",
+      "oracleUpdater": null,
+      "subDeployers": {
+        "_items": [
+          [
+            "registerAsset",
+            [
+              "0x7d16f116d252db609c56d27d6c9605eb03e16657"
+            ]
+          ],
+          [
+            "setOracle",
+            [
+              "0x1234567890545d1df9ee64b35fdd16966e08acec"
+            ]
+          ],
+          [
+            "haltTrading",
+            [
+              "0x7d16f116d252db609c56d27d6c9605eb03e16657"
+            ]
+          ],
+          [
+            "setOpenInterestCaps",
+            [
+              "0x7d16f116d252db609c56d27d6c9605eb03e16657"
+            ]
+          ],
+          [
+            "setFundingMultipliers",
+            [
+              "0x7d16f116d252db609c56d27d6c9605eb03e16657"
+            ]
+          ]
+        ],
+        "_items_in_report": 5,
+        "_report_note": "list truncated for readability; rerun with --full for every item",
+        "_total_items": 8
+      }
+    },
+    {
+      "assetToFundingInterestRate": [],
+      "assetToFundingMultiplier": {
+        "_items": [
+          [
+            "flx:COIN",
+            "0.6"
+          ],
+          [
+            "flx:COPPER",
+            "0.6"
+          ],
+          [
+            "flx:CRCL",
+            "0.6"
+          ],
+          [
+            "flx:GAS",
+            "0.6"
+          ],
+          [
+            "flx:GOLD",
+            "0.6"
+          ]
+        ],
+        "_items_in_report": 5,
+        "_report_note": "list truncated for readability; rerun with --full for every item",
+        "_total_items": 13
+      },
+      "assetToStreamingOiCap": {
+        "_items": [
+          [
+            "flx:COIN",
+            "8000000.0"
+          ],
+          [
+            "flx:COPPER",
+            "5000000.0"
+          ],
+          [
+            "flx:CRCL",
+            "5000000.0"
+          ],
+          [
+            "flx:GAS",
+            "5000000.0"
+          ],
+          [
+            "flx:GOLD",
+            "10000000.0"
+          ]
+        ],
+        "_items_in_report": 5,
+        "_report_note": "list truncated for readability; rerun with --full for every item",
+        "_total_items": 15
+      },
+      "deployer": "0x2fab552502a6d45920d5741a2f3ebf4c35536352",
+      "deployerFeeScale": "1.0",
+      "feeRecipient": "0xe2872b5ae7dcbba40cc4510d08c8bbea95b42d43",
+      "fullName": "Felix Exchange",
+      "lastDeployerFeeScaleChangeTime": "1970-01-01T00:00:00",
+      "name": "flx",
+      "oracleUpdater": "0x94757f8dcb4bf73b850195660e959d1105cfedd5",
+      "subDeployers": {
+        "_items": [
+          [
+            "registerAsset",
+            [
+              "0xd0d4ef34424af3da883672b8cdeca751293655a5"
+            ]
+          ],
+          [
+            "setOracle",
+            [
+              "0x94757f8dcb4bf73b850195660e959d1105cfedd5",
+              "0xd0d4ef34424af3da883672b8cdeca751293655a5"
+            ]
+          ],
+          [
+            "insertMarginTable",
+            [
+              "0xd0d4ef34424af3da883672b8cdeca751293655a5"
+            ]
+          ],
+          [
+            "setFeeRecipient",
+            [
+              "0xd0d4ef34424af3da883672b8cdeca751293655a5"
+            ]
+          ],
+          [
+            "haltTrading",
+            [
+              "0xd0d4ef34424af3da883672b8cdeca751293655a5"
+            ]
+          ]
+        ],
+        "_items_in_report": 5,
+        "_report_note": "list truncated for readability; rerun with --full for every item",
+        "_total_items": 13
+      }
+    },
+    {
+      "assetToFundingInterestRate": [],
+      "assetToFundingMultiplier": {
+        "_items": [
+          [
+            "vntl:ANTHROPIC",
+            "0.0030220915"
+          ],
+          [
+            "vntl:BIOTECH",
+            "0.5"
+          ],
+          [
+            "vntl:DEFENSE",
+            "0.5"
+          ],
+          [
+            "vntl:ENERGY",
+            "0.5"
+          ],
+          [
+            "vntl:GOLDJM",
+            "0.5"
+          ]
+        ],
+        "_items_in_report": 5,
+        "_report_note": "list truncated for readability; rerun with --full for every item",
+        "_total_items": 15
+      },
+      "assetToStreamingOiCap": {
+        "_items": [
+          [
+            "vntl:ANTHROPIC",
+            "10000000.0"
+          ],
+          [
+            "vntl:BIOTECH",
+            "10000000.0"
+          ],
+          [
+            "vntl:DEFENSE",
+            "10000000.0"
+          ],
+          [
+            "vntl:ENERGY",
+            "10000000.0"
+          ],
+          [
+            "vntl:GOLDJM",
+            "10000000.0"
+          ]
+        ],
+        "_items_in_report": 5,
+        "_report_note": "list truncated for readability; rerun with --full for every item",
+        "_total_items": 15
+      },
+      "deployer": "0x8888888192a4a0593c13532ba48449fc24c3beda",
+      "deployerFeeScale": "1.0",
+      "feeRecipient": "0x5afe865300895b96d20132a8d9fa8e7829334b52",
+      "fullName": "Ventuals",
+      "lastDeployerFeeScaleChangeTime": "1970-01-01T00:00:00",
+      "name": "vntl",
+      "oracleUpdater": null,
+      "subDeployers": {
+        "_items": [
+          [
+            "registerAsset",
+            [
+              "0xdfc9f8b03664fb312c51ebf820eaefb6732f495a"
+            ]
+          ],
+          [
+            "setOracle",
+            [
+              "0x0ac1e81a640f1492c286d71031af5af27a9b712e"
+            ]
+          ],
+          [
+            "setMarginTableIds",
+            [
+              "0x6bdf4b47b638a8bb8ba630fbf867dc0f458d953e"
+            ]
+          ],
+          [
+            "setOpenInterestCaps",
+            [
+              "0x6bdf4b47b638a8bb8ba630fbf867dc0f458d953e"
+            ]
+          ],
+          [
+            "setFundingMultipliers",
+            [
+              "0x6bdf4b47b638a8bb8ba630fbf867dc0f458d953e",
+              "0x9f82ce39734468c213f46834d0189222e1fadf5b"
+            ]
+          ]
+        ],
+        "_items_in_report": 5,
+        "_report_note": "list truncated for readability; rerun with --full for every item",
+        "_total_items": 6
+      }
+    },
+    {
+      "assetToFundingInterestRate": [],
+      "assetToFundingMultiplier": [
+        [
+          "hyna:LIGHTER",
+          "1.0"
+        ],
+        [
+          "hyna:LIT",
+          "0.05"
+        ]
+      ],
+      "assetToStreamingOiCap": {
+        "_items": [
+          [
+            "hyna:ADA",
+            "35000000.0"
+          ],
+          [
+            "hyna:BASED",
+            "10000000.0"
+          ],
+          [
+            "hyna:BCH",
+            "35000000.0"
+          ],
+          [
+            "hyna:BNB",
+            "35000000.0"
+          ],
+          [
+            "hyna:BTC",
+            "75000000.0"
+          ]
+        ],
+        "_items_in_report": 5,
+        "_report_note": "list truncated for readability; rerun with --full for every item",
+        "_total_items": 24
+      },
+      "deployer": "0x53e655101ea361537124ef814ad4e654b54d0637",
+      "deployerFeeScale": "0.1111",
+      "feeRecipient": null,
+      "fullName": "HyENA",
+      "lastDeployerFeeScaleChangeTime": "2026-01-20T15:56:29.934742459",
+      "name": "hyna",
+      "oracleUpdater": "0xaab93501e78f5105e265a1eafda10ce6530de17e",
+      "subDeployers": [
+        [
+          "setOracle",
+          [
+            "0xaab93501e78f5105e265a1eafda10ce6530de17e",
+            "0xaffde4868990b0b547dea3aaf8082b69825bbc2f"
+          ]
+        ]
+      ]
+    }
+  ],
+  "_items_in_report": 5,
+  "_report_note": "list truncated for readability; rerun with --full for every item",
+  "_total_items": 9
+}
+
+CONFIGURED MARKET DATA
+======================
+
+connector.market_metadata[BTC]
+------------------------------
+
+description: Local connector precision, symbol, and rounding examples. No order is submitted.
+status: OK
+elapsed_ms: 0.1
+format:
+{
+  "dex": "str",
+  "input_market": "str",
+  "market": "str",
+  "post_only_time_in_force": "str",
+  "round_buy_price_example": "float",
+  "round_sell_price_example": "float",
+  "round_size_example": "float",
+  "size_step": "float",
+  "symbol": "str",
+  "universe_item": {
+    "marginTableId": "int",
+    "maxLeverage": "int",
+    "name": "str",
+    "szDecimals": "int"
+  }
+}
+response:
+{
+  "dex": "<default>",
+  "input_market": "BTC",
+  "market": "BTC",
+  "post_only_time_in_force": "Alo",
+  "round_buy_price_example": 12346.0,
+  "round_sell_price_example": 12346.0,
+  "round_size_example": 0.01234,
+  "size_step": 1e-05,
+  "symbol": "BTC/USDC:USDC",
+  "universe_item": {
+    "marginTableId": 56,
+    "maxLeverage": 40,
+    "name": "BTC",
+    "szDecimals": 5
+  }
+}
+
+info.l2_snapshot[BTC]
+---------------------
+
+description: Raw order-book snapshot using the exact Hyperliquid coin string.
+status: OK
+elapsed_ms: 554.1
+format:
+{
+  "coin": "str",
+  "levels": {
+    "item_format": {
+      "item_format": {
+        "n": "int",
+        "px": "str",
+        "sz": "str"
+      },
+      "length": 20,
+      "type": "list"
+    },
+    "length": 2,
+    "type": "list"
+  },
+  "time": "int"
+}
+response:
+{
+  "coin": "BTC",
+  "levels": [
+    {
+      "_items": [
+        {
+          "n": 57,
+          "px": "66022.0",
+          "sz": "9.31446"
+        },
+        {
+          "n": 178,
+          "px": "66021.0",
+          "sz": "35.32639"
+        },
+        {
+          "n": 121,
+          "px": "66020.0",
+          "sz": "17.93234"
+        },
+        {
+          "n": 144,
+          "px": "66019.0",
+          "sz": "28.48724"
+        },
+        {
+          "n": 110,
+          "px": "66018.0",
+          "sz": "36.33915"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    },
+    {
+      "_items": [
+        {
+          "n": 1,
+          "px": "66023.0",
+          "sz": "0.00017"
+        },
+        {
+          "n": 2,
+          "px": "66024.0",
+          "sz": "0.00317"
+        },
+        {
+          "n": 2,
+          "px": "66025.0",
+          "sz": "0.0004"
+        },
+        {
+          "n": 1,
+          "px": "66026.0",
+          "sz": "0.00017"
+        },
+        {
+          "n": 2,
+          "px": "66027.0",
+          "sz": "0.0004"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    }
+  ],
+  "time": 1780505874856
+}
+
+info.l2_snapshot[BTC, nSigFigs=5]
+---------------------------------
+
+description: Aggregated order-book snapshot.
+status: OK
+elapsed_ms: 229.5
+format:
+{
+  "coin": "str",
+  "levels": {
+    "item_format": {
+      "item_format": {
+        "n": "int",
+        "px": "str",
+        "sz": "str"
+      },
+      "length": 20,
+      "type": "list"
+    },
+    "length": 2,
+    "type": "list"
+  },
+  "spread": "str",
+  "time": "int"
+}
+response:
+{
+  "coin": "BTC",
+  "levels": [
+    {
+      "_items": [
+        {
+          "n": 57,
+          "px": "66022.0",
+          "sz": "9.31446"
+        },
+        {
+          "n": 178,
+          "px": "66021.0",
+          "sz": "35.32639"
+        },
+        {
+          "n": 121,
+          "px": "66020.0",
+          "sz": "17.93234"
+        },
+        {
+          "n": 144,
+          "px": "66019.0",
+          "sz": "28.48724"
+        },
+        {
+          "n": 110,
+          "px": "66018.0",
+          "sz": "36.33915"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    },
+    {
+      "_items": [
+        {
+          "n": 1,
+          "px": "66023.0",
+          "sz": "0.00017"
+        },
+        {
+          "n": 2,
+          "px": "66024.0",
+          "sz": "0.00317"
+        },
+        {
+          "n": 2,
+          "px": "66025.0",
+          "sz": "0.0004"
+        },
+        {
+          "n": 1,
+          "px": "66026.0",
+          "sz": "0.00017"
+        },
+        {
+          "n": 2,
+          "px": "66027.0",
+          "sz": "0.0004"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    }
+  ],
+  "spread": "1.0",
+  "time": 1780505874962
+}
+
+info.l2_snapshot[BTC, nSigFigs=4]
+---------------------------------
+
+description: Aggregated order-book snapshot.
+status: OK
+elapsed_ms: 228.2
+format:
+{
+  "coin": "str",
+  "levels": {
+    "item_format": {
+      "item_format": {
+        "n": "int",
+        "px": "str",
+        "sz": "str"
+      },
+      "length": 20,
+      "type": "list"
+    },
+    "length": 2,
+    "type": "list"
+  },
+  "spread": "str",
+  "time": "int"
+}
+response:
+{
+  "coin": "BTC",
+  "levels": [
+    {
+      "_items": [
+        {
+          "n": 568,
+          "px": "66020.0",
+          "sz": "117.50732"
+        },
+        {
+          "n": 107,
+          "px": "66010.0",
+          "sz": "81.19808"
+        },
+        {
+          "n": 89,
+          "px": "66000.0",
+          "sz": "103.09938"
+        },
+        {
+          "n": 60,
+          "px": "65990.0",
+          "sz": "44.73158"
+        },
+        {
+          "n": 51,
+          "px": "65980.0",
+          "sz": "49.96427"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    },
+    {
+      "_items": [
+        {
+          "n": 11,
+          "px": "66030.0",
+          "sz": "0.01715"
+        },
+        {
+          "n": 42,
+          "px": "66040.0",
+          "sz": "8.13269"
+        },
+        {
+          "n": 73,
+          "px": "66050.0",
+          "sz": "32.83582"
+        },
+        {
+          "n": 79,
+          "px": "66060.0",
+          "sz": "90.28714"
+        },
+        {
+          "n": 67,
+          "px": "66070.0",
+          "sz": "63.96211"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    }
+  ],
+  "spread": "1.0",
+  "time": 1780505875395
+}
+
+info.l2_snapshot[BTC, nSigFigs=3]
+---------------------------------
+
+description: Aggregated order-book snapshot.
+status: OK
+elapsed_ms: 224.5
+format:
+{
+  "coin": "str",
+  "levels": {
+    "item_format": {
+      "item_format": {
+        "n": "int",
+        "px": "str",
+        "sz": "str"
+      },
+      "length": 20,
+      "type": "list"
+    },
+    "length": 2,
+    "type": "list"
+  },
+  "spread": "str",
+  "time": "int"
+}
+response:
+{
+  "coin": "BTC",
+  "levels": [
+    {
+      "_items": [
+        {
+          "n": 764,
+          "px": "66000.0",
+          "sz": "301.80478"
+        },
+        {
+          "n": 434,
+          "px": "65900.0",
+          "sz": "454.84211"
+        },
+        {
+          "n": 269,
+          "px": "65800.0",
+          "sz": "256.74613"
+        },
+        {
+          "n": 201,
+          "px": "65700.0",
+          "sz": "337.54153"
+        },
+        {
+          "n": 151,
+          "px": "65600.0",
+          "sz": "235.42231"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    },
+    {
+      "_items": [
+        {
+          "n": 451,
+          "px": "66100.0",
+          "sz": "409.4632"
+        },
+        {
+          "n": 384,
+          "px": "66200.0",
+          "sz": "380.6616"
+        },
+        {
+          "n": 261,
+          "px": "66300.0",
+          "sz": "401.22199"
+        },
+        {
+          "n": 211,
+          "px": "66400.0",
+          "sz": "428.46854"
+        },
+        {
+          "n": 133,
+          "px": "66500.0",
+          "sz": "178.99238"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    }
+  ],
+  "spread": "1.0",
+  "time": 1780505875395
+}
+
+info.l2_snapshot[BTC, nSigFigs=2]
+---------------------------------
+
+description: Aggregated order-book snapshot.
+status: OK
+elapsed_ms: 224.3
+format:
+{
+  "coin": "str",
+  "levels": {
+    "item_format": {
+      "item_format": {
+        "n": "int",
+        "px": "str",
+        "sz": "str"
+      },
+      "length": 20,
+      "type": "list"
+    },
+    "length": 2,
+    "type": "list"
+  },
+  "spread": "str",
+  "time": "int"
+}
+response:
+{
+  "coin": "BTC",
+  "levels": [
+    {
+      "_items": [
+        {
+          "n": 509,
+          "px": "66000.0",
+          "sz": "268.48053"
+        },
+        {
+          "n": 2653,
+          "px": "65000.0",
+          "sz": "2624.26682"
+        },
+        {
+          "n": 2082,
+          "px": "64000.0",
+          "sz": "683.05311"
+        },
+        {
+          "n": 1439,
+          "px": "63000.0",
+          "sz": "254.03378"
+        },
+        {
+          "n": 1180,
+          "px": "62000.0",
+          "sz": "188.2655"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    },
+    {
+      "_items": [
+        {
+          "n": 1801,
+          "px": "67000.0",
+          "sz": "2428.31965"
+        },
+        {
+          "n": 1168,
+          "px": "68000.0",
+          "sz": "1060.35749"
+        },
+        {
+          "n": 1616,
+          "px": "69000.0",
+          "sz": "205.65286"
+        },
+        {
+          "n": 1777,
+          "px": "70000.0",
+          "sz": "207.75815"
+        },
+        {
+          "n": 892,
+          "px": "71000.0",
+          "sz": "124.01909"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    }
+  ],
+  "spread": "1.0",
+  "time": 1780505875968
+}
+
+info.recent_trades[BTC]
+-----------------------
+
+description: Raw recent public trades.
+status: OK
+elapsed_ms: 276.8
+format:
+{
+  "item_format": {
+    "coin": "str",
+    "hash": "str",
+    "px": "str",
+    "side": "str",
+    "sz": "str",
+    "tid": "int",
+    "time": "int",
+    "users": {
+      "item_format": "str",
+      "length": 2,
+      "type": "list"
+    }
+  },
+  "length": 10,
+  "type": "list"
+}
+response:
+{
+  "_items": [
+    {
+      "coin": "BTC",
+      "hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "px": "66025.0",
+      "side": "A",
+      "sz": "0.00712",
+      "tid": 1053325041204644,
+      "time": 1780505876104,
+      "users": [
+        "0x7dd6f02fef939cea86f0243358255f6b57a6cf0d",
+        "0xb676a78f19227ffe9a97db93263fce675e547dbf"
+      ]
+    },
+    {
+      "coin": "BTC",
+      "hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "px": "66026.0",
+      "side": "B",
+      "sz": "0.00017",
+      "tid": 92775314486440,
+      "time": 1780505876104,
+      "users": [
+        "0x7babd703286d9310efa6cb667c533330df9593fe",
+        "0x2ca4927174ba283d8a57f60ef3589844035a2930"
+      ]
+    },
+    {
+      "coin": "BTC",
+      "hash": "0x086cf859da72854d09e6043ce36361017200103f7575a41fac35a3ac99765f37",
+      "px": "66025.0",
+      "side": "B",
+      "sz": "0.00023",
+      "tid": 207839237012074,
+      "time": 1780505875159,
+      "users": [
+        "0xb668858ff53322d5511651a2cd92391eb5d60ee3",
+        "0x55f389689b39fdd29d063f8b1aa776666a2dd788"
+      ]
+    },
+    {
+      "coin": "BTC",
+      "hash": "0x086cf859da72854d09e6043ce36361017200103f7575a41fac35a3ac99765f37",
+      "px": "66025.0",
+      "side": "B",
+      "sz": "0.00017",
+      "tid": 254988942191294,
+      "time": 1780505875159,
+      "users": [
+        "0xb668858ff53322d5511651a2cd92391eb5d60ee3",
+        "0x2ca4927174ba283d8a57f60ef3589844035a2930"
+      ]
+    },
+    {
+      "coin": "BTC",
+      "hash": "0x086cf859da72854d09e6043ce36361017200103f7575a41fac35a3ac99765f37",
+      "px": "66024.0",
+      "side": "B",
+      "sz": "0.003",
+      "tid": 1358530517366,
+      "time": 1780505875159,
+      "users": [
+        "0xb668858ff53322d5511651a2cd92391eb5d60ee3",
+        "0x31dea2516beee92135b96f464eeec3cf292a13f2"
+      ]
+    }
+  ],
+  "_items_in_report": 5,
+  "_report_note": "list truncated for readability; rerun with --full for every item",
+  "_total_items": 10
+}
+
+connector.fetch_bbo[BTC]
+------------------------
+
+description: Normalized best bid, best ask, and midpoint parsed from the raw order book.
+status: OK
+elapsed_ms: 223.5
+format:
+{
+  "item_format": "float",
+  "length": 3,
+  "type": "list"
+}
+response:
+[
+  66026.0,
+  66027.0,
+  66026.5
+]
+
+info.candles_snapshot[BTC]
+--------------------------
+
+description: Raw one-minute candles from the most recent hour.
+status: OK
+elapsed_ms: 272.9
+format:
+{
+  "item_format": {
+    "T": "int",
+    "c": "str",
+    "h": "str",
+    "i": "str",
+    "l": "str",
+    "n": "int",
+    "o": "str",
+    "s": "str",
+    "t": "int",
+    "v": "str"
+  },
+  "length": 61,
+  "type": "list"
+}
+response:
+{
+  "_items": [
+    {
+      "T": 1780502279999,
+      "c": "66112.0",
+      "h": "66159.0",
+      "i": "1m",
+      "l": "66088.0",
+      "n": 772,
+      "o": "66148.0",
+      "s": "BTC",
+      "t": 1780502220000,
+      "v": "25.59934"
+    },
+    {
+      "T": 1780502339999,
+      "c": "66090.0",
+      "h": "66112.0",
+      "i": "1m",
+      "l": "66090.0",
+      "n": 655,
+      "o": "66111.0",
+      "s": "BTC",
+      "t": 1780502280000,
+      "v": "96.90396"
+    },
+    {
+      "T": 1780502399999,
+      "c": "66055.0",
+      "h": "66090.0",
+      "i": "1m",
+      "l": "66053.0",
+      "n": 731,
+      "o": "66090.0",
+      "s": "BTC",
+      "t": 1780502340000,
+      "v": "40.1996"
+    },
+    {
+      "T": 1780502459999,
+      "c": "66083.0",
+      "h": "66129.0",
+      "i": "1m",
+      "l": "66054.0",
+      "n": 1097,
+      "o": "66054.0",
+      "s": "BTC",
+      "t": 1780502400000,
+      "v": "103.615"
+    },
+    {
+      "T": 1780502519999,
+      "c": "65908.0",
+      "h": "66083.0",
+      "i": "1m",
+      "l": "65908.0",
+      "n": 2064,
+      "o": "66083.0",
+      "s": "BTC",
+      "t": 1780502460000,
+      "v": "208.23289"
+    }
+  ],
+  "_items_in_report": 5,
+  "_report_note": "list truncated for readability; rerun with --full for every item",
+  "_total_items": 61
+}
+
+connector.market_metadata[xyz:AMD]
+----------------------------------
+
+description: Local connector precision, symbol, and rounding examples. No order is submitted.
+status: OK
+elapsed_ms: 550.1
+format:
+{
+  "dex": "str",
+  "input_market": "str",
+  "market": "str",
+  "post_only_time_in_force": "str",
+  "round_buy_price_example": "float",
+  "round_sell_price_example": "float",
+  "round_size_example": "float",
+  "size_step": "float",
+  "symbol": "str",
+  "universe_item": {
+    "growthMode": "str",
+    "lastGrowthModeChangeTime": "str",
+    "marginMode": "str",
+    "marginTableId": "int",
+    "maxLeverage": "int",
+    "name": "str",
+    "onlyIsolated": "bool",
+    "szDecimals": "int"
+  }
+}
+response:
+{
+  "dex": "xyz",
+  "input_market": "xyz:AMD",
+  "market": "xyz:AMD",
+  "post_only_time_in_force": "Alo",
+  "round_buy_price_example": 12346.0,
+  "round_sell_price_example": 12346.0,
+  "round_size_example": 0.012,
+  "size_step": 0.001,
+  "symbol": "xyz:AMD/USDC:USDC",
+  "universe_item": {
+    "growthMode": "enabled",
+    "lastGrowthModeChangeTime": "2025-11-23T17:37:10.033211662",
+    "marginMode": "noCross",
+    "marginTableId": 10,
+    "maxLeverage": 10,
+    "name": "xyz:AMD",
+    "onlyIsolated": true,
+    "szDecimals": 3
+  }
+}
+
+info.l2_snapshot[xyz:AMD]
+-------------------------
+
+description: Raw order-book snapshot using the exact Hyperliquid coin string.
+status: OK
+elapsed_ms: 221.0
+format:
+{
+  "coin": "str",
+  "levels": {
+    "item_format": {
+      "item_format": {
+        "n": "int",
+        "px": "str",
+        "sz": "str"
+      },
+      "length": 20,
+      "type": "list"
+    },
+    "length": 2,
+    "type": "list"
+  },
+  "time": "int"
+}
+response:
+{
+  "coin": "xyz:AMD",
+  "levels": [
+    {
+      "_items": [
+        {
+          "n": 1,
+          "px": "533.45",
+          "sz": "9.386"
+        },
+        {
+          "n": 2,
+          "px": "533.41",
+          "sz": "16.017"
+        },
+        {
+          "n": 2,
+          "px": "533.4",
+          "sz": "17.394"
+        },
+        {
+          "n": 1,
+          "px": "533.39",
+          "sz": "16.018"
+        },
+        {
+          "n": 1,
+          "px": "533.38",
+          "sz": "1.812"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    },
+    {
+      "_items": [
+        {
+          "n": 1,
+          "px": "533.63",
+          "sz": "9.386"
+        },
+        {
+          "n": 3,
+          "px": "533.68",
+          "sz": "12.455"
+        },
+        {
+          "n": 1,
+          "px": "533.73",
+          "sz": "5.619"
+        },
+        {
+          "n": 1,
+          "px": "533.77",
+          "sz": "9.386"
+        },
+        {
+          "n": 3,
+          "px": "533.79",
+          "sz": "6.154"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    }
+  ],
+  "time": 1780505877559
+}
+
+info.l2_snapshot[xyz:AMD, nSigFigs=5]
+-------------------------------------
+
+description: Aggregated order-book snapshot.
+status: OK
+elapsed_ms: 227.7
+format:
+{
+  "coin": "str",
+  "levels": {
+    "item_format": {
+      "item_format": {
+        "n": "int",
+        "px": "str",
+        "sz": "str"
+      },
+      "length": 20,
+      "type": "list"
+    },
+    "length": 2,
+    "type": "list"
+  },
+  "spread": "str",
+  "time": "int"
+}
+response:
+{
+  "coin": "xyz:AMD",
+  "levels": [
+    {
+      "_items": [
+        {
+          "n": 5,
+          "px": "533.46",
+          "sz": "60.06"
+        },
+        {
+          "n": 1,
+          "px": "533.45",
+          "sz": "9.386"
+        },
+        {
+          "n": 1,
+          "px": "533.4",
+          "sz": "9.386"
+        },
+        {
+          "n": 1,
+          "px": "533.38",
+          "sz": "1.812"
+        },
+        {
+          "n": 1,
+          "px": "533.37",
+          "sz": "0.373"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    },
+    {
+      "_items": [
+        {
+          "n": 1,
+          "px": "533.63",
+          "sz": "9.386"
+        },
+        {
+          "n": 3,
+          "px": "533.68",
+          "sz": "12.455"
+        },
+        {
+          "n": 1,
+          "px": "533.73",
+          "sz": "5.619"
+        },
+        {
+          "n": 1,
+          "px": "533.77",
+          "sz": "9.386"
+        },
+        {
+          "n": 2,
+          "px": "533.79",
+          "sz": "2.153"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    }
+  ],
+  "spread": "0.17",
+  "time": 1780505878073
+}
+
+info.l2_snapshot[xyz:AMD, nSigFigs=4]
+-------------------------------------
+
+description: Aggregated order-book snapshot.
+status: OK
+elapsed_ms: 313.4
+format:
+{
+  "coin": "str",
+  "levels": {
+    "item_format": {
+      "item_format": {
+        "n": "int",
+        "px": "str",
+        "sz": "str"
+      },
+      "length": 20,
+      "type": "list"
+    },
+    "length": 2,
+    "type": "list"
+  },
+  "spread": "str",
+  "time": "int"
+}
+response:
+{
+  "coin": "xyz:AMD",
+  "levels": [
+    {
+      "_items": [
+        {
+          "n": 7,
+          "px": "533.4",
+          "sz": "78.832"
+        },
+        {
+          "n": 4,
+          "px": "533.3",
+          "sz": "11.944"
+        },
+        {
+          "n": 8,
+          "px": "533.2",
+          "sz": "80.923"
+        },
+        {
+          "n": 7,
+          "px": "533.1",
+          "sz": "25.911"
+        },
+        {
+          "n": 8,
+          "px": "533.0",
+          "sz": "99.506"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    },
+    {
+      "_items": [
+        {
+          "n": 4,
+          "px": "533.7",
+          "sz": "21.841"
+        },
+        {
+          "n": 6,
+          "px": "533.8",
+          "sz": "35.226"
+        },
+        {
+          "n": 12,
+          "px": "533.9",
+          "sz": "78.299"
+        },
+        {
+          "n": 10,
+          "px": "534.0",
+          "sz": "154.396"
+        },
+        {
+          "n": 10,
+          "px": "534.1",
+          "sz": "46.051"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    }
+  ],
+  "spread": "0.17",
+  "time": 1780505878073
+}
+
+info.l2_snapshot[xyz:AMD, nSigFigs=3]
+-------------------------------------
+
+description: Aggregated order-book snapshot.
+status: OK
+elapsed_ms: 226.8
+format:
+{
+  "coin": "str",
+  "levels": {
+    "item_format": {
+      "item_format": {
+        "n": "int",
+        "px": "str",
+        "sz": "str"
+      },
+      "length": 20,
+      "type": "list"
+    },
+    "length": 2,
+    "type": "list"
+  },
+  "spread": "str",
+  "time": "int"
+}
+response:
+{
+  "coin": "xyz:AMD",
+  "levels": [
+    {
+      "_items": [
+        {
+          "n": 36,
+          "px": "533.0",
+          "sz": "328.874"
+        },
+        {
+          "n": 59,
+          "px": "532.0",
+          "sz": "633.251"
+        },
+        {
+          "n": 33,
+          "px": "531.0",
+          "sz": "315.334"
+        },
+        {
+          "n": 40,
+          "px": "530.0",
+          "sz": "1289.098"
+        },
+        {
+          "n": 17,
+          "px": "529.0",
+          "sz": "279.754"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    },
+    {
+      "_items": [
+        {
+          "n": 32,
+          "px": "534.0",
+          "sz": "289.762"
+        },
+        {
+          "n": 70,
+          "px": "535.0",
+          "sz": "776.197"
+        },
+        {
+          "n": 40,
+          "px": "536.0",
+          "sz": "354.202"
+        },
+        {
+          "n": 26,
+          "px": "537.0",
+          "sz": "1319.831"
+        },
+        {
+          "n": 10,
+          "px": "538.0",
+          "sz": "239.844"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    }
+  ],
+  "spread": "0.17",
+  "time": 1780505878583
+}
+
+info.l2_snapshot[xyz:AMD, nSigFigs=2]
+-------------------------------------
+
+description: Aggregated order-book snapshot.
+status: OK
+elapsed_ms: 220.9
+format:
+{
+  "coin": "str",
+  "levels": {
+    "item_format": {
+      "item_format": {
+        "n": "int",
+        "px": "str",
+        "sz": "str"
+      },
+      "length": 20,
+      "type": "list"
+    },
+    "length": 2,
+    "type": "list"
+  },
+  "spread": "str",
+  "time": "int"
+}
+response:
+{
+  "coin": "xyz:AMD",
+  "levels": [
+    {
+      "_items": [
+        {
+          "n": 168,
+          "px": "530.0",
+          "sz": "2566.557"
+        },
+        {
+          "n": 59,
+          "px": "520.0",
+          "sz": "870.251"
+        },
+        {
+          "n": 36,
+          "px": "510.0",
+          "sz": "460.12"
+        },
+        {
+          "n": 24,
+          "px": "500.0",
+          "sz": "179.572"
+        },
+        {
+          "n": 17,
+          "px": "490.0",
+          "sz": "37.988"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    },
+    {
+      "_items": [
+        {
+          "n": 190,
+          "px": "540.0",
+          "sz": "3128.779"
+        },
+        {
+          "n": 33,
+          "px": "550.0",
+          "sz": "642.661"
+        },
+        {
+          "n": 21,
+          "px": "560.0",
+          "sz": "317.846"
+        },
+        {
+          "n": 9,
+          "px": "570.0",
+          "sz": "11.328"
+        },
+        {
+          "n": 3,
+          "px": "580.0",
+          "sz": "8.924"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 20
+    }
+  ],
+  "spread": "0.17",
+  "time": 1780505878583
+}
+
+info.recent_trades[xyz:AMD]
+---------------------------
+
+description: Raw recent public trades.
+status: OK
+elapsed_ms: 240.3
+format:
+{
+  "item_format": {
+    "coin": "str",
+    "hash": "str",
+    "px": "str",
+    "side": "str",
+    "sz": "str",
+    "tid": "int",
+    "time": "int",
+    "users": {
+      "item_format": "str",
+      "length": 2,
+      "type": "list"
+    }
+  },
+  "length": 10,
+  "type": "list"
+}
+response:
+{
+  "_items": [
+    {
+      "coin": "xyz:AMD",
+      "hash": "0x4c4fc9016e550bd84dc9043ce362370205b200e709582aaaf01874542d58e5c2",
+      "px": "533.5",
+      "side": "A",
+      "sz": "0.059",
+      "tid": 881660497164224,
+      "time": 1780505854560,
+      "users": [
+        "0x77001f3760e212769cb102dd82477e1b07f84216",
+        "0x58d2cc13b1dfa73b8f1806aeda2d2b27b6facfa0"
+      ]
+    },
+    {
+      "coin": "xyz:AMD",
+      "hash": "0x700246a5bc2308cc717c043ce36237020597008b5726279e13caf1f87b26e2b7",
+      "px": "533.7",
+      "side": "B",
+      "sz": "0.3",
+      "tid": 545203475989544,
+      "time": 1780505854560,
+      "users": [
+        "0xe8640a0b604e131b64791a98788408178f8e8d21",
+        "0xf9a28ab8bd579e6a75cc5dd138954e3db8967c5a"
+      ]
+    },
+    {
+      "coin": "xyz:AMD",
+      "hash": "0xa7c1d141743b69eaa93b043ce3614702087000270f3e88bc4b8a7c94333f43d5",
+      "px": "533.49",
+      "side": "B",
+      "sz": "0.028",
+      "tid": 541803254146382,
+      "time": 1780505838293,
+      "users": [
+        "0x399965e15d4e61ec3529cc98b7f7ebb93b733336",
+        "0x7b23d3626ec0c4a1dc4697a24d720884cfa81f5f"
+      ]
+    },
+    {
+      "coin": "xyz:AMD",
+      "hash": "0xee34cb7676677671efae043ce35fbb020247005c116a954391fd76c9356b505c",
+      "px": "533.19",
+      "side": "A",
+      "sz": "8.0",
+      "tid": 1031206606063714,
+      "time": 1780505810505,
+      "users": [
+        "0x99c641913b895b0180d6c8ece787a36dd8f99344",
+        "0xc5ed4501500fcbfb2b88fb7f0aa52f834ed44346"
+      ]
+    },
+    {
+      "coin": "xyz:AMD",
+      "hash": "0x3de6c6652a71329e3f60043ce35ec20202cd004ac5745170e1af71b7e9750c88",
+      "px": "533.25",
+      "side": "A",
+      "sz": "0.955",
+      "tid": 979826831676330,
+      "time": 1780505793127,
+      "users": [
+        "0x99c641913b895b0180d6c8ece787a36dd8f99344",
+        "0x827e95a939a77cebc8cbefbe22c2e2e482181248"
+      ]
+    }
+  ],
+  "_items_in_report": 5,
+  "_report_note": "list truncated for readability; rerun with --full for every item",
+  "_total_items": 10
+}
+
+connector.fetch_bbo[xyz:AMD]
+----------------------------
+
+description: Normalized best bid, best ask, and midpoint parsed from the raw order book.
+status: OK
+elapsed_ms: 225.6
+format:
+{
+  "item_format": "float",
+  "length": 3,
+  "type": "list"
+}
+response:
+[
+  533.46,
+  533.63,
+  533.5450000000001
+]
+
+info.candles_snapshot[xyz:AMD]
+------------------------------
+
+description: Raw one-minute candles from the most recent hour.
+status: OK
+elapsed_ms: 364.0
+format:
+{
+  "item_format": {
+    "T": "int",
+    "c": "str",
+    "h": "str",
+    "i": "str",
+    "l": "str",
+    "n": "int",
+    "o": "str",
+    "s": "str",
+    "t": "int",
+    "v": "str"
+  },
+  "length": 61,
+  "type": "list"
+}
+response:
+{
+  "_items": [
+    {
+      "T": 1780502279999,
+      "c": "532.6",
+      "h": "532.93",
+      "i": "1m",
+      "l": "532.6",
+      "n": 2,
+      "o": "532.93",
+      "s": "xyz:AMD",
+      "t": 1780502220000,
+      "v": "0.056"
+    },
+    {
+      "T": 1780502339999,
+      "c": "533.2",
+      "h": "533.2",
+      "i": "1m",
+      "l": "532.83",
+      "n": 8,
+      "o": "532.83",
+      "s": "xyz:AMD",
+      "t": 1780502280000,
+      "v": "22.077"
+    },
+    {
+      "T": 1780502399999,
+      "c": "532.66",
+      "h": "533.78",
+      "i": "1m",
+      "l": "532.66",
+      "n": 12,
+      "o": "533.7",
+      "s": "xyz:AMD",
+      "t": 1780502340000,
+      "v": "15.892"
+    },
+    {
+      "T": 1780502459999,
+      "c": "532.18",
+      "h": "533.39",
+      "i": "1m",
+      "l": "532.18",
+      "n": 20,
+      "o": "532.38",
+      "s": "xyz:AMD",
+      "t": 1780502400000,
+      "v": "26.817"
+    },
+    {
+      "T": 1780502519999,
+      "c": "532.08",
+      "h": "532.22",
+      "i": "1m",
+      "l": "531.34",
+      "n": 23,
+      "o": "532.22",
+      "s": "xyz:AMD",
+      "t": 1780502460000,
+      "v": "16.134"
+    }
+  ],
+  "_items_in_report": 5,
+  "_report_note": "list truncated for readability; rerun with --full for every item",
+  "_total_items": 61
+}
+
+connector.websocket_cache_sample
+--------------------------------
+
+description: Subscribe to raw and aggregated l2Book, bbo, trades, and orderUpdates, then capture synthetic cached depth. This is read-only.
+status: OK
+elapsed_ms: 3897.4
+format:
+{
+  "cached_open_orders_after_subscription": {
+    "item_format": null,
+    "length": 0,
+    "type": "list"
+  },
+  "l2_cache_snapshots": {
+    "BTC": {
+      "best_ask": {
+        "order_count": "int",
+        "price": "float",
+        "raw": {
+          "n": "int",
+          "px": "str",
+          "syntheticBookSource": "str",
+          "sz": "str"
+        },
+        "size": "float"
+      },
+      "best_bid": {
+        "order_count": "int",
+        "price": "float",
+        "raw": {
+          "n": "int",
+          "px": "str",
+          "syntheticBookSource": "str",
+          "sz": "str"
+        },
+        "size": "float"
+      },
+      "cache_metadata": {
+        "age_ms": "int",
+        "bbo_age_ms": "int",
+        "exchange_timestamp_ms": "int",
+        "received_at_ms": "int",
+        "resolution_level_counts": {
+          "raw": "dict",
+          "sig2": "dict",
+          "sig3": "dict",
+          "sig4": "dict",
+          "sig5": "dict"
+        },
+        "synthetic": "bool",
+        "synthetic_source_counts": {
+          "asks": "dict",
+          "bids": "dict"
+        }
+      },
+      "last_public_trade": {
+        "exchange": "str",
+        "market": "str",
+        "price": "float",
+        "raw": {
+          "coin": "str",
+          "hash": "str",
+          "px": "str",
+          "side": "str",
+          "sz": "str",
+          "tid": "int",
+          "time": "int",
+          "users": "list"
+        },
+        "side": "str",
+        "size": "float",
+        "timestamp_ms": "int",
+        "trade_id": "str"
+      },
+      "synthetic_ask_level_count": "int",
+      "synthetic_bid_level_count": "int"
+    },
+    "xyz:AMD": {
+      "best_ask": {
+        "order_count": "int",
+        "price": "float",
+        "raw": {
+          "n": "int",
+          "px": "str",
+          "syntheticBookSource": "str",
+          "sz": "str"
+        },
+        "size": "float"
+      },
+      "best_bid": {
+        "order_count": "int",
+        "price": "float",
+        "raw": {
+          "n": "int",
+          "px": "str",
+          "syntheticBookSource": "str",
+          "sz": "str"
+        },
+        "size": "float"
+      },
+      "cache_metadata": {
+        "age_ms": "int",
+        "bbo_age_ms": "null",
+        "exchange_timestamp_ms": "int",
+        "received_at_ms": "int",
+        "resolution_level_counts": {
+          "raw": "dict",
+          "sig2": "dict",
+          "sig3": "dict",
+          "sig4": "dict",
+          "sig5": "dict"
+        },
+        "synthetic": "bool",
+        "synthetic_source_counts": {
+          "asks": "dict",
+          "bids": "dict"
+        }
+      },
+      "last_public_trade": {
+        "exchange": "str",
+        "market": "str",
+        "price": "float",
+        "raw": {
+          "coin": "str",
+          "hash": "str",
+          "px": "str",
+          "side": "str",
+          "sz": "str",
+          "tid": "int",
+          "time": "int",
+          "users": "list"
+        },
+        "side": "str",
+        "size": "float",
+        "timestamp_ms": "int",
+        "trade_id": "str"
+      },
+      "synthetic_ask_level_count": "int",
+      "synthetic_bid_level_count": "int"
+    }
+  },
+  "note": "str",
+  "subscriptions": {
+    "item_format": {
+      "method": "str",
+      "subscription": {
+        "coin": "str",
+        "type": "str"
+      }
+    },
+    "length": 15,
+    "type": "list"
+  }
+}
+response:
+{
+  "cached_open_orders_after_subscription": [],
+  "l2_cache_snapshots": {
+    "BTC": {
+      "best_ask": {
+        "order_count": 143,
+        "price": 66011.0,
+        "raw": {
+          "n": 143,
+          "px": "66011.0",
+          "syntheticBookSource": "bbo",
+          "sz": "33.17015"
+        },
+        "size": 33.17015
+      },
+      "best_bid": {
+        "order_count": 28,
+        "price": 66010.0,
+        "raw": {
+          "n": 28,
+          "px": "66010.0",
+          "syntheticBookSource": "bbo",
+          "sz": "1.39631"
+        },
+        "size": 1.39631
+      },
+      "cache_metadata": {
+        "age_ms": 63,
+        "bbo_age_ms": 62,
+        "exchange_timestamp_ms": 1780505882159,
+        "received_at_ms": 1780505882473,
+        "resolution_level_counts": {
+          "raw": {
+            "asks": 20,
+            "bids": 20
+          },
+          "sig2": {
+            "asks": 20,
+            "bids": 20
+          },
+          "sig3": {
+            "asks": 20,
+            "bids": 20
+          },
+          "sig4": {
+            "asks": 20,
+            "bids": 20
+          },
+          "sig5": {
+            "asks": 20,
+            "bids": 20
+          }
+        },
+        "synthetic": true,
+        "synthetic_source_counts": {
+          "asks": {
+            "raw": 20,
+            "sig2": 18,
+            "sig3": 17,
+            "sig4": 18
+          },
+          "bids": {
+            "raw": 20,
+            "sig2": 17,
+            "sig3": 17,
+            "sig4": 17
+          }
+        }
+      },
+      "last_public_trade": {
+        "exchange": "hyperliquid",
+        "market": "BTC",
+        "price": 66011.0,
+        "raw": {
+          "coin": "BTC",
+          "hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "px": "66011.0",
+          "side": "B",
+          "sz": "0.00017",
+          "tid": 495525041173649,
+          "time": 1780505882009,
+          "users": [
+            "0x28f0233472b6a44e170e002a72845ca100be4a7e",
+            "0xe29d84a6f37858d7f8017be454ee35726511e525"
+          ]
+        },
+        "side": "buy",
+        "size": 0.00017,
+        "timestamp_ms": 1780505882009,
+        "trade_id": "495525041173649"
+      },
+      "synthetic_ask_level_count": 73,
+      "synthetic_bid_level_count": 71
+    },
+    "xyz:AMD": {
+      "best_ask": {
+        "order_count": 1,
+        "price": 533.28,
+        "raw": {
+          "n": 1,
+          "px": "533.28",
+          "syntheticBookSource": "raw",
+          "sz": "9.386"
+        },
+        "size": 9.386
+      },
+      "best_bid": {
+        "order_count": 1,
+        "price": 533.16,
+        "raw": {
+          "n": 1,
+          "px": "533.16",
+          "syntheticBookSource": "raw",
+          "sz": "0.028"
+        },
+        "size": 0.028
+      },
+      "cache_metadata": {
+        "age_ms": 89,
+        "bbo_age_ms": null,
+        "exchange_timestamp_ms": 1780505881787,
+        "received_at_ms": 1780505882448,
+        "resolution_level_counts": {
+          "raw": {
+            "asks": 20,
+            "bids": 20
+          },
+          "sig2": {
+            "asks": 20,
+            "bids": 20
+          },
+          "sig3": {
+            "asks": 20,
+            "bids": 20
+          },
+          "sig4": {
+            "asks": 20,
+            "bids": 20
+          },
+          "sig5": {
+            "asks": 20,
+            "bids": 20
+          }
+        },
+        "synthetic": true,
+        "synthetic_source_counts": {
+          "asks": {
+            "raw": 15,
+            "sig2": 17,
+            "sig3": 17,
+            "sig4": 12
+          },
+          "bids": {
+            "raw": 14,
+            "sig2": 17,
+            "sig3": 17,
+            "sig4": 11
+          }
+        }
+      },
+      "last_public_trade": {
+        "exchange": "hyperliquid",
+        "market": "xyz:AMD",
+        "price": 533.5,
+        "raw": {
+          "coin": "xyz:AMD",
+          "hash": "0x4c4fc9016e550bd84dc9043ce362370205b200e709582aaaf01874542d58e5c2",
+          "px": "533.5",
+          "side": "A",
+          "sz": "0.059",
+          "tid": 881660497164224,
+          "time": 1780505854560,
+          "users": [
+            "0x77001f3760e212769cb102dd82477e1b07f84216",
+            "0x58d2cc13b1dfa73b8f1806aeda2d2b27b6facfa0"
+          ]
+        },
+        "side": "sell",
+        "size": 0.059,
+        "timestamp_ms": 1780505854560,
+        "trade_id": "881660497164224"
+      },
+      "synthetic_ask_level_count": 61,
+      "synthetic_bid_level_count": 59
+    }
+  },
+  "note": "Websocket subscription only. No order action was signed or sent.",
+  "subscriptions": {
+    "_items": [
+      {
+        "method": "subscribe",
+        "subscription": {
+          "coin": "BTC",
+          "type": "l2Book"
+        }
+      },
+      {
+        "method": "subscribe",
+        "subscription": {
+          "coin": "xyz:AMD",
+          "type": "l2Book"
+        }
+      },
+      {
+        "method": "subscribe",
+        "subscription": {
+          "coin": "BTC",
+          "type": "bbo"
+        }
+      },
+      {
+        "method": "subscribe",
+        "subscription": {
+          "coin": "xyz:AMD",
+          "type": "bbo"
+        }
+      },
+      {
+        "method": "subscribe",
+        "subscription": {
+          "coin": "BTC",
+          "type": "trades"
+        }
+      }
+    ],
+    "_items_in_report": 5,
+    "_report_note": "list truncated for readability; rerun with --full for every item",
+    "_total_items": 15
+  }
+}
+
+RAW ACCOUNT DATA
+================
+
+info.user_role[account]
+-----------------------
+
+description: Role reported for the configured main account.
+status: OK
+elapsed_ms: 238.2
+format:
+{
+  "role": "str"
+}
+response:
+{
+  "role": "user"
+}
+
+info.user_role[signer]
+----------------------
+
+description: Role reported for the signing wallet.
+status: OK
+elapsed_ms: 231.5
+format:
+{
+  "data": {
+    "user": "str"
+  },
+  "role": "str"
+}
+response:
+{
+  "data": {
+    "user": "0xa5f51a1a61d374dd97a51e946f9ab9e16af0f0e3"
+  },
+  "role": "agent"
+}
+
+info.extra_agents[account]
+--------------------------
+
+description: Approved API-agent wallets for the configured account.
+status: OK
+elapsed_ms: 254.0
+format:
+{
+  "item_format": {
+    "address": "str",
+    "name": "str",
+    "validUntil": "int"
+  },
+  "length": 1,
+  "type": "list"
+}
+response:
+[
+  {
+    "address": "0xcf461a4d36f155523577b46da28c74e90972d0f1",
+    "name": "testnet",
+    "validUntil": 1782915399561
+  }
+]
+
+info.user_state[account]
+------------------------
+
+description: Raw perpetual balances, margin summary, and positions.
+status: OK
+elapsed_ms: 508.9
+format:
+{
+  "assetPositions": {
+    "item_format": null,
+    "length": 0,
+    "type": "list"
+  },
+  "crossMaintenanceMarginUsed": "str",
+  "crossMarginSummary": {
+    "accountValue": "str",
+    "totalMarginUsed": "str",
+    "totalNtlPos": "str",
+    "totalRawUsd": "str"
+  },
+  "marginSummary": {
+    "accountValue": "str",
+    "totalMarginUsed": "str",
+    "totalNtlPos": "str",
+    "totalRawUsd": "str"
+  },
+  "time": "int",
+  "withdrawable": "str"
+}
+response:
+{
+  "assetPositions": [],
+  "crossMaintenanceMarginUsed": "0.0",
+  "crossMarginSummary": {
+    "accountValue": "0.0",
+    "totalMarginUsed": "0.0",
+    "totalNtlPos": "0.0",
+    "totalRawUsd": "0.0"
+  },
+  "marginSummary": {
+    "accountValue": "0.0",
+    "totalMarginUsed": "0.0",
+    "totalNtlPos": "0.0",
+    "totalRawUsd": "0.0"
+  },
+  "time": 1780505884656,
+  "withdrawable": "0.0"
+}
+
+info.spot_user_state[account]
+-----------------------------
+
+description: Raw spot balances.
+status: OK
+elapsed_ms: 661.0
+format:
+{
+  "balances": {
+    "item_format": {
+      "coin": "str",
+      "entryNtl": "str",
+      "hold": "str",
+      "token": "int",
+      "total": "str"
+    },
+    "length": 4,
+    "type": "list"
+  },
+  "tokenToAvailableAfterMaintenance": {
+    "item_format": {
+      "item_format": "int",
+      "length": 2,
+      "type": "list"
+    },
+    "length": 1,
+    "type": "list"
+  }
+}
+response:
+{
+  "balances": [
+    {
+      "coin": "USDC",
+      "entryNtl": "0.0",
+      "hold": "0.0",
+      "token": 0,
+      "total": "8.875562"
+    },
+    {
+      "coin": "USDE",
+      "entryNtl": "0.0",
+      "hold": "0.0",
+      "token": 235,
+      "total": "0.0"
+    },
+    {
+      "coin": "USDT0",
+      "entryNtl": "0.0",
+      "hold": "0.0",
+      "token": 268,
+      "total": "0.0"
+    },
+    {
+      "coin": "USDH",
+      "entryNtl": "0.0",
+      "hold": "0.0",
+      "token": 360,
+      "total": "0.0"
+    }
+  ],
+  "tokenToAvailableAfterMaintenance": [
+    [
+      0,
+      "8.875562"
+    ]
+  ]
+}
+
+info.open_orders[account]
+-------------------------
+
+description: Raw currently resting orders.
+status: OK
+elapsed_ms: 234.6
+format:
+{
+  "item_format": null,
+  "length": 0,
+  "type": "list"
+}
+response:
+[]
+
+info.frontend_open_orders[account]
+----------------------------------
+
+description: Raw resting orders with frontend fields such as cloid, tif, and reduceOnly.
+status: OK
+elapsed_ms: 237.8
+format:
+{
+  "item_format": null,
+  "length": 0,
+  "type": "list"
+}
+response:
+[]
+
+info.user_state[account,dex=default]
+------------------------------------
+
+description: Raw perp balances and positions for the configured dex.
+status: OK
+elapsed_ms: 237.2
+format:
+{
+  "assetPositions": {
+    "item_format": null,
+    "length": 0,
+    "type": "list"
+  },
+  "crossMaintenanceMarginUsed": "str",
+  "crossMarginSummary": {
+    "accountValue": "str",
+    "totalMarginUsed": "str",
+    "totalNtlPos": "str",
+    "totalRawUsd": "str"
+  },
+  "marginSummary": {
+    "accountValue": "str",
+    "totalMarginUsed": "str",
+    "totalNtlPos": "str",
+    "totalRawUsd": "str"
+  },
+  "time": "int",
+  "withdrawable": "str"
+}
+response:
+{
+  "assetPositions": [],
+  "crossMaintenanceMarginUsed": "0.0",
+  "crossMarginSummary": {
+    "accountValue": "0.0",
+    "totalMarginUsed": "0.0",
+    "totalNtlPos": "0.0",
+    "totalRawUsd": "0.0"
+  },
+  "marginSummary": {
+    "accountValue": "0.0",
+    "totalMarginUsed": "0.0",
+    "totalNtlPos": "0.0",
+    "totalRawUsd": "0.0"
+  },
+  "time": 1780505886290,
+  "withdrawable": "0.0"
+}
+
+info.open_orders[account,dex=default]
+-------------------------------------
+
+description: Raw resting orders for the configured dex.
+status: OK
+elapsed_ms: 240.9
+format:
+{
+  "item_format": null,
+  "length": 0,
+  "type": "list"
+}
+response:
+[]
+
+info.frontend_open_orders[account,dex=default]
+----------------------------------------------
+
+description: Raw frontend resting orders for the configured dex.
+status: OK
+elapsed_ms: 243.5
+format:
+{
+  "item_format": null,
+  "length": 0,
+  "type": "list"
+}
+response:
+[]
+
+info.user_state[account,dex=xyz]
+--------------------------------
+
+description: Raw perp balances and positions for the configured dex.
+status: OK
+elapsed_ms: 261.1
+format:
+{
+  "assetPositions": {
+    "item_format": null,
+    "length": 0,
+    "type": "list"
+  },
+  "crossMaintenanceMarginUsed": "str",
+  "crossMarginSummary": {
+    "accountValue": "str",
+    "totalMarginUsed": "str",
+    "totalNtlPos": "str",
+    "totalRawUsd": "str"
+  },
+  "marginSummary": {
+    "accountValue": "str",
+    "totalMarginUsed": "str",
+    "totalNtlPos": "str",
+    "totalRawUsd": "str"
+  },
+  "time": "int",
+  "withdrawable": "str"
+}
+response:
+{
+  "assetPositions": [],
+  "crossMaintenanceMarginUsed": "0.0",
+  "crossMarginSummary": {
+    "accountValue": "0.0",
+    "totalMarginUsed": "0.0",
+    "totalNtlPos": "0.0",
+    "totalRawUsd": "0.0"
+  },
+  "marginSummary": {
+    "accountValue": "0.0",
+    "totalMarginUsed": "0.0",
+    "totalNtlPos": "0.0",
+    "totalRawUsd": "0.0"
+  },
+  "time": 1780505887024,
+  "withdrawable": "0.0"
+}
+
+info.open_orders[account,dex=xyz]
+---------------------------------
+
+description: Raw resting orders for the configured dex.
+status: OK
+elapsed_ms: 238.5
+format:
+{
+  "item_format": null,
+  "length": 0,
+  "type": "list"
+}
+response:
+[]
+
+info.frontend_open_orders[account,dex=xyz]
+------------------------------------------
+
+description: Raw frontend resting orders for the configured dex.
+status: OK
+elapsed_ms: 241.3
+format:
+{
+  "item_format": null,
+  "length": 0,
+  "type": "list"
+}
+response:
+[]
+
+info.user_fills[account]
+------------------------
+
+description: Raw recent fills returned by Hyperliquid.
+status: OK
+elapsed_ms: 1348.8
+format:
+{
+  "item_format": {
+    "closedPnl": "str",
+    "coin": "str",
+    "crossed": "bool",
+    "dir": "str",
+    "fee": "str",
+    "feeToken": "str",
+    "hash": "str",
+    "oid": "int",
+    "px": "str",
+    "side": "str",
+    "startPosition": "str",
+    "sz": "str",
+    "tid": "int",
+    "time": "int",
+    "twapId": "null"
+  },
+  "length": 1660,
+  "type": "list"
+}
+response:
+{
+  "_items": [
+    {
+      "closedPnl": "-0.0231",
+      "coin": "NIL",
+      "crossed": true,
+      "dir": "Close Long",
+      "fee": "0.004533",
+      "feeToken": "USDC",
+      "hash": "0x05c9728e15e90a190743043ce296070202830073b0ec28eba9921de0d4ece403",
+      "oid": 455264907764,
+      "px": "0.059972",
+      "side": "A",
+      "startPosition": "175.0",
+      "sz": "175.0",
+      "tid": 896870236566305,
+      "time": 1780502203732,
+      "twapId": null
+    },
+    {
+      "cloid": "0x3e1dcbc807ec443c8018954cfc73188f",
+      "closedPnl": "0.0",
+      "coin": "NIL",
+      "crossed": false,
+      "dir": "Open Long",
+      "fee": "0.001514",
+      "feeToken": "USDC",
+      "hash": "0xb9d70159845942b2bb50043ce28e9e0203cf003f1f5c61845d9facac435d1c9d",
+      "oid": 455260924401,
+      "px": "0.060104",
+      "side": "B",
+      "startPosition": "0.0",
+      "sz": "175.0",
+      "tid": 134620072704278,
+      "time": 1780502069321,
+      "twapId": null
+    },
+    {
+      "cloid": "0xdb941a202bf04706baa85ef2a63cf5a8",
+      "closedPnl": "-0.016625",
+      "coin": "NIL",
+      "crossed": false,
+      "dir": "Close Long",
+      "fee": "0.001517",
+      "feeToken": "USDC",
+      "hash": "0x10329c514a4e433f11ac043ce2888b0204250036e5416211b3fb47a409421d29",
+      "oid": 455258253514,
+      "px": "0.060222",
+      "side": "A",
+      "startPosition": "175.0",
+      "sz": "175.0",
+      "tid": 567850857616034,
+      "time": 1780501960536,
+      "twapId": null
+    },
+    {
+      "cloid": "0x39c830e7617f49e3b9699eac1861211a",
+      "closedPnl": "0.0",
+      "coin": "NIL",
+      "crossed": false,
+      "dir": "Open Long",
+      "fee": "0.001519",
+      "feeToken": "USDC",
+      "hash": "0xe69230339d9606d0e80b043ce282a602045b0019389925a28a5adb865c99e0bb",
+      "oid": 455255105203,
+      "px": "0.060317",
+      "side": "B",
+      "startPosition": "0.0",
+      "sz": "175.0",
+      "tid": 658936625652602,
+      "time": 1780501856199,
+      "twapId": null
+    },
+    {
+      "cloid": "0x1a77d0762cbe446886d701c9ee8f484f",
+      "closedPnl": "-0.051275",
+      "coin": "NIL",
+      "crossed": false,
+      "dir": "Close Long",
+      "fee": "0.001509",
+      "feeToken": "USDC",
+      "hash": "0x0160a5df5093cf7002da043ce277f202078f00c4eb96ee42a52951320f97a95a",
+      "oid": 455249865027,
+      "px": "0.059886",
+      "side": "A",
+      "startPosition": "175.0",
+      "sz": "175.0",
+      "tid": 216289535980604,
+      "time": 1780501663204,
+      "twapId": null
+    }
+  ],
+  "_items_in_report": 5,
+  "_report_note": "list truncated for readability; rerun with --full for every item",
+  "_total_items": 1660
+}
+
+info.user_fills_by_time[account]
+--------------------------------
+
+description: Raw fills in the configured 1-day lookback window.
+status: OK
+elapsed_ms: 643.6
+format:
+{
+  "item_format": {
+    "cloid": "str",
+    "closedPnl": "str",
+    "coin": "str",
+    "crossed": "bool",
+    "dir": "str",
+    "fee": "str",
+    "feeToken": "str",
+    "hash": "str",
+    "oid": "int",
+    "px": "str",
+    "side": "str",
+    "startPosition": "str",
+    "sz": "str",
+    "tid": "int",
+    "time": "int",
+    "twapId": "null"
+  },
+  "length": 164,
+  "type": "list"
+}
+response:
+{
+  "_items": [
+    {
+      "cloid": "0x616bd7d772d240edbad42da49ddd3c72",
+      "closedPnl": "0.0",
+      "coin": "BTC",
+      "crossed": false,
+      "dir": "Open Long",
+      "fee": "0.001533",
+      "feeToken": "USDC",
+      "hash": "0xd9eef9d3ae1366e2db68043cd56fd6020cb300b9491685b47db7a5266d1740cd",
+      "oid": 454013568868,
+      "px": "66579.0",
+      "side": "B",
+      "startPosition": "0.0",
+      "sz": "0.00016",
+      "tid": 97679550984932,
+      "time": 1780442489311,
+      "twapId": null
+    },
+    {
+      "closedPnl": "-0.00336",
+      "coin": "BTC",
+      "crossed": true,
+      "dir": "Close Long",
+      "fee": "0.0046",
+      "feeToken": "USDC",
+      "hash": "0xa8622fa56ec91d7da9db043cd5738e02015e008b09cc3c4f4c2adaf82dccf768",
+      "oid": 454015305824,
+      "px": "66558.0",
+      "side": "A",
+      "startPosition": "0.00016",
+      "sz": "0.00016",
+      "tid": 356589760749838,
+      "time": 1780442554249,
+      "twapId": null
+    },
+    {
+      "cloid": "0xc155d67c4eb94ee7a94f2f6365180654",
+      "closedPnl": "0.0",
+      "coin": "BTC",
+      "crossed": false,
+      "dir": "Open Short",
+      "fee": "0.001533",
+      "feeToken": "USDC",
+      "hash": "0xc82ce6657fd7896dc9a6043cd5b27b020636004b1adaa83f6bf591b83edb6358",
+      "oid": 454046735411,
+      "px": "66561.0",
+      "side": "A",
+      "startPosition": "0.0",
+      "sz": "0.00016",
+      "tid": 418361488219882,
+      "time": 1780443671276,
+      "twapId": null
+    },
+    {
+      "cloid": "0x56afb0c371be4e2f8c37cfb488b2151f",
+      "closedPnl": "0.00416",
+      "coin": "BTC",
+      "crossed": false,
+      "dir": "Close Short",
+      "fee": "0.001532",
+      "feeToken": "USDC",
+      "hash": "0xee8fc645fcc94f52f009043cd5b27f0214c9002b97cc6e2492587198bbcd293d",
+      "oid": 454046764797,
+      "px": "66535.0",
+      "side": "B",
+      "startPosition": "-0.00016",
+      "sz": "0.00016",
+      "tid": 147441731153306,
+      "time": 1780443671616,
+      "twapId": null
+    },
+    {
+      "cloid": "0x2a64bf1a5e59496d9ecd30f504878a62",
+      "closedPnl": "0.0",
+      "coin": "BTC",
+      "crossed": false,
+      "dir": "Open Long",
+      "fee": "0.001531",
+      "feeToken": "USDC",
+      "hash": "0x3c7b6bf3a054d5b63df5043cd5b676020a5700d93b57f488e04417465f58afa0",
+      "oid": 454048296156,
+      "px": "66471.0",
+      "side": "B",
+      "startPosition": "0.0",
+      "sz": "0.00016",
+      "tid": 855813692487619,
+      "time": 1780443741469,
+      "twapId": null
+    }
+  ],
+  "_items_in_report": 5,
+  "_report_note": "list truncated for readability; rerun with --full for every item",
+  "_total_items": 164
+}
+
+info.historical_orders[account]
+-------------------------------
+
+description: Raw historical orders. The SDK documents a maximum of 2000 recent entries.
+status: OK
+elapsed_ms: 1603.5
+format:
+{
+  "item_format": {
+    "order": {
+      "children": {
+        "item_format": null,
+        "length": 0,
+        "type": "list"
+      },
+      "cloid": "str",
+      "coin": "str",
+      "isPositionTpsl": "bool",
+      "isTrigger": "bool",
+      "limitPx": "str",
+      "oid": "int",
+      "orderType": "str",
+      "origSz": "str",
+      "reduceOnly": "bool",
+      "side": "str",
+      "sz": "str",
+      "tif": "str",
+      "timestamp": "int",
+      "triggerCondition": "str",
+      "triggerPx": "str"
+    },
+    "status": "str",
+    "statusTimestamp": "int"
+  },
+  "length": 2000,
+  "type": "list"
+}
+response:
+{
+  "_items": [
+    {
+      "order": {
+        "children": [],
+        "cloid": "0x99c82de8cdd64becb33486c35f70f2df",
+        "coin": "NIL",
+        "isPositionTpsl": false,
+        "isTrigger": false,
+        "limitPx": "0.060016",
+        "oid": 455264680690,
+        "orderType": "Limit",
+        "origSz": "175.0",
+        "reduceOnly": true,
+        "side": "A",
+        "sz": "175.0",
+        "tif": "Alo",
+        "timestamp": 1780502192875,
+        "triggerCondition": "N/A",
+        "triggerPx": "0.0"
+      },
+      "status": "reduceOnlyCanceled",
+      "statusTimestamp": 1780502203732
+    },
+    {
+      "order": {
+        "children": [],
+        "cloid": null,
+        "coin": "NIL",
+        "isPositionTpsl": false,
+        "isTrigger": false,
+        "limitPx": "0.0552",
+        "oid": 455264907764,
+        "orderType": "Market",
+        "origSz": "175.0",
+        "reduceOnly": true,
+        "side": "A",
+        "sz": "0.0",
+        "tif": "FrontendMarket",
+        "timestamp": 1780502203732,
+        "triggerCondition": "N/A",
+        "triggerPx": "0.0"
+      },
+      "status": "filled",
+      "statusTimestamp": 1780502203732
+    },
+    {
+      "order": {
+        "children": [],
+        "cloid": null,
+        "coin": "NIL",
+        "isPositionTpsl": false,
+        "isTrigger": false,
+        "limitPx": "0.0552",
+        "oid": 455264907764,
+        "orderType": "Market",
+        "origSz": "175.0",
+        "reduceOnly": true,
+        "side": "A",
+        "sz": "175.0",
+        "tif": "FrontendMarket",
+        "timestamp": 1780502203732,
+        "triggerCondition": "N/A",
+        "triggerPx": "0.0"
+      },
+      "status": "open",
+      "statusTimestamp": 1780502203732
+    },
+    {
+      "order": {
+        "children": [],
+        "cloid": "0x99c82de8cdd64becb33486c35f70f2df",
+        "coin": "NIL",
+        "isPositionTpsl": false,
+        "isTrigger": false,
+        "limitPx": "0.060018",
+        "oid": 455264394833,
+        "orderType": "Limit",
+        "origSz": "175.0",
+        "reduceOnly": true,
+        "side": "A",
+        "sz": "175.0",
+        "tif": "Alo",
+        "timestamp": 1780502182030,
+        "triggerCondition": "N/A",
+        "triggerPx": "0.0"
+      },
+      "status": "canceled",
+      "statusTimestamp": 1780502192875
+    },
+    {
+      "order": {
+        "children": [],
+        "cloid": "0x99c82de8cdd64becb33486c35f70f2df",
+        "coin": "NIL",
+        "isPositionTpsl": false,
+        "isTrigger": false,
+        "limitPx": "0.060016",
+        "oid": 455264680690,
+        "orderType": "Limit",
+        "origSz": "175.0",
+        "reduceOnly": true,
+        "side": "A",
+        "sz": "175.0",
+        "tif": "Alo",
+        "timestamp": 1780502192875,
+        "triggerCondition": "N/A",
+        "triggerPx": "0.0"
+      },
+      "status": "open",
+      "statusTimestamp": 1780502192875
+    }
+  ],
+  "_items_in_report": 5,
+  "_report_note": "list truncated for readability; rerun with --full for every item",
+  "_total_items": 2000
+}
+
+info.user_fees[account]
+-----------------------
+
+description: Raw fee schedule and trading-volume information.
+status: OK
+elapsed_ms: 323.7
+format:
+{
+  "activeReferralDiscount": "str",
+  "activeStakingDiscount": {
+    "bpsOfMaxSupply": "str",
+    "discount": "str"
+  },
+  "dailyUserVlm": {
+    "item_format": {
+      "date": "str",
+      "exchange": "str",
+      "userAdd": "str",
+      "userCross": "str"
+    },
+    "length": 15,
+    "type": "list"
+  },
+  "feeSchedule": {
+    "add": "str",
+    "cross": "str",
+    "referralDiscount": "str",
+    "spotAdd": "str",
+    "spotCross": "str",
+    "stakingDiscountTiers": {
+      "item_format": {
+        "bpsOfMaxSupply": "str",
+        "discount": "str"
+      },
+      "length": 7,
+      "type": "list"
+    },
+    "tiers": {
+      "mm": {
+        "item_format": {
+          "add": "str",
+          "makerFractionCutoff": "str"
+        },
+        "length": 3,
+        "type": "list"
+      },
+      "vip": {
+        "item_format": {
+          "add": "str",
+          "cross": "str",
+          "ntlCutoff": "str",
+          "spotAdd": "str",
+          "spotCross": "str"
+        },
+        "length": 6,
+        "type": "list"
+      }
+    }
+  },
+  "feeTrialEscrow": "str",
+  "nextTrialAvailableTimestamp": "null",
+  "stakingLink": "null",
+  "trial": "null",
+  "userAddRate": "str",
+  "userCrossRate": "str",
+  "userSpotAddRate": "str",
+  "userSpotCrossRate": "str"
+}
+response:
+{
+  "activeReferralDiscount": "0.04",
+  "activeStakingDiscount": {
+    "bpsOfMaxSupply": "0.0",
+    "discount": "0.0"
+  },
+  "dailyUserVlm": {
+    "_items": [
+      {
+        "date": "2026-05-20",
+        "exchange": "5183436020.4200000763",
+        "userAdd": "0.0",
+        "userCross": "0.0"
+      },
+      {
+        "date": "2026-05-21",
+        "exchange": "7438403412.9499998093",
+        "userAdd": "0.0",
+        "userCross": "0.0"
+      },
+      {
+        "date": "2026-05-22",
+        "exchange": "6404855941.1400003433",
+        "userAdd": "0.0",
+        "userCross": "0.0"
+      },
+      {
+        "date": "2026-05-23",
+        "exchange": "6110962321.8400001526",
+        "userAdd": "0.0",
+        "userCross": "0.0"
+      },
+      {
+        "date": "2026-05-24",
+        "exchange": "4662736618.3999996185",
+        "userAdd": "0.0",
+        "userCross": "0.0"
+      }
+    ],
+    "_items_in_report": 5,
+    "_report_note": "list truncated for readability; rerun with --full for every item",
+    "_total_items": 15
+  },
+  "feeSchedule": {
+    "add": "0.00015",
+    "cross": "0.00045",
+    "referralDiscount": "0.04",
+    "spotAdd": "0.0004",
+    "spotCross": "0.0007",
+    "stakingDiscountTiers": {
+      "_items": [
+        {
+          "bpsOfMaxSupply": "0.0",
+          "discount": "0.0"
+        },
+        {
+          "bpsOfMaxSupply": "0.0001",
+          "discount": "0.05"
+        },
+        {
+          "bpsOfMaxSupply": "0.001",
+          "discount": "0.1"
+        },
+        {
+          "bpsOfMaxSupply": "0.01",
+          "discount": "0.15"
+        },
+        {
+          "bpsOfMaxSupply": "0.1",
+          "discount": "0.2"
+        }
+      ],
+      "_items_in_report": 5,
+      "_report_note": "list truncated for readability; rerun with --full for every item",
+      "_total_items": 7
+    },
+    "tiers": {
+      "mm": [
+        {
+          "add": "-0.00001",
+          "makerFractionCutoff": "0.005"
+        },
+        {
+          "add": "-0.00002",
+          "makerFractionCutoff": "0.015"
+        },
+        {
+          "add": "-0.00003",
+          "makerFractionCutoff": "0.03"
+        }
+      ],
+      "vip": {
+        "_items": [
+          {
+            "add": "0.00012",
+            "cross": "0.0004",
+            "ntlCutoff": "5000000.0",
+            "spotAdd": "0.0003",
+            "spotCross": "0.0006"
+          },
+          {
+            "add": "0.00008",
+            "cross": "0.00035",
+            "ntlCutoff": "25000000.0",
+            "spotAdd": "0.0002",
+            "spotCross": "0.0005"
+          },
+          {
+            "add": "0.00004",
+            "cross": "0.0003",
+            "ntlCutoff": "100000000.0",
+            "spotAdd": "0.0001",
+            "spotCross": "0.0004"
+          },
+          {
+            "add": "0.0",
+            "cross": "0.00028",
+            "ntlCutoff": "500000000.0",
+            "spotAdd": "0.0",
+            "spotCross": "0.00035"
+          },
+          {
+            "add": "0.0",
+            "cross": "0.00026",
+            "ntlCutoff": "2000000000.0",
+            "spotAdd": "0.0",
+            "spotCross": "0.0003"
+          }
+        ],
+        "_items_in_report": 5,
+        "_report_note": "list truncated for readability; rerun with --full for every item",
+        "_total_items": 6
+      }
+    }
+  },
+  "feeTrialEscrow": "0.0",
+  "nextTrialAvailableTimestamp": null,
+  "stakingLink": null,
+  "trial": null,
+  "userAddRate": "0.00015",
+  "userCrossRate": "0.00045",
+  "userSpotAddRate": "0.0004",
+  "userSpotCrossRate": "0.0007"
+}
+
+info.user_rate_limit[account]
+-----------------------------
+
+description: Raw API rate-limit information.
+status: OK
+elapsed_ms: 257.0
+format:
+{
+  "cumVlm": "str",
+  "nRequestsCap": "int",
+  "nRequestsSurplus": "int",
+  "nRequestsUsed": "int"
+}
+response:
+{
+  "cumVlm": "27316.78",
+  "nRequestsCap": 37316,
+  "nRequestsSurplus": 0,
+  "nRequestsUsed": 37329
+}
+
+info.portfolio[account]
+-----------------------
+
+description: Raw portfolio history.
+status: OK
+elapsed_ms: 334.2
+format:
+{
+  "item_format": {
+    "item_format": "str",
+    "length": 2,
+    "type": "list"
+  },
+  "length": 8,
+  "type": "list"
+}
+response:
+{
+  "_items": [
+    [
+      "day",
+      {
+        "accountValueHistory": {
+          "_items": [
+            [
+              1780419480056,
+              "9.56933"
+            ],
+            [
+              1780427880026,
+              "9.56933"
+            ],
+            [
+              1780435080067,
+              "9.56933"
+            ],
+            [
+              1780443480049,
+              "9.559837"
+            ],
+            [
+              1780451880017,
+              "9.499735"
+            ]
+          ],
+          "_items_in_report": 5,
+          "_report_note": "list truncated for readability; rerun with --full for every item",
+          "_total_items": 13
+        },
+        "pnlHistory": {
+          "_items": [
+            [
+              1780419480056,
+              "0.0"
+            ],
+            [
+              1780427880026,
+              "0.0"
+            ],
+            [
+              1780435080067,
+              "0.0"
+            ],
+            [
+              1780443480049,
+              "-0.009493"
+            ],
+            [
+              1780451880017,
+              "-0.069595"
+            ]
+          ],
+          "_items_in_report": 5,
+          "_report_note": "list truncated for readability; rerun with --full for every item",
+          "_total_items": 13
+        },
+        "vlm": "1699.63"
+      }
+    ],
+    [
+      "week",
+      {
+        "accountValueHistory": {
+          "_items": [
+            [
+              1779899880066,
+              "9.564885"
+            ],
+            [
+              1779915480015,
+              "9.564885"
+            ],
+            [
+              1779923880050,
+              "9.564885"
+            ],
+            [
+              1779931080072,
+              "9.564885"
+            ],
+            [
+              1779947880052,
+              "9.564885"
+            ]
+          ],
+          "_items_in_report": 5,
+          "_report_note": "list truncated for readability; rerun with --full for every item",
+          "_total_items": 65
+        },
+        "pnlHistory": {
+          "_items": [
+            [
+              1779899880066,
+              "0.0"
+            ],
+            [
+              1779915480015,
+              "0.0"
+            ],
+            [
+              1779923880050,
+              "0.0"
+            ],
+            [
+              1779931080072,
+              "0.0"
+            ],
+            [
+              1779947880052,
+              "0.0"
+            ]
+          ],
+          "_items_in_report": 5,
+          "_report_note": "list truncated for readability; rerun with --full for every item",
+          "_total_items": 65
+        },
+        "vlm": "1729.68"
+      }
+    ],
+    [
+      "month",
+      {
+        "accountValueHistory": {
+          "_items": [
+            [
+              1777850280007,
+              "9.564885"
+            ],
+            [
+              1777935480000,
+              "9.564885"
+            ],
+            [
+              1778024280053,
+              "9.564885"
+            ],
+            [
+              1778111880064,
+              "9.564885"
+            ],
+            [
+              1778197080017,
+              "9.564885"
+            ]
+          ],
+          "_items_in_report": 5,
+          "_report_note": "list truncated for readability; rerun with --full for every item",
+          "_total_items": 47
+        },
+        "pnlHistory": {
+          "_items": [
+            [
+              1777850280007,
+              "0.0"
+            ],
+            [
+              1777935480000,
+              "0.0"
+            ],
+            [
+              1778024280053,
+              "0.0"
+            ],
+            [
+              1778111880064,
+              "0.0"
+            ],
+            [
+              1778197080017,
+              "0.0"
+            ]
+          ],
+          "_items_in_report": 5,
+          "_report_note": "list truncated for readability; rerun with --full for every item",
+          "_total_items": 47
+        },
+        "vlm": "1729.68"
+      }
+    ],
+    [
+      "allTime",
+      {
+        "accountValueHistory": {
+          "_items": [
+            [
+              1770244680046,
+              "0.0"
+            ],
+            [
+              1770248280046,
+              "17.518636"
+            ],
+            [
+              1770850680096,
+              "15.542823"
+            ],
+            [
+              1771455480065,
+              "15.542823"
+            ],
+            [
+              1772060280097,
+              "13.036798"
+            ]
+          ],
+          "_items_in_report": 5,
+          "_report_note": "list truncated for readability; rerun with --full for every item",
+          "_total_items": 34
+        },
+        "pnlHistory": {
+          "_items": [
+            [
+              1770244680046,
+              "0.0"
+            ],
+            [
+              1770248280046,
+              "-0.191364"
+            ],
+            [
+              1770850680096,
+              "-2.167177"
+            ],
+            [
+              1771455480065,
+              "-2.167177"
+            ],
+            [
+              1772060280097,
+              "-4.673202"
+            ]
+          ],
+          "_items_in_report": 5,
+          "_report_note": "list truncated for readability; rerun with --full for every item",
+          "_total_items": 34
+        },
+        "vlm": "27316.78"
+      }
+    ],
+    [
+      "perpDay",
+      {
+        "accountValueHistory": {
+          "_items": [
+            [
+              1780419480056,
+              "0.0"
+            ],
+            [
+              1780427880026,
+              "0.0"
+            ],
+            [
+              1780435080067,
+              "0.273992"
+            ],
+            [
+              1780443480049,
+              "0.0"
+            ],
+            [
+              1780451880017,
+              "0.0"
+            ]
+          ],
+          "_items_in_report": 5,
+          "_report_note": "list truncated for readability; rerun with --full for every item",
+          "_total_items": 13
+        },
+        "pnlHistory": {
+          "_items": [
+            [
+              1780419480056,
+              "0.0"
+            ],
+            [
+              1780427880026,
+              "0.0"
+            ],
+            [
+              1780435080067,
+              "0.003992"
+            ],
+            [
+              1780443480049,
+              "-0.27"
+            ],
+            [
+              1780451880017,
+              "-2.34"
+            ]
+          ],
+          "_items_in_report": 5,
+          "_report_note": "list truncated for readability; rerun with --full for every item",
+          "_total_items": 13
+        },
+        "vlm": "1699.63"
+      }
+    ]
+  ],
+  "_items_in_report": 5,
+  "_report_note": "list truncated for readability; rerun with --full for every item",
+  "_total_items": 8
+}
+
+info.user_funding_history[account]
+----------------------------------
+
+description: Raw user funding history in the configured 1-day lookback window.
+status: OK
+elapsed_ms: 220.6
+format:
+{
+  "item_format": null,
+  "length": 0,
+  "type": "list"
+}
+response:
+[]
+
+NORMALIZED CONNECTOR DATA
+=========================
+
+connector.fetch_signer_role
+---------------------------
+
+description: Normalized signer role.
+status: OK
+elapsed_ms: 230.2
+format:
+{
+  "data": {
+    "user": "str"
+  },
+  "role": "str"
+}
+response:
+{
+  "data": {
+    "user": "0xa5f51a1a61d374dd97a51e946f9ab9e16af0f0e3"
+  },
+  "role": "agent"
+}
+
+connector.fetch_account_summary
+-------------------------------
+
+description: Normalized account summary passthrough.
+status: OK
+elapsed_ms: 234.6
+format:
+{
+  "assetPositions": {
+    "item_format": null,
+    "length": 0,
+    "type": "list"
+  },
+  "crossMaintenanceMarginUsed": "str",
+  "crossMarginSummary": {
+    "accountValue": "str",
+    "totalMarginUsed": "str",
+    "totalNtlPos": "str",
+    "totalRawUsd": "str"
+  },
+  "marginSummary": {
+    "accountValue": "str",
+    "totalMarginUsed": "str",
+    "totalNtlPos": "str",
+    "totalRawUsd": "str"
+  },
+  "time": "int",
+  "withdrawable": "str"
+}
+response:
+{
+  "assetPositions": [],
+  "crossMaintenanceMarginUsed": "0.0",
+  "crossMarginSummary": {
+    "accountValue": "0.0",
+    "totalMarginUsed": "0.0",
+    "totalNtlPos": "0.0",
+    "totalRawUsd": "0.0"
+  },
+  "marginSummary": {
+    "accountValue": "0.0",
+    "totalMarginUsed": "0.0",
+    "totalNtlPos": "0.0",
+    "totalRawUsd": "0.0"
+  },
+  "time": 1780505893152,
+  "withdrawable": "0.0"
+}
+
+connector.fetch_positions
+-------------------------
+
+description: Normalized list of perpetual positions.
+status: OK
+elapsed_ms: 290.1
+format:
+{
+  "item_format": null,
+  "length": 0,
+  "type": "list"
+}
+response:
+[]
+
+connector.fetch_spot_balances
+-----------------------------
+
+description: Normalized spot balances.
+status: OK
+elapsed_ms: 238.3
+format:
+{
+  "item_format": {
+    "coin": "str",
+    "entryNtl": "str",
+    "hold": "str",
+    "token": "int",
+    "total": "str"
+  },
+  "length": 4,
+  "type": "list"
+}
+response:
+[
+  {
+    "coin": "USDC",
+    "entryNtl": "0.0",
+    "hold": "0.0",
+    "token": 0,
+    "total": "8.875562"
+  },
+  {
+    "coin": "USDE",
+    "entryNtl": "0.0",
+    "hold": "0.0",
+    "token": 235,
+    "total": "0.0"
+  },
+  {
+    "coin": "USDT0",
+    "entryNtl": "0.0",
+    "hold": "0.0",
+    "token": 268,
+    "total": "0.0"
+  },
+  {
+    "coin": "USDH",
+    "entryNtl": "0.0",
+    "hold": "0.0",
+    "token": 360,
+    "total": "0.0"
+  }
+]
+
+connector.fetch_open_orders
+---------------------------
+
+description: Normalized open orders used by strategies.
+status: OK
+elapsed_ms: 281.4
+format:
+{
+  "item_format": null,
+  "length": 0,
+  "type": "list"
+}
+response:
+[]
+
+connector.fetch_open_order_details
+----------------------------------
+
+description: Exchange-specific open-order detail payload.
+status: OK
+elapsed_ms: 235.2
+format:
+{
+  "item_format": null,
+  "length": 0,
+  "type": "list"
+}
+response:
+[]
+
+connector.fetch_recent_fills
+----------------------------
+
+description: Normalized fills in the configured 1-day lookback window.
+status: OK
+elapsed_ms: 663.8
+format:
+{
+  "item_format": {
+    "client_order_id": "str",
+    "exchange": "str",
+    "exchange_order_id": "str",
+    "fee": "float",
+    "fee_currency": "str",
+    "market": "str",
+    "price": "float",
+    "raw": {
+      "cloid": "str",
+      "closedPnl": "str",
+      "coin": "str",
+      "crossed": "bool",
+      "dir": "str",
+      "fee": "str",
+      "feeToken": "str",
+      "hash": "str",
+      "oid": "int",
+      "px": "str",
+      "side": "str",
+      "startPosition": "str",
+      "sz": "str",
+      "tid": "int",
+      "time": "int",
+      "twapId": "null"
+    },
+    "side": "str",
+    "size": "float",
+    "symbol": "str",
+    "timestamp_ms": "int",
+    "trade_id": "str"
+  },
+  "length": 164,
+  "type": "list"
+}
+response:
+{
+  "_items": [
+    {
+      "client_order_id": "0x616bd7d772d240edbad42da49ddd3c72",
+      "exchange": "hyperliquid",
+      "exchange_order_id": "454013568868",
+      "fee": 0.001533,
+      "fee_currency": "USDC",
+      "market": "BTC",
+      "price": 66579.0,
+      "raw": {
+        "cloid": "0x616bd7d772d240edbad42da49ddd3c72",
+        "closedPnl": "0.0",
+        "coin": "BTC",
+        "crossed": false,
+        "dir": "Open Long",
+        "fee": "0.001533",
+        "feeToken": "USDC",
+        "hash": "0xd9eef9d3ae1366e2db68043cd56fd6020cb300b9491685b47db7a5266d1740cd",
+        "oid": 454013568868,
+        "px": "66579.0",
+        "side": "B",
+        "startPosition": "0.0",
+        "sz": "0.00016",
+        "tid": 97679550984932,
+        "time": 1780442489311,
+        "twapId": null
+      },
+      "side": "buy",
+      "size": 0.00016,
+      "symbol": "BTC/USDC:USDC",
+      "timestamp_ms": 1780442489311,
+      "trade_id": "97679550984932"
+    },
+    {
+      "client_order_id": null,
+      "exchange": "hyperliquid",
+      "exchange_order_id": "454015305824",
+      "fee": 0.0046,
+      "fee_currency": "USDC",
+      "market": "BTC",
+      "price": 66558.0,
+      "raw": {
+        "closedPnl": "-0.00336",
+        "coin": "BTC",
+        "crossed": true,
+        "dir": "Close Long",
+        "fee": "0.0046",
+        "feeToken": "USDC",
+        "hash": "0xa8622fa56ec91d7da9db043cd5738e02015e008b09cc3c4f4c2adaf82dccf768",
+        "oid": 454015305824,
+        "px": "66558.0",
+        "side": "A",
+        "startPosition": "0.00016",
+        "sz": "0.00016",
+        "tid": 356589760749838,
+        "time": 1780442554249,
+        "twapId": null
+      },
+      "side": "sell",
+      "size": 0.00016,
+      "symbol": "BTC/USDC:USDC",
+      "timestamp_ms": 1780442554249,
+      "trade_id": "356589760749838"
+    },
+    {
+      "client_order_id": "0xc155d67c4eb94ee7a94f2f6365180654",
+      "exchange": "hyperliquid",
+      "exchange_order_id": "454046735411",
+      "fee": 0.001533,
+      "fee_currency": "USDC",
+      "market": "BTC",
+      "price": 66561.0,
+      "raw": {
+        "cloid": "0xc155d67c4eb94ee7a94f2f6365180654",
+        "closedPnl": "0.0",
+        "coin": "BTC",
+        "crossed": false,
+        "dir": "Open Short",
+        "fee": "0.001533",
+        "feeToken": "USDC",
+        "hash": "0xc82ce6657fd7896dc9a6043cd5b27b020636004b1adaa83f6bf591b83edb6358",
+        "oid": 454046735411,
+        "px": "66561.0",
+        "side": "A",
+        "startPosition": "0.0",
+        "sz": "0.00016",
+        "tid": 418361488219882,
+        "time": 1780443671276,
+        "twapId": null
+      },
+      "side": "sell",
+      "size": 0.00016,
+      "symbol": "BTC/USDC:USDC",
+      "timestamp_ms": 1780443671276,
+      "trade_id": "418361488219882"
+    },
+    {
+      "client_order_id": "0x56afb0c371be4e2f8c37cfb488b2151f",
+      "exchange": "hyperliquid",
+      "exchange_order_id": "454046764797",
+      "fee": 0.001532,
+      "fee_currency": "USDC",
+      "market": "BTC",
+      "price": 66535.0,
+      "raw": {
+        "cloid": "0x56afb0c371be4e2f8c37cfb488b2151f",
+        "closedPnl": "0.00416",
+        "coin": "BTC",
+        "crossed": false,
+        "dir": "Close Short",
+        "fee": "0.001532",
+        "feeToken": "USDC",
+        "hash": "0xee8fc645fcc94f52f009043cd5b27f0214c9002b97cc6e2492587198bbcd293d",
+        "oid": 454046764797,
+        "px": "66535.0",
+        "side": "B",
+        "startPosition": "-0.00016",
+        "sz": "0.00016",
+        "tid": 147441731153306,
+        "time": 1780443671616,
+        "twapId": null
+      },
+      "side": "buy",
+      "size": 0.00016,
+      "symbol": "BTC/USDC:USDC",
+      "timestamp_ms": 1780443671616,
+      "trade_id": "147441731153306"
+    },
+    {
+      "client_order_id": "0x2a64bf1a5e59496d9ecd30f504878a62",
+      "exchange": "hyperliquid",
+      "exchange_order_id": "454048296156",
+      "fee": 0.001531,
+      "fee_currency": "USDC",
+      "market": "BTC",
+      "price": 66471.0,
+      "raw": {
+        "cloid": "0x2a64bf1a5e59496d9ecd30f504878a62",
+        "closedPnl": "0.0",
+        "coin": "BTC",
+        "crossed": false,
+        "dir": "Open Long",
+        "fee": "0.001531",
+        "feeToken": "USDC",
+        "hash": "0x3c7b6bf3a054d5b63df5043cd5b676020a5700d93b57f488e04417465f58afa0",
+        "oid": 454048296156,
+        "px": "66471.0",
+        "side": "B",
+        "startPosition": "0.0",
+        "sz": "0.00016",
+        "tid": 855813692487619,
+        "time": 1780443741469,
+        "twapId": null
+      },
+      "side": "buy",
+      "size": 0.00016,
+      "symbol": "BTC/USDC:USDC",
+      "timestamp_ms": 1780443741469,
+      "trade_id": "855813692487619"
+    }
+  ],
+  "_items_in_report": 5,
+  "_report_note": "list truncated for readability; rerun with --full for every item",
+  "_total_items": 164
+}
+
+connector.fetch_position_size[BTC]
+----------------------------------
+
+description: Normalized current position quantity and raw matching position payload.
+status: OK
+elapsed_ms: 558.0
+format:
+{
+  "item_format": "float",
+  "length": 2,
+  "type": "list"
+}
+response:
+[
+  0.0,
+  {}
+]
+
+connector.fetch_position_size[xyz:AMD]
+--------------------------------------
+
+description: Normalized current position quantity and raw matching position payload.
+status: OK
+elapsed_ms: 704.6
+format:
+{
+  "item_format": "float",
+  "length": 2,
+  "type": "list"
+}
+response:
+[
+  0.0,
+  {}
+]
+
+ORDER STATUS LOOKUPS
+====================
+
+discovered_unique_oids: 2519
+discovered_unique_cloids: 575
+sample_limit_per_identifier_type: 3
+
+info.query_order_by_oid[454013568868]
+-------------------------------------
+
+description: Raw order-status lookup by exchange order ID.
+status: OK
+elapsed_ms: 231.0
+format:
+{
+  "status": "str"
+}
+response:
+{
+  "status": "unknownOid"
+}
+
+info.query_order_by_oid[454015305824]
+-------------------------------------
+
+description: Raw order-status lookup by exchange order ID.
+status: OK
+elapsed_ms: 227.0
+format:
+{
+  "status": "str"
+}
+response:
+{
+  "status": "unknownOid"
+}
+
+info.query_order_by_oid[454046735411]
+-------------------------------------
+
+description: Raw order-status lookup by exchange order ID.
+status: OK
+elapsed_ms: 410.6
+format:
+{
+  "status": "str"
+}
+response:
+{
+  "status": "unknownOid"
+}
+
+info.query_order_by_cloid[0x616bd7d772d240edbad42da49ddd3c72]
+-------------------------------------------------------------
+
+description: Raw order-status lookup by client order ID.
+status: OK
+elapsed_ms: 237.3
+format:
+{
+  "status": "str"
+}
+response:
+{
+  "status": "unknownOid"
+}
+
+info.query_order_by_cloid[0xc155d67c4eb94ee7a94f2f6365180654]
+-------------------------------------------------------------
+
+description: Raw order-status lookup by client order ID.
+status: OK
+elapsed_ms: 240.2
+format:
+{
+  "status": "str"
+}
+response:
+{
+  "status": "unknownOid"
+}
+
+info.query_order_by_cloid[0x56afb0c371be4e2f8c37cfb488b2151f]
+-------------------------------------------------------------
+
+description: Raw order-status lookup by client order ID.
+status: OK
+elapsed_ms: 242.9
+format:
+{
+  "status": "str"
+}
+response:
+{
+  "status": "unknownOid"
+}
+
+TRADE API EXAMPLES GENERATED LOCALLY
+====================================
+
+The following payload examples are generated locally from current public prices.
+They document live connector usage but are never signed or sent by this diagnostic.
+
+local.trade_api_examples[BTC]
+-----------------------------
+
+description: Generated placement, bulk amendment, cancellation, and read-only state examples. No write call is executed.
+status: OK
+elapsed_ms: 326.6
+format:
+{
+  "amend_existing_bid_and_ask_in_one_request": {
+    "connector_method": "str",
+    "important_note": "str",
+    "sdk_arguments": {
+      "item_format": {
+        "oid": "str",
+        "order": {
+          "cloid": "str",
+          "coin": "str",
+          "is_buy": "bool",
+          "limit_px": "float",
+          "order_type": "dict",
+          "reduce_only": "bool",
+          "sz": "float"
+        }
+      },
+      "length": 2,
+      "type": "list"
+    },
+    "sdk_method": "str"
+  },
+  "cancel_order": {
+    "connector_method": "str",
+    "fallback_sdk_arguments": {
+      "market": "str",
+      "oid": "str"
+    },
+    "fallback_sdk_method": "str",
+    "preferred_sdk_arguments": {
+      "cloid": "str",
+      "market": "str"
+    },
+    "preferred_sdk_method": "str"
+  },
+  "expected_modify_response_shape": {
+    "response": {
+      "data": {
+        "statuses": {
+          "item_format": "dict",
+          "length": 2,
+          "type": "list"
+        }
+      }
+    },
+    "status": "str"
+  },
+  "initial_post_only_order": {
+    "connector_arguments": {
+      "client_order_id": "str",
+      "market": "str",
+      "post_only": "bool",
+      "price": "float",
+      "reduce_only": "bool",
+      "side": "str",
+      "size": "float"
+    },
+    "connector_method": "str",
+    "sdk_arguments": {
+      "cloid": "str",
+      "is_buy": "bool",
+      "market": "str",
+      "order_type": {
+        "limit": {
+          "tif": "str"
+        }
+      },
+      "price": "float",
+      "reduce_only": "bool",
+      "size": "float"
+    },
+    "sdk_method": "str"
+  },
+  "read_only_state_used_by_strategy": {
+    "inventory": "str",
+    "order_book": "str",
+    "resting_orders_cache": "str",
+    "resting_orders_rest_reconciliation": "str"
+  },
+  "warning": "str"
+}
+response:
+{
+  "amend_existing_bid_and_ask_in_one_request": {
+    "connector_method": "connector.bulk_edit_orders",
+    "important_note": "batchModify can return replacement oids. Keep the returned oids in the cache. A replacement oid is an amendment result, not a missing-side placement.",
+    "sdk_arguments": [
+      {
+        "oid": "<CURRENT_BUY_OID>",
+        "order": {
+          "cloid": "0x11111111111111111111111111111111",
+          "coin": "BTC",
+          "is_buy": true,
+          "limit_px": 66020.0,
+          "order_type": {
+            "limit": {
+              "tif": "Alo"
+            }
+          },
+          "reduce_only": false,
+          "sz": 0.00016
+        }
+      },
+      {
+        "oid": "<CURRENT_SELL_OID>",
+        "order": {
+          "cloid": "0x22222222222222222222222222222222",
+          "coin": "BTC",
+          "is_buy": false,
+          "limit_px": 66022.0,
+          "order_type": {
+            "limit": {
+              "tif": "Alo"
+            }
+          },
+          "reduce_only": false,
+          "sz": 0.00016
+        }
+      }
+    ],
+    "sdk_method": "sdk_exchange.bulk_modify_orders_new"
+  },
+  "cancel_order": {
+    "connector_method": "connector.cancel_order",
+    "fallback_sdk_arguments": {
+      "market": "BTC",
+      "oid": "<CURRENT_BUY_OID>"
+    },
+    "fallback_sdk_method": "sdk_exchange.cancel",
+    "preferred_sdk_arguments": {
+      "cloid": "0x11111111111111111111111111111111",
+      "market": "BTC"
+    },
+    "preferred_sdk_method": "sdk_exchange.cancel_by_cloid"
+  },
+  "expected_modify_response_shape": {
+    "response": {
+      "data": {
+        "statuses": [
+          {
+            "resting": {
+              "oid": "<REPLACEMENT_BUY_OID>"
+            }
+          },
+          {
+            "resting": {
+              "oid": "<REPLACEMENT_SELL_OID>"
+            }
+          }
+        ]
+      }
+    },
+    "status": "ok"
+  },
+  "initial_post_only_order": {
+    "connector_arguments": {
+      "client_order_id": "0x11111111111111111111111111111111",
+      "market": "BTC",
+      "post_only": true,
+      "price": 66020.0,
+      "reduce_only": false,
+      "side": "buy",
+      "size": 0.00016
+    },
+    "connector_method": "connector.place_limit_order",
+    "sdk_arguments": {
+      "cloid": "0x11111111111111111111111111111111",
+      "is_buy": true,
+      "market": "BTC",
+      "order_type": {
+        "limit": {
+          "tif": "Alo"
+        }
+      },
+      "price": 66020.0,
+      "reduce_only": false,
+      "size": 0.00016
+    },
+    "sdk_method": "sdk_exchange.order"
+  },
+  "read_only_state_used_by_strategy": {
+    "inventory": "connector.fetch_inventory_balances(['BTC'])",
+    "order_book": "connector.fetch_order_book('BTC', depth=settings.LOB_MAX_LEVELS)",
+    "resting_orders_cache": "connector.fetch_cached_open_orders('BTC')",
+    "resting_orders_rest_reconciliation": "connector.fetch_open_orders('BTC', force=True)"
+  },
+  "warning": "Examples only. This report does not execute, sign, or send these write calls."
+}
+
+local.trade_api_examples[xyz:AMD]
+---------------------------------
+
+description: Generated placement, bulk amendment, cancellation, and read-only state examples. No write call is executed.
+status: OK
+elapsed_ms: 224.4
+format:
+{
+  "amend_existing_bid_and_ask_in_one_request": {
+    "connector_method": "str",
+    "important_note": "str",
+    "sdk_arguments": {
+      "item_format": {
+        "oid": "str",
+        "order": {
+          "cloid": "str",
+          "coin": "str",
+          "is_buy": "bool",
+          "limit_px": "float",
+          "order_type": "dict",
+          "reduce_only": "bool",
+          "sz": "float"
+        }
+      },
+      "length": 2,
+      "type": "list"
+    },
+    "sdk_method": "str"
+  },
+  "cancel_order": {
+    "connector_method": "str",
+    "fallback_sdk_arguments": {
+      "market": "str",
+      "oid": "str"
+    },
+    "fallback_sdk_method": "str",
+    "preferred_sdk_arguments": {
+      "cloid": "str",
+      "market": "str"
+    },
+    "preferred_sdk_method": "str"
+  },
+  "expected_modify_response_shape": {
+    "response": {
+      "data": {
+        "statuses": {
+          "item_format": "dict",
+          "length": 2,
+          "type": "list"
+        }
+      }
+    },
+    "status": "str"
+  },
+  "initial_post_only_order": {
+    "connector_arguments": {
+      "client_order_id": "str",
+      "market": "str",
+      "post_only": "bool",
+      "price": "float",
+      "reduce_only": "bool",
+      "side": "str",
+      "size": "float"
+    },
+    "connector_method": "str",
+    "sdk_arguments": {
+      "cloid": "str",
+      "is_buy": "bool",
+      "market": "str",
+      "order_type": {
+        "limit": {
+          "tif": "str"
+        }
+      },
+      "price": "float",
+      "reduce_only": "bool",
+      "size": "float"
+    },
+    "sdk_method": "str"
+  },
+  "read_only_state_used_by_strategy": {
+    "inventory": "str",
+    "order_book": "str",
+    "resting_orders_cache": "str",
+    "resting_orders_rest_reconciliation": "str"
+  },
+  "warning": "str"
+}
+response:
+{
+  "amend_existing_bid_and_ask_in_one_request": {
+    "connector_method": "connector.bulk_edit_orders",
+    "important_note": "batchModify can return replacement oids. Keep the returned oids in the cache. A replacement oid is an amendment result, not a missing-side placement.",
+    "sdk_arguments": [
+      {
+        "oid": "<CURRENT_BUY_OID>",
+        "order": {
+          "cloid": "0x11111111111111111111111111111111",
+          "coin": "xyz:AMD",
+          "is_buy": true,
+          "limit_px": 533.43,
+          "order_type": {
+            "limit": {
+              "tif": "Alo"
+            }
+          },
+          "reduce_only": false,
+          "sz": 0.02
+        }
+      },
+      {
+        "oid": "<CURRENT_SELL_OID>",
+        "order": {
+          "cloid": "0x22222222222222222222222222222222",
+          "coin": "xyz:AMD",
+          "is_buy": false,
+          "limit_px": 533.56,
+          "order_type": {
+            "limit": {
+              "tif": "Alo"
+            }
+          },
+          "reduce_only": false,
+          "sz": 0.02
+        }
+      }
+    ],
+    "sdk_method": "sdk_exchange.bulk_modify_orders_new"
+  },
+  "cancel_order": {
+    "connector_method": "connector.cancel_order",
+    "fallback_sdk_arguments": {
+      "market": "xyz:AMD",
+      "oid": "<CURRENT_BUY_OID>"
+    },
+    "fallback_sdk_method": "sdk_exchange.cancel",
+    "preferred_sdk_arguments": {
+      "cloid": "0x11111111111111111111111111111111",
+      "market": "xyz:AMD"
+    },
+    "preferred_sdk_method": "sdk_exchange.cancel_by_cloid"
+  },
+  "expected_modify_response_shape": {
+    "response": {
+      "data": {
+        "statuses": [
+          {
+            "resting": {
+              "oid": "<REPLACEMENT_BUY_OID>"
+            }
+          },
+          {
+            "resting": {
+              "oid": "<REPLACEMENT_SELL_OID>"
+            }
+          }
+        ]
+      }
+    },
+    "status": "ok"
+  },
+  "initial_post_only_order": {
+    "connector_arguments": {
+      "client_order_id": "0x11111111111111111111111111111111",
+      "market": "xyz:AMD",
+      "post_only": true,
+      "price": 533.43,
+      "reduce_only": false,
+      "side": "buy",
+      "size": 0.02
+    },
+    "connector_method": "connector.place_limit_order",
+    "sdk_arguments": {
+      "cloid": "0x11111111111111111111111111111111",
+      "is_buy": true,
+      "market": "xyz:AMD",
+      "order_type": {
+        "limit": {
+          "tif": "Alo"
+        }
+      },
+      "price": 533.43,
+      "reduce_only": false,
+      "size": 0.02
+    },
+    "sdk_method": "sdk_exchange.order"
+  },
+  "read_only_state_used_by_strategy": {
+    "inventory": "connector.fetch_inventory_balances(['xyz:AMD'])",
+    "order_book": "connector.fetch_order_book('xyz:AMD', depth=settings.LOB_MAX_LEVELS)",
+    "resting_orders_cache": "connector.fetch_cached_open_orders('xyz:AMD')",
+    "resting_orders_rest_reconciliation": "connector.fetch_open_orders('xyz:AMD', force=True)"
+  },
+  "warning": "Examples only. This report does not execute, sign, or send these write calls."
+}
+
+SIGNED WRITE CALLS
+==================
+
+connector.place_limit_order
+---------------------------
+
+status: SKIPPED
+reason: Intentionally skipped: this diagnostic is read-only and must not place live orders.
+
+connector.bulk_edit_orders
+--------------------------
+
+status: SKIPPED
+reason: Intentionally skipped: this diagnostic is read-only and must not amend live orders.
+
+connector.cancel_order
+----------------------
+
+status: SKIPPED
+reason: Intentionally skipped: this diagnostic is read-only and must not cancel live orders.
+
+connector.set_market_leverage
+-----------------------------
+
+status: SKIPPED
+reason: Intentionally skipped: this diagnostic is read-only and must not change live leverage.
+
+transfers and withdrawals
+-------------------------
+
+status: SKIPPED
+reason: Intentionally skipped: this diagnostic never transfers funds.
+
+SUMMARY
+=======
+
+account_role: {'role': 'user'}
+signer_role: {'role': 'agent', 'data': {'user': '0xa5f51a1a61d374dd97a51e946f9ab9e16af0f0e3'}}
+successful_calls: 70
+failed_calls: 0
+report_path: C:\Users\Ggjoj\Downloads\hyperliquid_multi_program_mm\hyperliquid_multi_program_mm\reports\hyperliquid_api_BTC_xyzAMD_readonly_test.txt
+mutating_calls_executed: 0
+

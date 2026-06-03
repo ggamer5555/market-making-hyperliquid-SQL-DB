@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hyperliquid Market Map</title>
+  <style>
+    :root { color-scheme: dark; --bg:#070b11; --panel:#101722; --muted:#8a9bad; --line:#233244; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:#e6edf3; font:13px system-ui,Segoe UI,sans-serif; }
+    header { display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center; padding:12px 16px; background:#0c131d; border-bottom:1px solid var(--line); }
+    h1 { font-size:16px; margin:0 12px 0 0; letter-spacing:.4px; }
+    label { color:var(--muted); }
+    select,input,button { color:#e6edf3; background:#172231; border:1px solid #31445a; border-radius:4px; padding:5px 8px; }
+    input[type=number] { width:72px; }
+    input[type=range] { width:82px; padding:0; vertical-align:middle; }
+    input[type=checkbox] { vertical-align:middle; }
+    button { cursor:pointer; }
+    #status { margin-left:auto; color:#80cbc4; }
+    #cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(135px,1fr)); gap:1px; background:var(--line); border-bottom:1px solid var(--line); }
+    .card { background:var(--panel); padding:8px 10px; min-height:54px; }
+    .card .name { color:var(--muted); font-size:11px; text-transform:uppercase; }
+    .card .value { margin-top:5px; font-size:14px; font-variant-numeric:tabular-nums; }
+    #chartWrap { position:relative; width:100%; height:calc(100vh - 132px); min-height:860px; }
+    canvas { display:block; width:100%; height:100%; }
+    #extraPlots { display:grid; grid-template-columns:repeat(auto-fit,minmax(420px,1fr)); gap:12px; padding:12px; border-top:1px solid var(--line); background:#070b11; }
+    .extra-panel { min-height:380px; background:#0c131d; border:1px solid var(--line); border-radius:6px; padding:10px; position:relative; }
+    .extra-panel h2 { margin:0 0 8px; font-size:13px; color:#d7e3ef; letter-spacing:.2px; }
+    .extra-canvas { width:100%; height:330px; border:1px solid #1c2a3a; background:#05080d; border-radius:4px; }
+    .extra-hint { margin-top:6px; color:var(--muted); font-size:11px; }
+    #legend { position:absolute; left:72px; top:12px; display:flex; flex-wrap:wrap; gap:10px; padding:5px 7px; background:#070b11cc; border-radius:4px; color:#b9c6d2; font-size:11px; }
+    .legend-item { cursor:pointer; user-select:none; }
+    .legend-item.off { opacity:.35; text-decoration:line-through; }
+    .swatch { display:inline-block; width:14px; height:3px; vertical-align:middle; margin-right:4px; }
+    #tooltip { display:none; position:absolute; z-index:2; pointer-events:none; padding:6px 8px; border:1px solid #31445a; border-radius:4px; background:#0c131dee; color:#e6edf3; font-size:12px; font-variant-numeric:tabular-nums; white-space:nowrap; }
+    #error { position:absolute; inset:45px auto auto 72px; color:#ff8a80; white-space:pre-wrap; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Hyperliquid Market Map</h1>
+    <label>Market <select id="coin"></select></label>
+    <label>Window
+      <select id="minutes">
+        <option value="0.1667">10 seconds</option>
+        <option value="0.5">30 seconds</option>
+        <option value="1">1 minute</option>
+        <option value="5" selected>5 minutes</option>
+        <option value="15">15 minutes</option>
+        <option value="60">1 hour</option>
+      </select>
+    </label>
+    <label>Account OHLC
+      <select id="accountOhlcMinutes">
+        <option value="1">1 minute</option>
+        <option value="5">5 minutes</option>
+        <option value="15">15 minutes</option>
+        <option value="60" selected>1 hour</option>
+        <option value="240">4 hours</option>
+      </select>
+    </label>
+    <label><input id="autoScale" type="checkbox" checked> Auto scale</label>
+    <label>Price scale +/- <input id="priceScaleBps" type="number" min="1" max="5000" step="1" value="100"> bps</label>
+    <label>Main opacity <input id="mainDepthOpacity" type="range" min="0.05" max="1" step="0.05" value="0.65"> <span id="mainDepthOpacityValue">0.65</span></label>
+    <label>LOB profile
+      <select id="lobProfileMode">
+        <option value="cumulative">cumulative</option>
+        <option value="level">per level</option>
+      </select>
+    </label>
+    <label>Profile opacity <input id="profileOpacity" type="range" min="0.05" max="1" step="0.05" value="0.75"> <span id="profileOpacityValue">0.75</span></label>
+    <label><input id="profilePercentiles" type="checkbox" checked> Sidebar percentiles</label>
+    <button id="refresh">Refresh</button>
+    <button id="reset">Reset graph</button>
+    <span id="status">loading</span>
+  </header>
+  <div id="cards"></div>
+  <div id="chartWrap">
+    <canvas id="chart"></canvas>
+    <div id="legend">
+      <span class="legend-item" data-series="bidDepth"><i class="swatch" style="background:#43a047"></i>bid depth</span>
+      <span class="legend-item" data-series="askDepth"><i class="swatch" style="background:#e53935"></i>ask depth</span>
+        <span class="legend-item" data-series="bidDepth"><i class="swatch" style="background:#43a047"></i>bid depth</span>
+      <span class="legend-item" data-series="askDepth"><i class="swatch" style="background:#e53935"></i>ask depth</span>
+      <span class="legend-item" data-series="mid"><i class="swatch" style="background:#fff"></i>mid</span>
+      <span class="legend-item" data-series="reservation"><i class="swatch" style="background:#ffd54f"></i>reservation</span>
+      <span class="legend-item" data-series="myBid"><i class="swatch" style="background:#42a5f5"></i>my bid</span>
+      <span class="legend-item" data-series="myAsk"><i class="swatch" style="background:#ff9800"></i>my ask</span>
+      <span class="legend-item" data-series="lobPercentiles"><i class="swatch" style="background:#90a4ae"></i>LOB percentiles .1/.5/1/2/5/10/25%</span>
+      <span class="legend-item" data-series="trades"><i class="swatch" style="background:#26c6da"></i>trades</span>
+    </div>
+    <div id="tooltip"></div>
+    <div id="error"></div>
+  </div>
+  <section id="extraPlots">
+    <div class="extra-panel">
+      <h2>EV Ask Curve</h2>
+      <canvas id="evAskSurface" class="extra-canvas"></canvas>
+      <div class="extra-hint">Ask-side EV curve from diagnostic sweep data.</div>
+    </div>
+    <div class="extra-panel">
+      <h2>EV Bid Curve</h2>
+      <canvas id="evBidSurface" class="extra-canvas"></canvas>
+      <div class="extra-hint">Bid-side EV curve from diagnostic sweep data.</div>
+    </div>
+    <div class="extra-panel">
+      <h2>Account Balance</h2>
+      <canvas id="accountChart" class="extra-canvas"></canvas>
+      <div class="extra-hint">Account balance is shown as hourly OHLC values from the last 30 days of account snapshots.</div>
+    </div>
+  </section>
+  <script>
+    const canvas = document.getElementById("chart");
+    const ctx = canvas.getContext("2d");
+    const evAskSurfaceCanvas = document.getElementById("evAskSurface");
+    const evAskCtx = evAskSurfaceCanvas.getContext("2d");
+    const evBidSurfaceCanvas = document.getElementById("evBidSurface");
+    const evBidCtx = evBidSurfaceCanvas.getContext("2d");
+    const accountCanvas = document.getElementById("accountChart");
+    const accountCtx = accountCanvas.getContext("2d");
+    const coinSelect = document.getElementById("coin");
+    const minutesSelect = document.getElementById("minutes");
+    const accountOhlcMinutes = document.getElementById("accountOhlcMinutes");
+    const cards = document.getElementById("cards");
+    const status = document.getElementById("status");
+    const errorBox = document.getElementById("error");
+    const tooltip = document.getElementById("tooltip");
+    const enabledSeries = {};
+    let snapshots = [], trades = [], accountSnapshots = [], accountFills = [], evSurfacePayload = {rows:[],rows_ask:[],rows_bid:[]}, loadedRange = null, lockedRange = null, dragStartX = null, dragCurrentX = null, lastViewport = null, hoverRegions = [], evAskHover = null, evBidHover = null;
+
+    const fmt = (value, digits=6) => value == null ? "-" : Number(value).toLocaleString(undefined,{maximumFractionDigits:digits});
+    const card = (name,value) => `<div class="card"><div class="name">${name}</div><div class="value">${value}</div></div>`;
+    const xAt = (ms,left,width,start,end) => left + (ms-start) / Math.max(end-start,1) * width;
+    const yAt = (price,top,height,min,max) => top + (max-price) / Math.max(max-min,1e-12) * height;
+    const isEnabled = key => enabledSeries[key] !== false;
+    const finiteNumber = value => value==null||value==="" ? null : (Number.isFinite(Number(value)) ? Number(value) : null);
+    const LOB_PERCENTILES = ["0.1","0.5","1","2","5","10","25"];
+    const LOB_PERCENTILE_COLORS = {"0.1":"#fff59d","0.5":"#ffe082","1":"#cfd8dc","2":"#b0bec5","5":"#90a4ae","10":"#78909c","25":"#546e7a"};
+    const PROFILE_WITHIN_MID_PCT = .05;
+    const controlNumber = (id,fallback) => finiteNumber(document.getElementById(id).value) ?? fallback;
+    function numericBounds(values,fallbackMin=0,fallbackMax=1) {
+      let min=Infinity,max=-Infinity;
+      for(const rawValue of values){const value=finiteNumber(rawValue);if(value==null)continue;if(value<min)min=value;if(value>max)max=value;}
+      return Number.isFinite(min)&&Number.isFinite(max)?{min,max}:{min:fallbackMin,max:fallbackMax};
+    }
+    function levelsWithinProfileBand(snapshot,levels) {
+      const mid=finiteNumber(snapshot.mid_price);if(mid==null)return [];
+      const low=mid*(1-PROFILE_WITHIN_MID_PCT),high=mid*(1+PROFILE_WITHIN_MID_PCT);
+      return (levels||[]).filter(level=>level.price>=low&&level.price<=high);
+    }
+    function percentilePrice(levels,percentile) {
+      const total=levels.reduce((sum,level)=>sum+Math.max(finiteNumber(level.size)||0,0),0);if(total<=0)return null;
+      const target=percentile*total;let cumulative=0;
+      for(const level of levels){cumulative+=Math.max(finiteNumber(level.size)||0,0);if(cumulative>=target)return finiteNumber(level.price);}
+      return levels.length?finiteNumber(levels.at(-1).price):null;
+    }
+    function bucketBand(levels,index,isBid,top,height,min,max,fallbackStep) {
+      const price=finiteNumber(levels[index]?.price);if(price==null)return null;
+      const next=finiteNumber(levels[index+1]?.price)??price+(isBid?-fallbackStep:fallbackStep);
+      const y1=yAt(price,top,height,min,max),y2=yAt(next,top,height,min,max);
+      return {top:Math.min(y1,y2),height:Math.max(Math.abs(y2-y1),1.2)};
+    }
+    function drawLobProfile(snapshot,left,top,width,height,min,max) {
+      const bids=snapshot.bids||[],asks=snapshot.asks||[],percentileBids=levelsWithinProfileBand(snapshot,bids),percentileAsks=levelsWithinProfileBand(snapshot,asks);
+      const mode=document.getElementById("lobProfileMode").value,center=left+width/2,half=Math.max(width/2-3,1);
+      const decorate=levels=>{let cumulative=0;return levels.map(level=>{const size=Math.max(finiteNumber(level.size)||0,0);cumulative+=size;return {...level,profileValue:mode==="cumulative"?cumulative:size};});};
+      const visible=level=>level.price>=min&&level.price<=max,bidRows=decorate(bids).filter(visible),askRows=decorate(asks).filter(visible),rows=[...bidRows,...askRows];
+      const profileMax=numericBounds(rows.map(level=>level.profileValue),0,1).max||1;
+      const step=finiteNumber(snapshot.lob_price_step)||finiteNumber(snapshot.exchange_price_step)||1;
+      ctx.strokeStyle="#263545";ctx.strokeRect(left,top,width,height);ctx.fillStyle="#8a9bad";ctx.font="11px system-ui";ctx.fillText(`LOB ${mode}`,left,top-8);
+      ctx.save();ctx.beginPath();ctx.rect(left,top,width,height);ctx.clip();ctx.globalAlpha=controlNumber("profileOpacity",.75);
+      for(const [levels,isBid,color] of [[bidRows,true,"#43a047"],[askRows,false,"#e53935"]]){
+        for(let index=0;index<levels.length;index++){const level=levels[index],band=bucketBand(levels,index,isBid,top,height,min,max,step);if(!band)continue;const bar=Math.max(level.profileValue/profileMax*half,1);ctx.fillStyle=color;ctx.fillRect(isBid?center-bar:center,band.top,bar,band.height);}
+      }
+      ctx.globalAlpha=1;ctx.strokeStyle="#31445a";ctx.beginPath();ctx.moveTo(center,top);ctx.lineTo(center,top+height);ctx.stroke();
+      if(document.getElementById("profilePercentiles").checked){
+        for(const key of LOB_PERCENTILES){for(const [levels,side] of [[percentileBids,"B"],[percentileAsks,"A"]]){const price=percentilePrice(levels,Number(key)/100);if(price==null)continue;const y=yAt(price,top,height,min,max);ctx.fillStyle=LOB_PERCENTILE_COLORS[key];ctx.fillRect(left,y-1,width,2);ctx.fillText(`${side}${key}%`,left+2,y-2);}}
+      }
+      for(const [prices,color,label] of [[snapshot.my_bid_prices,"#42a5f5","B"],[snapshot.my_ask_prices,"#ff9800","A"]])for(const price of prices||[]){const y=yAt(price,top,height,min,max);ctx.fillStyle=color;ctx.fillRect(left,y-2,width,4);ctx.fillText(label,left+width-10,y-3);}
+      ctx.restore();
+    }
+
+    function mainLineSeries() {
+      const series = [
+        {key:"mid",name:"Mid",color:"#ffffff",value:s=>s.mid_price},
+        {key:"reservation",name:"Reservation",color:"#ffd54f",value:s=>s.reservation_price}
+      ];
+      for(const p of LOB_PERCENTILES){
+        series.push({key:"lobPercentiles",name:`LOB bid ${p}% percentile`,color:LOB_PERCENTILE_COLORS[p],value:s=>s.lob_bid_percentiles?.[p],dash:[2,4]});
+        series.push({key:"lobPercentiles",name:`LOB ask ${p}% percentile`,color:LOB_PERCENTILE_COLORS[p],value:s=>s.lob_ask_percentiles?.[p],dash:[2,4]});
+      }
+      return series;
+    }
+    function mainPointSeries() {
+      return [
+        {key:"myBid",name:"My bid",color:"#42a5f5",values:s=>s.my_bid_prices||[]},
+        {key:"myAsk",name:"My ask",color:"#ff9800",values:s=>s.my_ask_prices||[]}
+      ];
+    }
+    function percentileSpreadBps(snapshot,percentile) {
+      const bid=finiteNumber(snapshot.lob_bid_percentiles?.[percentile]),ask=finiteNumber(snapshot.lob_ask_percentiles?.[percentile]),mid=finiteNumber(snapshot.mid_price);
+      return bid==null||ask==null||mid==null||mid<=0?null:(ask-bid)/mid*10000;
+    }
+    function subplotDefinitions() {
+      return [];
+    }
+
+    function resizeCanvasToDisplay(targetCanvas,targetCtx) {
+      const rect = targetCanvas.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+      targetCanvas.width = Math.max(Math.floor(rect.width*dpr),1); targetCanvas.height = Math.max(Math.floor(rect.height*dpr),1);
+      targetCtx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    function resizeExtraCharts() {
+      resizeCanvasToDisplay(evAskSurfaceCanvas,evAskCtx); resizeCanvasToDisplay(evBidSurfaceCanvas,evBidCtx); resizeCanvasToDisplay(accountCanvas,accountCtx);
+      drawEvAskSurface(); drawEvBidSurface(); drawAccountChart();
+    }
+    function resize() {
+      resizeCanvasToDisplay(canvas,ctx); draw(); resizeExtraCharts();
+    }
+    function line(points,accessor,color,left,top,width,height,min,max,start,end,dash=[]) {
+      ctx.beginPath(); ctx.strokeStyle=color; ctx.lineWidth=1.4; ctx.setLineDash(dash);
+      let started=false;
+      for (const s of points) {
+        const p=finiteNumber(accessor(s)); if (p==null) continue;
+        const x=xAt(s.captured_at_ms,left,width,start,end), y=yAt(p,top,height,min,max);
+        if (!started) {ctx.moveTo(x,y); started=true;} else ctx.lineTo(x,y);
+      }
+      if (started) ctx.stroke(); ctx.setLineDash([]);
+    }
+    function visibleSnapshots() {
+      return lockedRange ? snapshots.filter(s=>s.captured_at_ms>=lockedRange.start&&s.captured_at_ms<=lockedRange.end) : snapshots;
+    }
+    function visibleTrades(start,end) { return trades.filter(t=>t.timestamp_ms>=start&&t.timestamp_ms<=end); }
+    function visibleAccountFills(start,end) { return accountFills.filter(fill=>fill.timestamp_ms>=start&&fill.timestamp_ms<=end); }
+    function plottedPriceValues(points,start,end) {
+      const values=[],add=value=>{const number=finiteNumber(value);if(number!=null)values.push(number);};
+      const lines=mainLineSeries(),pointSeries=mainPointSeries();
+      for(const s of points){
+        if(isEnabled("bidDepth"))for(const level of s.bids)add(level.price);
+        if(isEnabled("askDepth"))for(const level of s.asks)add(level.price);
+        for(const item of lines)if(isEnabled(item.key))add(item.value(s));
+        for(const item of pointSeries)if(isEnabled(item.key))for(const value of item.values(s))add(value);
+      }
+      if(isEnabled("trades"))for(const trade of visibleTrades(start,end))add(trade.price);
+      if(!values.length)for(const s of points)add(s.mid_price);
+      return values;
+    }
+    function subplot(points,label,series,left,top,width,height,start,end) {
+      const active=series.filter(item=>isEnabled(item.key));
+      const values=[];for(const item of active)for(const s of points){const value=finiteNumber(item.value(s));if(value!=null)values.push(value);}
+      let {min,max}=numericBounds(values);
+      const pad=Math.max((max-min)*.08,Math.abs(max)*.02,1e-9);if(min===max){min-=pad;max+=pad;}else{min-=pad;max+=pad;}
+      ctx.strokeStyle="#263545";ctx.strokeRect(left,top,width,height);ctx.fillStyle="#8a9bad";ctx.font="11px system-ui";ctx.fillText(`${label} | auto scale`,4,top+12);ctx.fillText(fmt(max,6),left+3,top+11);ctx.fillText(fmt(min,6),left+3,top+height-4);
+      for(const item of active)line(points,item.value,item.color,left,top,width,height,min,max,start,end,item.dash||[]);
+      hoverRegions.push({top,height,min,max,series:active});
+    }
+    function drawEvChoiceSeries(points,left,top,width,height,start,end) {
+      ctx.strokeStyle="#263545";ctx.strokeRect(left,top,width,height);ctx.fillStyle="#8a9bad";ctx.font="11px system-ui";
+      const askPoints=[],bidPoints=[];
+      for(const s of points){const d=s.diagnostics||{};const ask=finiteNumber(d.ev_choice_ask?.ev_per_hour),bid=finiteNumber(d.ev_choice_bid?.ev_per_hour);if(ask!=null)askPoints.push({timestamp_ms:s.captured_at_ms,value:ask});if(bid!=null)bidPoints.push({timestamp_ms:s.captured_at_ms,value:bid});}
+      ctx.fillText("Historical EV ask/bid values",4,top+12);
+      if(!askPoints.length&&!bidPoints.length){ctx.fillText("no EV ask/bid history yet",left+8,top+height/2);return;}
+      const allValues=[...askPoints.map(p=>p.value),...bidPoints.map(p=>p.value)];
+      const bounds=axisBounds(allValues,0,1);
+      const xAtTime=ms=>left+(ms-start)/Math.max(end-start,1)*width;
+      const yAtValue=value=>top+(bounds.max-value)/Math.max(bounds.max-bounds.min,1e-12)*height;
+      const drawSeries=(points,color,label)=>{if(!points.length)return;ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=1.6;let started=false;for(const point of points){const x=xAtTime(point.timestamp_ms),y=yAtValue(point.value);if(!started){ctx.moveTo(x,y);started=true;}else ctx.lineTo(x,y);}ctx.stroke();ctx.fillStyle=color;const last=points[points.length-1];ctx.fillText(`${label} ${fmt(last.value,8)}`,Math.min(left+width-110,left+width-90),Math.max(top+16,yAtValue(last.value)-2));};
+      drawSeries(askPoints,"#42a5f5","Ask EV");
+      drawSeries(bidPoints,"#ff9800","Bid EV");
+      ctx.fillStyle="#8a9bad";ctx.fillText(`max ${fmt(bounds.max,8)}`,left+3,top+11);ctx.fillText(`min ${fmt(bounds.min,8)}`,left+3,top+height-4);
+    }
+    function draw() {
+      const w=canvas.clientWidth,h=canvas.clientHeight;
+      ctx.clearRect(0,0,w,h); ctx.fillStyle="#070b11"; ctx.fillRect(0,0,w,h);
+      hoverRegions=[];
+      const points=visibleSnapshots(); if (!points.length) return;
+      const subplotDefs=subplotDefinitions();
+      const left=70,right=16,top=38,bottom=24,panelH=58,gap=10,panelCount=subplotDefs.length+1,profileGap=10,lobProfileW=188;
+      const heatH=Math.max(220,h-top-bottom-panelCount*(panelH+gap)),width=Math.max(260,w-left-right-lobProfileW-profileGap);
+      const lobProfileLeft=left+width+profileGap;
+      const range=lockedRange||loadedRange||{start:points[0].captured_at_ms,end:points.at(-1).captured_at_ms};
+      const start=range.start,end=range.end;
+      let prices=plottedPriceValues(points,start,end);
+      let {min,max}=numericBounds(prices,points[0].mid_price,points[0].mid_price);
+      let pad=(max-min)*.03 || points[0].mid_price*.0005;
+      if(document.getElementById("autoScale").checked){min-=pad;max+=pad;} else {const center=points.at(-1).mid_price,bps=Math.max(Number(document.getElementById("priceScaleBps").value)||1,1);min=center*(1-bps/10000);max=center*(1+bps/10000);}
+      let maxSize=0; for(const s of points){if(isEnabled("bidDepth"))for(const l of s.bids)maxSize=Math.max(maxSize,l.size);if(isEnabled("askDepth"))for(const l of s.asks)maxSize=Math.max(maxSize,l.size);}
+      const cellW=Math.max(width/Math.max(points.length,1)+.5,1);
+      ctx.save();ctx.beginPath();ctx.rect(left,top,width,heatH);ctx.clip();
+      const mainDepthOpacity=controlNumber("mainDepthOpacity",.65);
+      for(const s of points){
+        const x=xAt(s.captured_at_ms,left,width,start,end);
+        for(const [levels,rgb,key] of [[s.bids,"67,160,71","bidDepth"],[s.asks,"229,57,53","askDepth"]]){
+          if(!isEnabled(key))continue;
+          for(const l of levels){
+            const y=yAt(l.price,top,heatH,min,max), alpha=.08+.78*Math.log1p(l.size)/Math.log1p(maxSize||1);
+            ctx.fillStyle=`rgba(${rgb},${alpha*mainDepthOpacity})`; ctx.fillRect(x,y-1.6,cellW,3.2);
+          }
+        }
+      }
+      const mainLines=mainLineSeries().filter(item=>isEnabled(item.key));
+      for(const item of mainLines)line(points,item.value,item.color,left,top,width,heatH,min,max,start,end,item.dash||[]);
+      const mainPoints=mainPointSeries().filter(item=>isEnabled(item.key));
+      for(const s of points){
+        const x=xAt(s.captured_at_ms,left,width,start,end);
+        for(const item of mainPoints)for(const p of item.values(s)){ctx.fillStyle=item.color;ctx.fillRect(x-1.5,yAt(p,top,heatH,min,max)-1.5,3,3);}
+      }
+      if(isEnabled("trades"))for(const t of visibleTrades(start,end)){
+        if(t.timestamp_ms<start||t.timestamp_ms>end) continue;
+        ctx.beginPath();ctx.fillStyle=t.side==="buy"?"#26c6da":"#ff80ab";
+        ctx.arc(xAt(t.timestamp_ms,left,width,start,end),yAt(t.price,top,heatH,min,max),2.5,0,Math.PI*2);ctx.fill();
+      }
+      ctx.restore();
+      const latest=points.at(-1);
+      drawLobProfile(latest,lobProfileLeft,top,lobProfileW,heatH,min,max);
+      hoverRegions.push({top,height:heatH,min,max,series:[...mainLines,...mainPoints]});
+      ctx.strokeStyle="#263545"; ctx.strokeRect(left,top,width,heatH);
+      ctx.fillStyle="#8a9bad";ctx.font="11px system-ui";
+      for(let i=0;i<=5;i++){const p=min+(max-min)*i/5,y=yAt(p,top,heatH,min,max);ctx.fillText(fmt(p,6),4,y+3);ctx.strokeStyle="#152232";ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(left+width,y);ctx.stroke();}
+      let panelTop=top+heatH+gap;
+      for(const panel of subplotDefs){subplot(points,panel.label,panel.series,left,panelTop,width,panelH,start,end);panelTop+=panelH+gap;}
+      drawEvChoiceSeries(points,left,panelTop,width,panelH,start,end);panelTop+=panelH+gap;
+      ctx.fillStyle="#8a9bad";ctx.fillText(new Date(start).toLocaleTimeString(),left,h-5);ctx.fillText(new Date(end).toLocaleTimeString(),Math.max(left,left+width-76),h-5);
+      lastViewport={left,width,start,end,top,bottom:h-bottom};
+      if(dragStartX!=null&&dragCurrentX!=null){const x=Math.min(dragStartX,dragCurrentX),selectionWidth=Math.abs(dragCurrentX-dragStartX);ctx.fillStyle="#42a5f533";ctx.fillRect(x,top,selectionWidth,h-top-bottom);ctx.strokeStyle="#42a5f5";ctx.strokeRect(x,top,selectionWidth,h-top-bottom);}
+    }
+    function updateCards() {
+      const points=visibleSnapshots();if(!points.length){cards.innerHTML="";return;} const s=points.at(-1);
+      const d=s.diagnostics||{},ev=d.ev_choice||{};
+      cards.innerHTML=[
+        card("Mid",fmt(s.mid_price)),card("Last trade",fmt(s.last_trade_price)),card("Exchange BBO spread bps",fmt(s.top_spread_bps,3)),card("Bot quote spread bps",fmt(s.my_quote_spread_bps,3)),card("Desired spread bps",fmt(s.desired_quote_spread_bps,3)),
+        card("Fair price",fmt(d.fair_price ?? d.ev_fair_price ?? s.mid_price)),card("Spread source",d.spread_source||"-"),card("EV depth mode",d.ev_depth_mode||"-"),card("EV applied",d.ev_applied?"yes":"no"),
+        card("EV half spread bps",fmt(ev.half_spread_bps,3)),card("EV fills/hour",fmt(ev.estimated_fills_per_hour,3)),card("EV sweeps",fmt(d.ev_sweep_count,0)),card("EV/hour",fmt(ev.ev_per_hour,8)),
+        card("Account balance USD",fmt(s.account_available_usd,4)),card("Spot balance USD",fmt(s.account_spot_balance_usd,4)),card("Open orders USD",fmt(s.account_open_orders_notional_usd,4)),card("Position USD",fmt(s.account_position_notional_usd,4)),card("Margin used USD",fmt(s.account_margin_used_usd,4)),card("Volatility",fmt(s.volatility,9)),
+        card("Speed bps/s",fmt(s.market_speed_bps_per_s,4)),card("Reservation",fmt(s.reservation_price)),card("q_norm",fmt(s.q_norm,6)),
+        card("Gamma",fmt(s.gamma,6)),card("K",fmt(s.k,6)),card("Min spread bps",fmt(s.min_quote_spread_bps,3)),
+        card("Bid liquidity base",fmt(s.book_bid_total_size,6)),card("Ask liquidity base",fmt(s.book_ask_total_size,6)),
+        card("Book levels",`${s.book_bid_level_count} bid / ${s.book_ask_level_count} ask`),card("Fallback sigma",fmt(s.fallback_sigma_per_s,9)),card("Exchange tick",fmt(s.exchange_price_step,9)),card("LOB step",fmt(s.lob_price_step,9)),
+        card("LOB bid percentile",fmt(s.lob_bid_percentile_price)),card("LOB ask percentile",fmt(s.lob_ask_percentile_price)),card("Book age ms",fmt(s.book_age_ms,0))
+      ].join("");
+    }
+    function colorForEv(value,min,max) {
+      const t=Math.max(0,Math.min(1,(value-min)/Math.max(max-min,1e-12)));
+      const r=Math.round(229*(1-t)+77*t),g=Math.round(57*(1-t)+208*t),b=Math.round(53*(1-t)+225*t);
+      return `rgb(${r},${g},${b})`;
+    }
+    function projectEvPoint(row,bounds,w,h) {
+      const margin = {left:48, right:16, top:30, bottom:32};
+      const plotWidth = Math.max(w - margin.left - margin.right, 1);
+      const plotHeight = Math.max(h - margin.top - margin.bottom, 1);
+      const x = margin.left + (Number(row.half_spread_bps) - bounds.xMin) / Math.max(bounds.xMax - bounds.xMin, 1e-12) * plotWidth;
+      const y = margin.top + (bounds.yMax - Number(row.ev_per_hour)) / Math.max(bounds.yMax - bounds.yMin, 1e-12) * plotHeight;
+      return {x, y, row};
+    }
+    function nearestEvSurfacePoint(projected, hover) {
+      if(!hover) return null;
+      let best=null;
+      for(const point of projected){const dx=point.x-hover.x,dy=point.y-hover.y,distance=Math.hypot(dx,dy);if(!best||distance<best.distance)best={...point,distance};}
+      return best&&best.distance<=12?best:null;
+    }
+    function drawEvInfoBox(ctx,bounds,title,choice,worst,hovered) {
+      const lines=[
+        title,
+        "X: half spread bps",
+        "Y: EV per hour",
+      ];
+      if(choice) lines.push(`best EV ${fmt(choice.ev_per_hour,8)} @ ${fmt(choice.half_spread_bps,1)} bps`);
+      if(worst) lines.push(`worst EV ${fmt(worst.ev_per_hour,8)} @ ${fmt(worst.half_spread_bps,1)} bps`);
+      if(hovered) lines.push(`hover ${fmt(hovered.row.ev_per_hour,8)} @ ${fmt(hovered.row.half_spread_bps,1)} bps`);
+      const boxW = 320, boxH = lines.length * 18 + 10, x = 12, y = 30;
+      ctx.fillStyle = "#0c131ddd";
+      ctx.strokeStyle = "#31445a";
+      ctx.lineWidth = 1;
+      ctx.fillRect(x, y, boxW, boxH);
+      ctx.strokeRect(x, y, boxW, boxH);
+      ctx.font = "11px system-ui";
+      lines.forEach((line,index)=>{ctx.fillStyle = index===0?"#e6edf3":"#b9c6d2";if(line.startsWith("best")) ctx.fillStyle="#ffd54f"; if(line.startsWith("worst")) ctx.fillStyle="#ff5252"; ctx.fillText(line, x+8, y+17+index*18);});
+    }
+    function drawEvChart(canvas, ctx, rows, title, choice, hover) {
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      const filtered = (rows||[]).filter(row=>finiteNumber(row.half_spread_bps)!=null && finiteNumber(row.ev_per_hour)!=null);
+      ctx.clearRect(0,0,w,h);
+      ctx.fillStyle = "#05080d";
+      ctx.fillRect(0,0,w,h);
+      ctx.font = "11px system-ui";
+      ctx.fillStyle = "#8a9bad";
+      ctx.fillText(title, 12, 18);
+      if(!filtered.length){ctx.fillText("no EV curve yet", 12, h/2);return;}
+      const bounds = {
+        xMin: numericBounds(filtered.map(row=>row.half_spread_bps)).min,
+        xMax: numericBounds(filtered.map(row=>row.half_spread_bps)).max,
+        yMin: numericBounds(filtered.map(row=>row.ev_per_hour)).min,
+        yMax: numericBounds(filtered.map(row=>row.ev_per_hour)).max,
+      };
+      const sorted = filtered.slice().sort((a,b)=>Number(a.half_spread_bps)-Number(b.half_spread_bps));
+      const projected = sorted.map(row=>({...projectEvPoint(row,bounds,w,h),row}));
+      const plot = {left:48, top:30, right:16, bottom:32, width:w-48-16, height:h-30-32};
+      ctx.strokeStyle="#263545";
+      ctx.strokeRect(plot.left, plot.top, plot.width, plot.height);
+      ctx.fillStyle="#263545";
+      ctx.fillText(`${fmt(bounds.xMin,1)} bps`, plot.left, h-12);
+      ctx.fillText(`${fmt(bounds.xMax,1)} bps`, plot.left+plot.width-42, h-12);
+      ctx.fillText(`${fmt(bounds.yMax,8)} EV/h`, 8, plot.top+10);
+      ctx.fillText(`${fmt(bounds.yMin,8)} EV/h`, 8, plot.top+plot.height+4);
+      ctx.beginPath();
+      ctx.strokeStyle="#4dd0e1";
+      ctx.lineWidth=1.8;
+      let started=false;
+      for(const point of projected){if(!started){ctx.moveTo(point.x, point.y);started=true;}else ctx.lineTo(point.x, point.y);}
+      if(started) ctx.stroke();
+      for(const point of projected){const color=colorForEv(Number(point.row.ev_per_hour),bounds.yMin,bounds.yMax);ctx.fillStyle=color;ctx.globalAlpha=0.75;ctx.beginPath();ctx.arc(point.x, point.y, 3.0, 0, Math.PI*2);ctx.fill();}
+      ctx.globalAlpha=1;
+      const best = filtered.reduce((best,row)=>!best||Number(row.ev_per_hour)>Number(best.ev_per_hour)?row:best,null);
+      const selected = choice && finiteNumber(choice.half_spread_bps)!=null && finiteNumber(choice.ev_per_hour)!=null ? choice : best;
+      const selectedPoint = selected ? projectEvPoint(selected,bounds,w,h) : null;
+      const worst = filtered.reduce((best,row)=>!best||Number(row.ev_per_hour)<Number(best.ev_per_hour)?row:best,null);
+      if(worst){const p=projectEvPoint(worst,bounds,w,h);ctx.fillStyle="#ff5252";ctx.strokeStyle="#000";ctx.lineWidth=1.2;ctx.beginPath();ctx.rect(p.x-4,p.y-4,8,8);ctx.fill();ctx.stroke();}
+      if(selectedPoint){ctx.fillStyle="#ffd54f";ctx.strokeStyle="#000";ctx.lineWidth=1.2;ctx.beginPath();ctx.rect(selectedPoint.x-4,selectedPoint.y-4,8,8);ctx.fill();ctx.stroke();}
+      const hovered = nearestEvSurfacePoint(projected, hover);
+      if(hovered){ctx.strokeStyle="#ffffff";ctx.lineWidth=1.2;ctx.strokeRect(hovered.x-6,hovered.y-6,12,12);}
+      drawEvInfoBox(ctx,bounds,title,selected,worst,hovered);
+      ctx.fillStyle="#8a9bad";
+      ctx.fillText(`notional $${fmt(evSurfacePayload.order_notional_usd,2)} fee ${fmt(evSurfacePayload.maker_fee_bps_per_side,3)} bps`,12,h-10);
+    }
+    function drawEvAskSurface() {
+      drawEvChart(evAskSurfaceCanvas, evAskCtx, evSurfacePayload.rows_ask, "Ask-side EV curve", evSurfacePayload.choice_ask, evAskHover);
+    }
+    function drawEvBidSurface() {
+      drawEvChart(evBidSurfaceCanvas, evBidCtx, evSurfacePayload.rows_bid, "Bid-side EV curve", evSurfacePayload.choice_bid, evBidHover);
+    }
+    function axisBounds(values,fallbackMin=0,fallbackMax=1) {
+      let {min,max}=numericBounds(values,fallbackMin,fallbackMax);const pad=Math.max((max-min)*.08,Math.abs(max)*.02,1e-9);
+      if(min===max){min-=pad;max+=pad;}else{min-=pad;max+=pad;}return {min,max};
+    }
+    function balanceOhlcSeries(points, intervalMs) {
+      const rows=[];
+      const sorted=[...points].sort((a,b)=>a.captured_at_ms-b.captured_at_ms);
+      const buckets=new Map();
+      for(const point of sorted){
+        const value=finiteNumber(point.account_equity_usd ?? point.account_available_usd);
+        if(value==null) continue;
+        const bucketMs=Math.floor(point.captured_at_ms/intervalMs)*intervalMs;
+        const existing=buckets.get(bucketMs) || {timestamp_ms:bucketMs,open:null,high:-Infinity,low:Infinity,close:null,firstMs:Infinity,lastMs:-Infinity};
+        if(point.captured_at_ms < existing.firstMs){existing.firstMs=point.captured_at_ms;existing.open=value;}
+        if(point.captured_at_ms > existing.lastMs){existing.lastMs=point.captured_at_ms;existing.close=value;}
+        existing.high=Math.max(existing.high,value);
+        existing.low=Math.min(existing.low,value);
+        buckets.set(bucketMs,existing);
+      }
+      for(const entry of buckets.values()){if(entry.open!=null&&entry.close!=null)rows.push(entry);}      
+      return rows.sort((a,b)=>a.timestamp_ms-b.timestamp_ms);
+    }
+    function drawAccountChart() {
+      const w=accountCanvas.clientWidth,h=accountCanvas.clientHeight,points=accountSnapshots.length?accountSnapshots:visibleSnapshots();
+      accountCtx.clearRect(0,0,w,h);accountCtx.fillStyle="#05080d";accountCtx.fillRect(0,0,w,h);accountCtx.font="11px system-ui";
+      if(!points.length){accountCtx.fillStyle="#8a9bad";accountCtx.fillText("no snapshots yet",12,h/2);return;}
+      const range=lockedRange||loadedRange||{start:points[0].captured_at_ms,end:points.at(-1).captured_at_ms},start=range.start,end=range.end;
+      const left=62,right=16,top=26,bottom=34,width=w-left-right,height=h-top-bottom;
+      const x=ms=>xAt(ms,left,width,start,end);
+      accountCtx.strokeStyle="#263545";accountCtx.strokeRect(left,top,width,height);
+      for(let i=0;i<=4;i++){const y=top+height*i/4;accountCtx.strokeStyle="#152232";accountCtx.beginPath();accountCtx.moveTo(left,y);accountCtx.lineTo(left+width,y);accountCtx.stroke();}
+      const intervalMs=Math.max(Number(accountOhlcMinutes.value)||60,1)*60*1000;
+      const bars=balanceOhlcSeries(points,intervalMs);
+      const values=bars.flatMap(bar=>[bar.open,bar.high,bar.low,bar.close]);
+      const ohlcBounds=axisBounds(values,0,1);
+      const yLeft=value=>top+(ohlcBounds.max-value)/Math.max(ohlcBounds.max-ohlcBounds.min,1e-12)*height;
+      accountCtx.fillStyle="#8a9bad";accountCtx.fillText(`account balance OHLC ${accountOhlcMinutes.value}m`,left,15);
+      accountCtx.fillText(fmt(ohlcBounds.max,4),4,top+4);accountCtx.fillText(fmt(ohlcBounds.min,4),4,top+height);
+      if(!bars.length){accountCtx.fillStyle="#4dd0e1";accountCtx.fillText("no OHLC balance data yet",left+8,top+18);} else {
+        const barWidth=Math.max(Math.min(width/Math.max(bars.length*1.5,1),28),8);
+        accountCtx.lineWidth=1.4;
+        for(const bar of bars){
+          const xCenter=x(bar.timestamp_ms + intervalMs/2);
+          const yOpen=yLeft(bar.open), yHigh=yLeft(bar.high), yLow=yLeft(bar.low), yClose=yLeft(bar.close);
+          accountCtx.strokeStyle="#4dd0e1";
+          accountCtx.beginPath();accountCtx.moveTo(xCenter,yHigh);accountCtx.lineTo(xCenter,yLow);accountCtx.stroke();
+          accountCtx.beginPath();accountCtx.moveTo(xCenter-barWidth/2,yOpen);accountCtx.lineTo(xCenter,yOpen);accountCtx.stroke();
+          accountCtx.beginPath();accountCtx.moveTo(xCenter,yClose);accountCtx.lineTo(xCenter+barWidth/2,yClose);accountCtx.stroke();
+        }
+      }
+      accountCtx.fillText(new Date(start).toLocaleTimeString(),left,h-7);accountCtx.fillText(new Date(end).toLocaleTimeString(),Math.max(left,left+width-76),h-7);
+      accountCtx.fillStyle="#4dd0e1";accountCtx.fillText("balance",left+110,15);
+    }
+    async function loadMarkets() {
+      const payload=await (await fetch("/api/markets")).json(); if(payload.error)throw Error(payload.error);
+      coinSelect.innerHTML=payload.markets.map(m=>`<option>${m.coin}</option>`).join("");
+    }
+    async function refresh(force=false) {
+      try {
+        if(lockedRange&&!force){status.textContent="zoom locked | press Reset graph";return;}
+        hideTooltip();
+        errorBox.textContent=""; const coin=coinSelect.value,minutes=minutesSelect.value;
+        status.textContent="loading";
+        const [snapPayload,tradePayload,fillPayload,evPayload,accountSnapPayload]=await Promise.all([
+          fetch(`/api/snapshots?coin=${encodeURIComponent(coin)}&minutes=${minutes}&limit=5000`).then(r=>r.json()),
+          fetch(`/api/trades?coin=${encodeURIComponent(coin)}&minutes=${minutes}`).then(r=>r.json()),
+          fetch(`/api/fills?coin=${encodeURIComponent(coin)}&minutes=${minutes}`).then(r=>r.json()),
+          fetch(`/api/ev-surface?coin=${encodeURIComponent(coin)}&minutes=${minutes}`).then(r=>r.json()),
+          fetch(`/api/snapshots?coin=${encodeURIComponent(coin)}&minutes=43200&limit=5000`).then(r=>r.json())
+        ]);
+        if(snapPayload.error)throw Error(snapPayload.error); if(tradePayload.error)throw Error(tradePayload.error); if(fillPayload.error)throw Error(fillPayload.error); if(evPayload.error)throw Error(evPayload.error); if(accountSnapPayload.error)throw Error(accountSnapPayload.error);
+        snapshots=snapPayload.snapshots; trades=tradePayload.trades; accountFills=fillPayload.fills||[]; evSurfacePayload=evPayload||{rows:[]}; accountSnapshots=accountSnapPayload.snapshots; loadedRange={start:snapPayload.range_start_ms,end:snapPayload.range_end_ms}; updateCards(); draw(); resizeExtraCharts();
+        status.textContent=`${snapshots.length}/${snapPayload.available_count} snapshots | ${trades.length}/${tradePayload.available_count} public trades | ${accountFills.length}/${fillPayload.available_count} fills | ${minutes}m window | ${new Date().toLocaleTimeString()}`;
+      } catch(err) { errorBox.textContent=String(err); status.textContent="error"; }
+    }
+    function hideTooltip(){tooltip.style.display="none";}
+    function nearestSnapshot(points,targetMs) {
+      let best=null,distance=Infinity;
+      for(const point of points){const nextDistance=Math.abs(point.captured_at_ms-targetMs);if(nextDistance<distance){best=point;distance=nextDistance;}}
+      return best;
+    }
+    function updateTooltip(event) {
+      if(dragStartX!=null||!lastViewport){hideTooltip();return;}
+      const rect=canvas.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;
+      if(x<lastViewport.left||x>lastViewport.left+lastViewport.width){hideTooltip();return;}
+      const region=hoverRegions.find(item=>y>=item.top&&y<=item.top+item.height);
+      if(!region){hideTooltip();return;}
+      const targetMs=lastViewport.start+(x-lastViewport.left)/lastViewport.width*(lastViewport.end-lastViewport.start);
+      const snapshot=nearestSnapshot(visibleSnapshots(),targetMs);
+      if(!snapshot){hideTooltip();return;}
+      let best=null;
+      for(const item of region.series){
+        const rawValues=item.values?item.values(snapshot):[item.value(snapshot)];
+        for(const rawValue of rawValues){
+          const value=finiteNumber(rawValue);if(value==null)continue;
+          const distance=Math.abs(yAt(value,region.top,region.height,region.min,region.max)-y);
+          if(!best||distance<best.distance)best={name:item.name,color:item.color,value,distance};
+        }
+      }
+      if(!best||best.distance>12){hideTooltip();return;}
+      tooltip.innerHTML=`<strong style="color:${best.color}">${best.name}</strong><br>${fmt(best.value,9)}<br>${new Date(snapshot.captured_at_ms).toLocaleTimeString()}`;
+      tooltip.style.display="block";
+      tooltip.style.left=`${Math.min(x+14,canvas.clientWidth-tooltip.offsetWidth-6)}px`;
+      tooltip.style.top=`${Math.max(4,Math.min(y+14,canvas.clientHeight-tooltip.offsetHeight-6))}px`;
+    }
+    function chartX(event){const rect=canvas.getBoundingClientRect();return Math.max(lastViewport?.left||0,Math.min(event.clientX-rect.left,(lastViewport?.left||0)+(lastViewport?.width||0)));}
+    canvas.addEventListener("mousedown",event=>{if(!lastViewport)return;hideTooltip();dragStartX=chartX(event);dragCurrentX=dragStartX;draw();});
+    canvas.addEventListener("mousemove",event=>{if(dragStartX==null){updateTooltip(event);return;}dragCurrentX=chartX(event);draw();});
+    canvas.addEventListener("mouseup",()=>{if(dragStartX==null||dragCurrentX==null||!lastViewport)return;const a=Math.min(dragStartX,dragCurrentX),b=Math.max(dragStartX,dragCurrentX);dragStartX=null;dragCurrentX=null;if(b-a<8){draw();return;}const toMs=x=>lastViewport.start+(x-lastViewport.left)/lastViewport.width*(lastViewport.end-lastViewport.start);lockedRange={start:toMs(a),end:toMs(b)};status.textContent="zoom locked | press Reset graph";updateCards();draw();});
+    canvas.addEventListener("mouseleave",()=>{hideTooltip();if(dragStartX!=null){dragStartX=null;dragCurrentX=null;draw();}});
+    evAskSurfaceCanvas.addEventListener("mousemove",event=>{const rect=evAskSurfaceCanvas.getBoundingClientRect();evAskHover={x:event.clientX-rect.left,y:event.clientY-rect.top};drawEvAskSurface();});
+    evAskSurfaceCanvas.addEventListener("mouseleave",()=>{evAskHover=null;drawEvAskSurface();});
+    evBidSurfaceCanvas.addEventListener("mousemove",event=>{const rect=evBidSurfaceCanvas.getBoundingClientRect();evBidHover={x:event.clientX-rect.left,y:event.clientY-rect.top};drawEvBidSurface();});
+    evBidSurfaceCanvas.addEventListener("mouseleave",()=>{evBidHover=null;drawEvBidSurface();});
+    for(const item of document.querySelectorAll("#legend [data-series]")){
+      item.setAttribute("aria-pressed","true");
+      item.addEventListener("click",()=>{const key=item.dataset.series;enabledSeries[key]=!isEnabled(key);item.classList.toggle("off",!isEnabled(key));item.setAttribute("aria-pressed",String(isEnabled(key)));hideTooltip();draw();drawAccountChart();});
+    }
+    document.getElementById("refresh").onclick=()=>refresh(true);
+    document.getElementById("reset").onclick=()=>{lockedRange=null;dragStartX=null;dragCurrentX=null;refresh(true);};
+    document.getElementById("autoScale").onchange=draw;document.getElementById("priceScaleBps").oninput=draw;
+    for(const id of ["mainDepthOpacity","profileOpacity"]){const input=document.getElementById(id),output=document.getElementById(`${id}Value`);input.oninput=()=>{output.textContent=Number(input.value).toFixed(2);draw();};}
+    document.getElementById("lobProfileMode").onchange=draw;document.getElementById("profilePercentiles").onchange=draw;
+    accountOhlcMinutes.onchange=()=>{lockedRange=null;refresh(true);};
+    coinSelect.onchange=()=>{lockedRange=null;refresh(true);}; minutesSelect.onchange=()=>{lockedRange=null;refresh(true);};
+    window.onresize=resize;
+    (async()=>{try{await loadMarkets(); await refresh(); resize(); setInterval(refresh,2000);}catch(err){errorBox.textContent=String(err);status.textContent="error";}})();
+  </script>
+</body>
+</html>

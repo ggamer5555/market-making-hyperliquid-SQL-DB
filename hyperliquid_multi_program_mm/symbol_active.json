@@ -1,0 +1,8 @@
+{
+  "all_symbols_disabled": false,
+  "symbols": {
+    "BTC/USDC:USDC": false,
+    "ETH/USDC:USDC": false,
+    "SOL/USDC:USDC": false
+  }
+}
