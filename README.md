@@ -118,7 +118,9 @@ Run unit tests that exercise DB code:
 .venv\\Scripts\\python.exe -m unittest test_hyperliquid_connector_offline.py
 ```
 
-If you want the primary store to be MySQL, set `PRIMARY_SQL_URL` in `settings.py` to a MySQL SQLAlchemy URL before starting.
+Alternative: configure the bot to write directly to SQL Server by setting PRIMARY_SQL_URL in settings.py to an SQL Server SQLAlchemy URL (then it will mirror writes via DualDB).
+
+Then you can use your SQL server and query it by hand! learn from these videos here: https://www.youtube.com/watch?v=Cr58jAj_YAc and https://www.youtube.com/watch?v=aAy-B6KPld8
 
 **Skills demonstrated / used**
 
